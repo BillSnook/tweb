@@ -17,7 +17,9 @@ import Foundation
 
 var stayInProgram = true
 
-SendPinState.send( "2", "on" )
+let sender = SendPinState()
+
+sender.send( "2", "on" )
 
 //let watcher = WatchPins()
 //

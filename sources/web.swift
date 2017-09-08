@@ -23,8 +23,6 @@ public class WatchPins {
     
     func trackPins() {
 
-        SendPinState.send( "2", "off" )
-
         gp17.direction = .IN
         gp18.direction = .IN
 
@@ -68,20 +66,20 @@ public class WatchPins {
 
 
 
-public class SendPinState: SessionDelegate {
+public class SendPinState {
 
     let session: URLSession
     
     init() {
         let configuration = URLSessionConfiguration.default
-        session = URLSession( configuration: configuration )
+        self.session = URLSession( configuration: configuration )
     }
     
     deinit {
 //        session
     }
     
-    class func send( _ pin: String, _ state: String ) {
+    func send( _ pin: String, _ state: String ) {
         
         let urlString = "http://workpi.local:8080/" + state + pin
         let url = URL( string: urlString )
@@ -89,7 +87,7 @@ public class SendPinState: SessionDelegate {
         
         let request = URLRequest(url: url!)
         //create dataTask using the session object to send data to the server
-        let task = session.dataTask(with: request, completionHandler: { data, response, error in
+        let task = self.session.dataTask(with: request, completionHandler: { data, response, error in
             guard error == nil else {
                 print( "Error \(String(describing: error))" )
                 return
