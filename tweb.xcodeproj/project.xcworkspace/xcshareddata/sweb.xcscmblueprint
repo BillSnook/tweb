@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "FFFF72BE4EB615BAFBD23B71E34C2C5E86713CA9",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "FFFF72BE4EB615BAFBD23B71E34C2C5E86713CA9" : 9223372036854775807,
+    "2FE9067C8214E7054530B894CD16965DC8E61872" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "B615FC0B-A0CB-4BE5-B692-03F0A186680C",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "FFFF72BE4EB615BAFBD23B71E34C2C5E86713CA9" : "tweb\/",
+    "2FE9067C8214E7054530B894CD16965DC8E61872" : "tweb\/.build\/checkouts\/SwiftyGPIO.git-6330852604069455572\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "sweb",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "sweb.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "\/Users\/bill\/Code\/RaspberryPi\/sweb\/.build\/repositories\/SwiftyGPIO.git-6330852604069455572",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "2FE9067C8214E7054530B894CD16965DC8E61872"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/BillSnook\/sweb.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "FFFF72BE4EB615BAFBD23B71E34C2C5E86713CA9"
+    }
+  ]
+}
