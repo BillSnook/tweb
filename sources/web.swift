@@ -22,54 +22,45 @@ public class WatchPins {
     }
     
     func trackPins() {
-        
-//        if gp17 == nil {
-//            print( "gp17 is nil - not good" )
-//        }
-//        
-//        if gp18 == nil {
-//            print( "gp18 is nil - not good" )
-//        }
+/*
+        gp17.direction = .IN
+        gp18.direction = .IN
 
-        
-//        gp17.direction = .OUT
-//        gp18.direction = .OUT
-
-//        gp17.onRaising {
-//            gpio in
-//            print( "Pin 2 is on" )
-//        }
-//        gp17.onFalling {
-//            gpio in
-//            print( "Pin 2 is off" )
-//        }
-//        gp18.onRaising {
-//            gpio in
-//            print( "Pin 3 is on" )
-//        }
-//        gp18.onFalling {
-//            gpio in
-//            print( "Pin 3 is off" )
-//        }
-//        
+        gp17.onRaising {
+            gpio in
+            print( "Pin 2 is on" )
+        }
+        gp17.onFalling {
+            gpio in
+            print( "Pin 2 is off" )
+        }
+        gp18.onRaising {
+            gpio in
+            print( "Pin 3 is on" )
+        }
+        gp18.onFalling {
+            gpio in
+            print( "Pin 3 is off" )
+        }
+*/        
 //        while true {
 //            usleep(100000)
 //        }
 
-        
+/* */
         print("Current Status")
         print("Direction: "+gp17.direction.rawValue)
-//        print("Edge: "+gp17.edge.rawValue)
-//        print("Active Low: "+String(gp17.activeLow))
-//        print("Value: "+String(gp17.value))
-//        gp17.direction = .OUT
-//        gp17.value = 1
-//        print("New Status")
-//        print("Direction: "+gp17.direction.rawValue)
-//        print("Edge: "+gp17.edge.rawValue)
-//        print("Active Low: "+String(gp17.activeLow))
-//        print("Value: "+String(gp17.value))
-
+        print("Edge: "+gp17.edge.rawValue)
+        print("Active Low: "+String(gp17.activeLow))
+        print("Value: "+String(gp17.value))
+        gp17.direction = .OUT
+        gp17.value = 1
+        print("New Status")
+        print("Direction: "+gp17.direction.rawValue)
+        print("Edge: "+gp17.edge.rawValue)
+        print("Active Low: "+String(gp17.activeLow))
+        print("Value: "+String(gp17.value))
+/* */
     }
 }
 
