@@ -22,7 +22,9 @@ public class WatchPins {
     }
     
     func trackPins() {
-/*
+
+        SendPinState.send( "2", "off" )
+
         gp17.direction = .IN
         gp18.direction = .IN
 
@@ -42,12 +44,12 @@ public class WatchPins {
             gpio in
             print( "Pin 3 is off" )
         }
-*/        
+
 //        while true {
 //            usleep(100000)
 //        }
 
-/* */
+/*
         print("Current Status")
         print("Direction: "+gp17.direction.rawValue)
         print("Edge: "+gp17.edge.rawValue)
@@ -60,7 +62,7 @@ public class WatchPins {
         print("Edge: "+gp17.edge.rawValue)
         print("Active Low: "+String(gp17.activeLow))
         print("Value: "+String(gp17.value))
-/* */
+*/
     }
 }
 
