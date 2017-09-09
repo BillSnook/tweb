@@ -28,6 +28,17 @@ public class WatchPins {
 
         gp17.direction = .IN
         gp18.direction = .IN
+        
+        if gp17.value != 0 {
+            sender.send( pin: "17", state: "on" )
+        } else {
+            sender.send( pin: "17", state: "off" )
+        }
+        if gp18.value != 0 {
+            sender.send( pin: "18", state: "on" )
+        } else {
+            sender.send( pin: "18", state: "off" )
+        }
 
         gp17.onRaising {
             gpio in
@@ -53,21 +64,6 @@ public class WatchPins {
         while true {
             usleep(100000)
         }
-
-/*
-        print("Current Status")
-        print("Direction: "+gp17.direction.rawValue)
-        print("Edge: "+gp17.edge.rawValue)
-        print("Active Low: "+String(gp17.activeLow))
-        print("Value: "+String(gp17.value))
-        gp17.direction = .OUT
-        gp17.value = 1
-        print("New Status")
-        print("Direction: "+gp17.direction.rawValue)
-        print("Edge: "+gp17.edge.rawValue)
-        print("Active Low: "+String(gp17.activeLow))
-        print("Value: "+String(gp17.value))
-*/
     }
 }
 
