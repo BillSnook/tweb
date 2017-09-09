@@ -29,8 +29,6 @@ public class WatchPins {
         gp17.direction = .IN
         gp18.direction = .IN
  
-        usleep(1000000)
-
         if gp17.value != 0 {
             sender.send( pin: "17", state: "on" )
         } else {
