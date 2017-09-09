@@ -17,13 +17,11 @@ import Foundation
 
 var stayInProgram = true
 
-let sender = SendPinState()
+//let sender = SendPinState()
+//sender.send( "2", "on" )
 
-sender.send( "2", "on" )
-
-//let watcher = WatchPins()
-//
-//watcher.trackPins()
+let watcher = WatchPins()
+watcher.trackPins()
 
 
 while stayInProgram {
