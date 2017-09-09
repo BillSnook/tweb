@@ -23,29 +23,36 @@ public class WatchPins {
     
     func trackPins() {
 
+		let sender = SendPinState()
+		sender.send( urlString: "http://workpi.local:8080/startup" )
+
         gp17.direction = .IN
         gp18.direction = .IN
 
         gp17.onRaising {
             gpio in
-            print( "Pin 2 is on" )
-        }
+            print( "Pin 17 is on" )
+			sender.send( pin: "17", state: "on" )
+       }
         gp17.onFalling {
             gpio in
-            print( "Pin 2 is off" )
+            print( "Pin 17 is off" )
+			sender.send( pin: "17", state: "off" )
         }
         gp18.onRaising {
             gpio in
-            print( "Pin 3 is on" )
+            print( "Pin 18 is on" )
+			sender.send( pin: "18", state: "on" )
         }
         gp18.onFalling {
             gpio in
-            print( "Pin 3 is off" )
+            print( "Pin 18 is off" )
+			sender.send( pin: "18", state: "off" )
         }
 
-//        while true {
-//            usleep(100000)
-//        }
+        while true {
+            usleep(100000)
+        }
 
 /*
         print("Current Status")
@@ -79,15 +86,20 @@ public class SendPinState {
 //        session
     }
     
-    func send( _ pin: String, _ state: String ) {
+    func send( pin: String, state: String ) {
         
         let urlString = "http://workpi.local:8080/" + state + pin
+        send( urlString: urlString )
+    }
+    
+    func send( urlString: String ) {
         let url = URL( string: urlString )
         print( "Sending \(String(describing: url))" )
         
         let request = URLRequest(url: url!)
-        //create dataTask using the session object to send data to the server
-        let task = self.session.dataTask(with: request, completionHandler: { data, response, error in
+        //create dataTask using the session  to send data to the server
+        let task = self.session.dataTask(with: request,
+		completionHandler: { data, response, error in
             guard error == nil else {
                 print( "Error \(String(describing: error))" )
                 return
