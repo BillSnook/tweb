@@ -63,9 +63,11 @@ public class WatchPins {
 
         while true {
             usleep(100000)
+/*
             let gp17Status = gp17.value != 0 ? " on" : "off"
             let gp18Status = gp18.value != 0 ? " on" : "off"
             print( "gp17 is \(gp17Status), gp18 is \(gp18Status)" )
+*/
         }
     }
 }
