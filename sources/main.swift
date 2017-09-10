@@ -17,9 +17,6 @@ import Foundation
 
 var stayInProgram = true
 
-//let sender = SendPinState()
-//sender.send( "2", "on" )
-
 let watcher = WatchPins()
 watcher.trackPins()
 

@@ -29,18 +29,7 @@ public class WatchPins {
         gp17.direction = .IN
         gp18.direction = .IN
  
-        if gp17.value != 0 {
-            sender.send( pin: "17", state: "on" )
-        } else {
-            sender.send( pin: "17", state: "off" )
-        }
-        if gp18.value != 0 {
-            sender.send( pin: "18", state: "on" )
-        } else {
-            sender.send( pin: "18", state: "off" )
-        }
-
-        gp17.onRaising {
+         gp17.onRaising {
             gpio in
             print( "Pin 17 is on" )
             sender.send( pin: "17", state: "on" )
@@ -63,11 +52,6 @@ public class WatchPins {
 
         while true {
             usleep(100000)
-/*
-            let gp17Status = gp17.value != 0 ? " on" : "off"
-            let gp18Status = gp18.value != 0 ? " on" : "off"
-            print( "gp17 is \(gp17Status), gp18 is \(gp18Status)" )
-*/
         }
     }
 }
@@ -105,13 +89,25 @@ public class SendPinState {
                 print( "Error in response: \(String(describing: error))" )
                 return
             }
+            guard let response = response as? HTTPURLResponse else {
+                print( "No response returned" )
+                return
+            }
+            guard response.statusCode == 200 else {
+                print( "Status code error: \(response.statusCode)" )
+                return
+            }
+            guard response.mimeType == "text/html" || response.mimeType == "text/plain" else {
+                print( "Unexpected response returned" )
+                return
+            }
             guard let data = data else {
                 print( "No returned data" )
                 return
             }
+
             let dataString = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
-            print( dataString ?? "Send failed" )
-            stayInProgram = false
+            print( dataString ?? "Unexpected data received" )
         })
         
         task.resume()
