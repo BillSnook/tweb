@@ -7,6 +7,8 @@
 //
 
 import Foundation
+
+/*
 import SwiftyGPIO
 
 public class WatchPins {
@@ -55,7 +57,7 @@ public class WatchPins {
         }
     }
 }
-
+*/
 
 
 public class SendPinState {

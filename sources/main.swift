@@ -17,11 +17,13 @@ import Foundation
 
 var stayInProgram = true
 
-let watcher = WatchPins()
-watcher.trackPins()
+let sender = Snd()
+sender.doSnd( to: "zerowpi2.local" )
 
 
-while stayInProgram {
-    usleep(100000)
-}
+//let watcher = WatchPins()
+//watcher.trackPins()
+//while stayInProgram {
+//    usleep(100000)
+//}
 
