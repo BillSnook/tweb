@@ -37,16 +37,19 @@ class Snd {
 	
 	func doSnd( to: String ) {
 	
-		guard let server = lookup( name: to ) as! Host else {
-			print( "Lookup fails: \(addrs.count)" )
+		guard let server = lookup( name: to ) else {
+			print( "Lookup failed for \(to)" )
 			return
 		}
 		let addrs = server.addresses
-		guard addrs != nil && addrs.count > 0 else { return }
+		guard addrs.count > 0 else {
+			print( "Lookup succeeded but no addresses were returned" )
+			return
+		}
 		
 		print( "Lookup succeeds, count: \(addrs.count)" )
 		for addr in addrs {
-			print( "  \(addr.address)" )
+			print( "  addr: \(addr)" )
 		}
 		for name in server.names {
 			print( "  name: \(name)" )
