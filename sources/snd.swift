@@ -6,6 +6,11 @@
 //
 
 import Foundation
+#if os(Linux)
+import Glibc
+#else
+import Darwin.C
+#endif
 
 
 // Get socket to send on
@@ -18,7 +23,7 @@ import Foundation
 // EndRepeat?
 // Close socket
 
-class Snd {
+class Snd /* : PortDelegate */ {
 
 	var target: Host?
 	var socket: SocketPort?
@@ -26,13 +31,39 @@ class Snd {
 	func lookup( name: String ) -> Host? {
 		
 		target = Host( name: name )
+		guard target != nil else {
+			print( "Lookup failed for \(name)" )
+			return nil
+		}
+		let addrs = target!.addresses
+		guard addrs.count > 0 else {
+			print( "Host call succeeded but no addresses were returned" )
+			return nil
+		}
+		
+		print( "Host call succeeds, count: \(addrs.count)" )
+		for addr in addrs {
+			print( "  addr: \(addr)" )
+		}
+		for name in target!.names { // We're not getting names when looking up Pi devices
+			print( "  name: \(name)" )
+		}
+
 		return target
 	}
 	
-	func getSocket() -> SocketPort? {
+	func getSocket( _ address: String ) -> SocketPort? {
+		
+		let socketPort = SocketPort(remoteWithTCPPort: 5555, host: address )
+//		socketPort?.setDelegate( self )
 		
 		
-		return nil
+		return socketPort
+	}
+	
+	func handle(_ message: PortMessage) {
+		
+		
 	}
 	
 	func doSnd( to: String ) {
@@ -43,20 +74,16 @@ class Snd {
 		}
 		let addrs = server.addresses
 		guard addrs.count > 0 else {
-			print( "Lookup succeeded but no addresses were returned" )
+			print( "No addresses returned for \(to)" )
+			return
+		}
+		let addr = addrs.first!
+		guard let socketPort = getSocket( addr ) else {
+			print( "Could not create socketPort for \(addr)" )
 			return
 		}
 		
-		print( "Lookup succeeds, count: \(addrs.count)" )
-		for addr in addrs {
-			print( "  addr: \(addr)" )
-		}
-		for name in server.names {
-			print( "  name: \(name)" )
-		}
-
-//		let useAddr = addrs.first
-		
+		print( "Got SocketPort" )
 		
 	}
 }
