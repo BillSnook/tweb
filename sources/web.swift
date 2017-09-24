@@ -10,10 +10,12 @@ import Glibc
 
 class ConnectManager {
 	
-	let socketfd: Int = socket( AF_INET, SOCK_STREAM.rawValue, 0 )
+	let socketfd: Int = socket( AF_INET, Int32(SOCK_STREAM.rawValue), 0 )
+	let buffer = malloc( 256 )
 
-	func doConnect( _ addr: Int ) {
-		guard let connectResult = getConnection( socketfd, address: addr ) else {
+	func doConnect( _ addr: Int32 ) {
+		let connectResult = getConnection( socketfd, address: addr )
+		if connectResult < 0 {
 			print( "Could not connect to socket for \(addr)" )
 			return
 		}
@@ -26,7 +28,7 @@ class ConnectManager {
 	}
 
 
-	func getConnection( _ socket: Int, address: Int ) -> Int {
+	func getConnection( _ socket: Int, address: Int32 ) -> Int {
 		let portNo: Int16 = 5555
 		let serv_addr: sockaddr_in = sockaddr_in( sin_family: AF_INET, sin_port: htons(portNo), sin_addr: address, sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
 		let connectResult = connect(sockfd, &serv_addr, sizeof(sockaddr_in) )
@@ -39,7 +41,6 @@ class ConnectManager {
 
 	func doLoop( _ socketfd: Int ) {
 		var n: long = 0
-		var buffer = malloc( 256 )
 		while n < 255 {
 			
 			// TODO: check inputs here to see if message is to be set else prompt
