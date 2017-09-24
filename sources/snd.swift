@@ -6,11 +6,7 @@
 //
 
 import Foundation
-#if os(Linux)
 import Glibc
-#else
-import Darwin.C
-#endif
 
 
 // Get socket to send on
@@ -23,7 +19,7 @@ import Darwin.C
 // EndRepeat?
 // Close socket
 
-class Snd /* : PortDelegate */ {
+class Snd {
 
 	var target: Host?
 	var socket: SocketPort?
@@ -52,20 +48,21 @@ class Snd /* : PortDelegate */ {
 		return target
 	}
 	
-	func getSocket( _ address: String ) -> SocketPort? {
+	func getSocket( _ socket: Int, address: Int ) -> Int {
+		let portNo: Int = 5555
+		let inAddr = in_addr( intAddr )
 		
-		let socketPort = SocketPort(remoteWithTCPPort: 5555, host: address )
-//		socketPort?.setDelegate( self )
+		let serv_addr: sockaddr_in = sockaddr_in( sin_len: sizeof(sockaddr_in), sin_family: AF_INET, sin_port: htons(portNo), sin_addr: address, sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+
+		let connectResult = connect(sockfd, &serv_addr, sizeof(serv_addr) )
+		if connectResult < 0 {
+			print("ERROR connecting");
+		}
 		
-		
-		return socketPort
+		return connectResult
 	}
 	
-	func handle(_ message: PortMessage) {
-		
-		
-	}
-	
+
 	func doSnd( to: String ) {
 	
 		guard let server = lookup( name: to ) else {
@@ -78,13 +75,38 @@ class Snd /* : PortDelegate */ {
 			return
 		}
 		let addr = addrs.first!
-		guard let socketPort = getSocket( addr ) else {
-			print( "Could not create socketPort for \(addr)" )
+		let socketfd: Int = socket( AF_INET, SOCK_STREAM, 0 )
+		guard let connectResult = getSocket( socketfd, address: atoi(addr) ) else {
+			print( "Could not connect to socket for \(addr)" )
 			return
 		}
+		print( "Got socket" )
 		
-		print( "Got SocketPort" )
-		
+		var n: long = 0
+		var buffer = malloc( 256 )
+		while n < 255 {
+			
+			// TODO: check inputs here to see if message is to be set else prompt
+			print("> ");
+			bzero(buffer,256);
+			fgets(buffer,255,stdin);    // Waits for input
+			
+			n = write(sockfd,buffer,strlen(buffer));
+			if (n < 0) {
+				error("ERROR writing to socket")
+			}
+			
+			bzero(buffer,256);
+			n = read(sockfd,buffer,255);
+			if (n < 0) {
+				error("ERROR reading from socket")
+			}
+			
+			print("%s\n",buffer);
+		}
+		// Clean up
+		free( buffer )
+		close( socketfd )
 	}
 }
 
