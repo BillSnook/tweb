@@ -6,9 +6,26 @@
 //
 //
 
-import Foundation
+import Glibc
+
+
+func getSocket( _ socket: Int, address: Int ) -> Int {
+	let portNo: UInt16 = 5555
+	let serv_addr: sockaddr_in = sockaddr_in( sin_len: sizeof(sockaddr_in), sin_family: AF_INET, sin_port: htons(portNo), sin_addr: address, sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+	
+	let connectResult = connect(sockfd, &serv_addr, sizeof(sockaddr_in) )
+	if connectResult < 0 {
+		print("ERROR connecting");
+	}
+	
+	return connectResult
+}
+
+
 
 /*
+import Foundation
+
 import SwiftyGPIO
 
 public class WatchPins {
