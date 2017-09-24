@@ -24,7 +24,7 @@ class ConnectManager {
 		
 		doLoop()
 		
-		free( buffer! )
+		free( buffer )
 		close( socketfd )
 	}
 
@@ -59,22 +59,22 @@ class ConnectManager {
 			
 			// TODO: check inputs here to see if message is to be set else prompt
 			print("> ");
-			bzero(buffer!,256);
-			fgets(UnsafeMutablePointer<Int8>!(buffer!),255,stdin);    // Waits for input
+			bzero(buffer,256);
+			fgets(UnsafeMutablePointer<Int8>!(buffer),255,stdin);    // Waits for input
 			
-			let len = strlen( UnsafePointer<Int8>(buffer!) )
-			n = write( socketfd, buffer!, len );
+			let len = strlen( UnsafePointer<Int8>(buffer) )
+			n = write( socketfd, buffer, len );
 			if (n < 0) {
 				print("ERROR writing to socket")
 			}
 			
-			bzero(buffer!,256);
-			n = read( socketfd, buffer!, 255 );
+			bzero(buffer,256);
+			n = read( socketfd, buffer, 255 );
 			if (n < 0) {
 				print("ERROR reading from socket")
 			}
 			
-			print("%s\n",buffer!);
+			print("%s\n",buffer);
 		}
 		
 	}
