@@ -10,14 +10,14 @@ import Glibc
 
 class ConnectManager {
 	
-	let socketfd: Int = socket( AF_INET, SOCK_STREAM, 0 )
+	let socketfd: Int = socket( AF_INET, SOCK_STREAM.rawValue, 0 )
 
-	func doConnect( _ addr: Int32 ) {
+	func doConnect( _ addr: Int ) {
 		guard let connectResult = getConnection( socketfd, address: addr ) else {
 			print( "Could not connect to socket for \(addr)" )
 			return
 		}
-		printf( "Got socket" )
+		print( "Got socket" )
 		
 		doLoop( socketfd )
 		
@@ -31,34 +31,34 @@ class ConnectManager {
 		let serv_addr: sockaddr_in = sockaddr_in( sin_family: AF_INET, sin_port: htons(portNo), sin_addr: address, sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
 		let connectResult = connect(sockfd, &serv_addr, sizeof(sockaddr_in) )
 		if connectResult < 0 {
-			printf("ERROR connecting")
+			print("ERROR connecting")
 		}
 		
 		return connectResult
 	}
 
-	func doLoop( _ socketfd: int) {
+	func doLoop( _ socketfd: Int ) {
 		var n: long = 0
 		var buffer = malloc( 256 )
 		while n < 255 {
 			
 			// TODO: check inputs here to see if message is to be set else prompt
-			printf("> ");
+			print("> ");
 			bzero(buffer,256);
 			fgets(buffer,255,stdin);    // Waits for input
 			
 			n = doWrite(sockfd,buffer,strlen(buffer));
 			if (n < 0) {
-				printf("ERROR writing to socket")
+				print("ERROR writing to socket")
 			}
 			
 			bzero(buffer,256);
 			n = doRead(sockfd,buffer,255);
 			if (n < 0) {
-				printf("ERROR reading from socket")
+				print("ERROR reading from socket")
 			}
 			
-			printf("%s\n",buffer);
+			print("%s\n",buffer);
 		}
 		
 	}
