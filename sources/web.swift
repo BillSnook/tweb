@@ -11,7 +11,8 @@ import Glibc
 class ConnectManager {
 	
 	let socketfd = socket( AF_INET, Int32(SOCK_STREAM.rawValue), 0 )
-	var buffer = malloc( 256 )
+//	var buffer = malloc( 256 )
+	let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: 256)
 
 	func doConnect( _ addr: Int32 ) {
 		let connectResult = getConnection( address: addr )
@@ -42,8 +43,8 @@ class ConnectManager {
 
 	func getConnection( address: Int32 ) -> Int32 {
 		let portNo: UInt16 = 5555
-		let serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(portNo), sin_addr: in_addr( s_addr: in_addr_t(address) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
-		var serv_addr: sockaddr = sockaddr( serv_addr_in )
+		let serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: portNo.bigEndian, sin_addr: in_addr( s_addr: in_addr_t(address) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+		var serv_addr: sockaddr = serv_addr_in
 		let connectResult = connect(socketfd, &serv_addr, socklen_t( MemoryLayout<sockaddr>.size ) )
 		if connectResult < 0 {
 			print("ERROR connecting")
@@ -59,9 +60,9 @@ class ConnectManager {
 			// TODO: check inputs here to see if message is to be set else prompt
 			print("> ");
 			bzero(buffer!,256);
-			fgets(buffer,255,stdin);    // Waits for input
+			fgets(UnsafeMutablePointer<Int8>!(buffer!),255,stdin);    // Waits for input
 			
-			let len = strlen(buffer! )
+			let len = strlen( UnsafePointer<Int8>(buffer!) )
 			n = write( socketfd, buffer!, len );
 			if (n < 0) {
 				print("ERROR writing to socket")
