@@ -11,7 +11,7 @@ import Glibc
 class ConnectManager {
 	
 	let socketfd = socket( AF_INET, Int32(SOCK_STREAM.rawValue), 0 )
-	let buffer: UnsafeMutablePointer<Int8>! = malloc( 256 )
+	let buffer = malloc( 256 )
 
 	func doConnect( _ addr: Int32 ) {
 		let connectResult = getConnection( socketfd, address: addr )
@@ -30,7 +30,7 @@ class ConnectManager {
 
 	func getConnection( _ socket: Int, address: Int32 ) -> Int {
 		let portNo: Int16 = 5555
-		let serv_addr: sockaddr_in = sockaddr_in( sin_family: AF_INET, sin_port: htons(portNo), sin_addr: address, sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+		let serv_addr: sockaddr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(portNo), sin_addr: address, sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
 		let connectResult = connect(sockfd, &serv_addr, sizeof(sockaddr_in) )
 		if connectResult < 0 {
 			print("ERROR connecting")
@@ -48,13 +48,13 @@ class ConnectManager {
 			bzero(buffer,256);
 			fgets(buffer,255,stdin);    // Waits for input
 			
-			n = doWrite(socketfd,buffer,strlen(buffer));
+			n = write(socketfd,buffer,strlen(buffer));
 			if (n < 0) {
 				print("ERROR writing to socket")
 			}
 			
 			bzero(buffer,256);
-			n = doRead(socketfd,buffer,255);
+			n = read(socketfd,buffer,255);
 			if (n < 0) {
 				print("ERROR reading from socket")
 			}
