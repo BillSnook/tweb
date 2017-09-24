@@ -10,8 +10,8 @@ import Glibc
 
 class ConnectManager {
 	
-	let socketfd: Int = socket( AF_INET, Int32(SOCK_STREAM.rawValue), 0 )
-	let buffer = malloc( 256 )
+	let socketfd = socket( AF_INET, Int32(SOCK_STREAM.rawValue), 0 )
+	let buffer: UnsafeMutablePointer<Int8>! = malloc( 256 )
 
 	func doConnect( _ addr: Int32 ) {
 		let connectResult = getConnection( socketfd, address: addr )
@@ -21,7 +21,7 @@ class ConnectManager {
 		}
 		print( "Got socket" )
 		
-		doLoop( socketfd )
+		doLoop()
 		
 		free( buffer )
 		close( socketfd )
@@ -39,7 +39,7 @@ class ConnectManager {
 		return connectResult
 	}
 
-	func doLoop( _ socketfd: Int ) {
+	func doLoop() {
 		var n: long = 0
 		while n < 255 {
 			
@@ -48,13 +48,13 @@ class ConnectManager {
 			bzero(buffer,256);
 			fgets(buffer,255,stdin);    // Waits for input
 			
-			n = doWrite(sockfd,buffer,strlen(buffer));
+			n = doWrite(socketfd,buffer,strlen(buffer));
 			if (n < 0) {
 				print("ERROR writing to socket")
 			}
 			
 			bzero(buffer,256);
-			n = doRead(sockfd,buffer,255);
+			n = doRead(socketfd,buffer,255);
 			if (n < 0) {
 				print("ERROR reading from socket")
 			}
