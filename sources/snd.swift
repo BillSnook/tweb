@@ -60,15 +60,17 @@ class Snd {
 			print( "No addresses returned for \(to)" )
 			return
 		}
-		let addr = addrs.first!
-		let socketfd: Int = socket( AF_INET, SOCK_STREAM, 0 )
-		guard let connectResult = getConnection( socketfd, address: atoi(addr) ) else {
-			print( "Could not connect to socket for \(addr)" )
-			return
-		}
-		print( "Got socket" )
-		
-		doLoop()
+		let addr = atoi( addrs.first! )
+		let cm = ConnectManager()
+		cm.doConnect( addr )
+
+//		guard let connectResult = getConnection( socketfd, address: atoi(addr) ) else {
+//			print( "Could not connect to socket for \(addr)" )
+//			return
+//		}
+//		print( "Got socket" )
+//
+//		doLoop( socketfd )
 		
 		
 //		var n: long = 0
@@ -94,8 +96,8 @@ class Snd {
 //			print("%s\n",buffer);
 //		}
 		// Clean up
-		free( buffer )
-		close( socketfd )
+//		free( buffer )
+//		close( socketfd )
 	}
 }
 
