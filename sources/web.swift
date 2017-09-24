@@ -59,7 +59,7 @@ public class WatchPins {
 }
 */
 
-
+/*
 public class SendPinState {
 
     let session: URLSession
@@ -115,6 +115,6 @@ public class SendPinState {
         task.resume()
     }
 
-
 }
+*/
 
