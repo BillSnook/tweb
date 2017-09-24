@@ -13,6 +13,7 @@ class ConnectManager {
 	let socketfd = socket( AF_INET, Int32(SOCK_STREAM.rawValue), 0 )
 
 	func doConnect( _ addr: Int32 ) {
+		print( "\nIn doConnect\n\n" )
 		let connectResult = getConnection( address: addr )
 		if connectResult < 0 {
 			print( "Could not connect to socket for \(addr)" )
@@ -34,6 +35,7 @@ class ConnectManager {
 		        connect(socketfd, $0, socklen_t(MemoryLayout.size(ofValue: serv_addr_in)))
 		    }
 		}
+		print( "\nIn getConnection with connectResult: \(connectResult)\n\n" )
 		if connectResult < 0 {
 			print("ERROR connecting")
 		}
@@ -45,6 +47,7 @@ class ConnectManager {
 		var buffer: [CChar] = [CChar](repeating: 0, count: 256)
 //		var buffer = &buff
 		var n: ssize_t = 0
+		print( "In doLoop" );
 		while n < 255 {
 			
 			// TODO: check inputs here to see if message is to be set else prompt
