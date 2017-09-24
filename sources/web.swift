@@ -42,9 +42,9 @@ class ConnectManager {
 
 	func getConnection( address: Int32 ) -> Int {
 		let portNo: UInt16 = 5555
-		let serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(portNo), sin_addr: in_addr(address), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+		let serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(portNo), sin_addr: in_addr( s_addr: address ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
 		var serv_addr: sockaddr = sockaddr( serv_addr_in )
-		let connectResult = connect(socketfd, &serv_addr, sizeof(sockaddr) )
+		let connectResult = connect(socketfd, &serv_addr, socklen_t( sizeof(sockaddr) ) )
 		if connectResult < 0 {
 			print("ERROR connecting")
 		}
@@ -61,7 +61,8 @@ class ConnectManager {
 			bzero(buffer!,256);
 			fgets(buffer,255,stdin);    // Waits for input
 			
-			n = write( socketfd, buffer!, strlen(buffer!) );
+			let len = strlen(buffer! )
+			n = write( socketfd, buffer!, len );
 			if (n < 0) {
 				print("ERROR writing to socket")
 			}
