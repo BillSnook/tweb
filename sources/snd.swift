@@ -62,34 +62,37 @@ class Snd {
 		}
 		let addr = addrs.first!
 		let socketfd: Int = socket( AF_INET, SOCK_STREAM, 0 )
-		guard let connectResult = getSocket( socketfd, address: atoi(addr) ) else {
+		guard let connectResult = getConnection( socketfd, address: atoi(addr) ) else {
 			print( "Could not connect to socket for \(addr)" )
 			return
 		}
 		print( "Got socket" )
 		
-		var n: long = 0
-		var buffer = malloc( 256 )
-		while n < 255 {
-			
-			// TODO: check inputs here to see if message is to be set else prompt
-			print("> ");
-			bzero(buffer,256);
-			fgets(buffer,255,stdin);    // Waits for input
-			
-			n = write(sockfd,buffer,strlen(buffer));
-			if (n < 0) {
-				error("ERROR writing to socket")
-			}
-			
-			bzero(buffer,256);
-			n = read(sockfd,buffer,255);
-			if (n < 0) {
-				error("ERROR reading from socket")
-			}
-			
-			print("%s\n",buffer);
-		}
+		doLoop()
+		
+		
+//		var n: long = 0
+//		var buffer = malloc( 256 )
+//		while n < 255 {
+//
+//			// TODO: check inputs here to see if message is to be set else prompt
+//			print("> ");
+//			bzero(buffer,256);
+//			fgets(buffer,255,stdin);    // Waits for input
+//
+//			n = doWrite(sockfd,buffer,strlen(buffer));
+//			if (n < 0) {
+//				error("ERROR writing to socket")
+//			}
+//
+//			bzero(buffer,256);
+//			n = doRead(sockfd,buffer,255);
+//			if (n < 0) {
+//				error("ERROR reading from socket")
+//			}
+//
+//			print("%s\n",buffer);
+//		}
 		// Clean up
 		free( buffer )
 		close( socketfd )

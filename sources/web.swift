@@ -9,16 +9,50 @@
 import Glibc
 
 
-func getSocket( _ socket: Int, address: Int ) -> Int {
+func getConnection( _ socket: Int, address: Int ) -> Int {
 	let portNo: UInt16 = 5555
-	let serv_addr: sockaddr_in = sockaddr_in( sin_len: sizeof(sockaddr_in), sin_family: AF_INET, sin_port: htons(portNo), sin_addr: address, sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
-	
+	let serv_addr: sockaddr_in = sockaddr_in( sin_family: AF_INET, sin_port: htons(portNo), sin_addr: address, sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
 	let connectResult = connect(sockfd, &serv_addr, sizeof(sockaddr_in) )
 	if connectResult < 0 {
-		print("ERROR connecting");
+		print("ERROR connecting")
 	}
 	
 	return connectResult
+}
+
+//func doWrite( _ socketfd: ssize_t, _ buffer: UnsafeBufferPointer, _ len: ssize_t ) {
+//	return write( sockfd, buffer, len )
+//}
+//
+//func doRead( _ socketfd: ssize_t, _ buffer: UnsafeBufferPointer, _ len: ssize_t ) {
+//	bzero( buffer, 256 )
+//	return doRead( sockfd, buffer, len )
+//}
+
+func doLoop() {
+	var n: long = 0
+	var buffer = malloc( 256 )
+	while n < 255 {
+		
+		// TODO: check inputs here to see if message is to be set else prompt
+		print("> ");
+		bzero(buffer,256);
+		fgets(buffer,255,stdin);    // Waits for input
+		
+		n = doWrite(sockfd,buffer,strlen(buffer));
+		if (n < 0) {
+			error("ERROR writing to socket")
+		}
+		
+		bzero(buffer,256);
+		n = doRead(sockfd,buffer,255);
+		if (n < 0) {
+			error("ERROR reading from socket")
+		}
+		
+	//	print("%s\n",buffer);
+	}
+	
 }
 
 
