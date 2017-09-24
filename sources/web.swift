@@ -42,8 +42,9 @@ class ConnectManager {
 
 	func getConnection( address: Int32 ) -> Int {
 		let portNo: UInt16 = 5555
-		let serv_addr: sockaddr = sockaddr(sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(portNo), sin_addr: in_addr(address), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) ))
-		let connectResult = connect(socketfd, &serv_addr, sizeof(sockaddr_in) )
+		let serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(portNo), sin_addr: in_addr(address), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+		var serv_addr: sockaddr = sockaddr( serv_addr_in )
+		let connectResult = connect(socketfd, &serv_addr, sizeof(sockaddr) )
 		if connectResult < 0 {
 			print("ERROR connecting")
 		}
@@ -58,9 +59,9 @@ class ConnectManager {
 			// TODO: check inputs here to see if message is to be set else prompt
 			print("> ");
 			bzero(buffer!,256);
-			fgets((char *)(buffer!),255,stdin);    // Waits for input
+			fgets(buffer,255,stdin);    // Waits for input
 			
-			n = write( socketfd, buffer!, strlen(buffer) );
+			n = write( socketfd, buffer!, strlen(buffer!) );
 			if (n < 0) {
 				print("ERROR writing to socket")
 			}
