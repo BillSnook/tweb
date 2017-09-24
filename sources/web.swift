@@ -14,7 +14,7 @@ class ConnectManager {
 	let buffer = malloc( 256 )
 
 	func doConnect( _ addr: Int32 ) {
-		let connectResult = getConnection( socketfd, address: addr )
+		let connectResult = getConnection( address: addr )
 		if connectResult < 0 {
 			print( "Could not connect to socket for \(addr)" )
 			return
@@ -23,15 +23,15 @@ class ConnectManager {
 		
 		doLoop()
 		
-		free( buffer )
+		free( buffer! )
 		close( socketfd )
 	}
 
 
-	func getConnection( _ socket: Int, address: Int32 ) -> Int {
-		let portNo: Int16 = 5555
+	func getConnection( address: Int32 ) -> Int {
+		let portNo: UInt16 = 5555
 		let serv_addr: sockaddr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(portNo), sin_addr: address, sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
-		let connectResult = connect(sockfd, &serv_addr, sizeof(sockaddr_in) )
+		let connectResult = connect(socketfd, &serv_addr, sizeof(sockaddr_in) )
 		if connectResult < 0 {
 			print("ERROR connecting")
 		}
@@ -45,21 +45,21 @@ class ConnectManager {
 			
 			// TODO: check inputs here to see if message is to be set else prompt
 			print("> ");
-			bzero(buffer,256);
-			fgets(buffer,255,stdin);    // Waits for input
+			bzero(buffer!,256);
+			fgets(buffer!,255,stdin);    // Waits for input
 			
-			n = write(socketfd,buffer,strlen(buffer));
+			n = write( socketfd, buffer!, strlen(buffer) );
 			if (n < 0) {
 				print("ERROR writing to socket")
 			}
 			
-			bzero(buffer,256);
-			n = read(socketfd,buffer,255);
+			bzero(buffer!,256);
+			n = read( socketfd, buffer!, 255 );
 			if (n < 0) {
 				print("ERROR reading from socket")
 			}
 			
-			print("%s\n",buffer);
+			print("%s\n",buffer!);
 		}
 		
 	}
