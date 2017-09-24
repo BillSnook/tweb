@@ -11,8 +11,6 @@ import Glibc
 class ConnectManager {
 	
 	let socketfd = socket( AF_INET, Int32(SOCK_STREAM.rawValue), 0 )
-//	var buffer = malloc( 256 )
-	let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: 256)
 
 	func doConnect( _ addr: Int32 ) {
 		let connectResult = getConnection( address: addr )
@@ -24,28 +22,18 @@ class ConnectManager {
 		
 		doLoop()
 		
-		free( buffer )
 		close( socketfd )
 	}
 
-//	struct sockaddr {
-//		__uint8_t	sa_len;		/* total length */
-//		sa_family_t	sa_family;	/* [XSI] address family */
-//		char		sa_data[14];	/* [XSI] addr value (actually larger) */
-//	};
-//	struct sockaddr_in {
-//		__uint8_t	sin_len;
-//		sa_family_t	sin_family;
-//		in_port_t	sin_port;
-//		struct	in_addr sin_addr;
-//		char		sin_zero[8];
-//	};
 
 	func getConnection( address: Int32 ) -> Int32 {
 		let portNo: UInt16 = 5555
-		let serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: portNo.bigEndian, sin_addr: in_addr( s_addr: in_addr_t(address) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
-		var serv_addr: sockaddr = serv_addr_in
-		let connectResult = connect(socketfd, &serv_addr, socklen_t( MemoryLayout<sockaddr>.size ) )
+		var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: portNo.bigEndian, sin_addr: in_addr( s_addr: in_addr_t(address) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+		let connectResult = withUnsafeMutablePointer(to: &serv_addr_in) {
+		    $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+		        connect(socketfd, $0, socklen_t(MemoryLayout.size(ofValue: serv_addr_in)))
+		    }
+		}
 		if connectResult < 0 {
 			print("ERROR connecting")
 		}
@@ -54,27 +42,29 @@ class ConnectManager {
 	}
 
 	func doLoop() {
+		var buffer: [CChar] = [CChar](repeating: 0, count: 256)
+//		var buffer = &buff
 		var n: ssize_t = 0
 		while n < 255 {
 			
 			// TODO: check inputs here to see if message is to be set else prompt
 			print("> ");
-			bzero(buffer,256);
-			fgets(UnsafeMutablePointer<Int8>!(buffer),255,stdin);    // Waits for input
+			bzero( &buffer, 256 );
+			fgets( &buffer, 255, stdin );    // Waits for input
 			
-			let len = strlen( UnsafePointer<Int8>(buffer) )
-			n = write( socketfd, buffer, len );
+			let len = strlen( &buffer )
+			n = write( socketfd, &buffer, Int(len) );
 			if (n < 0) {
 				print("ERROR writing to socket")
 			}
 			
-			bzero(buffer,256);
-			n = read( socketfd, buffer, 255 );
+			bzero( &buffer, 256 );
+			n = read( socketfd, &buffer, 255 );
 			if (n < 0) {
 				print("ERROR reading from socket")
 			}
 			
-			print("%s\n",buffer);
+			print("%s\n", buffer);
 		}
 		
 	}
