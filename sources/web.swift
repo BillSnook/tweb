@@ -27,10 +27,22 @@ class ConnectManager {
 		close( socketfd )
 	}
 
+//	struct sockaddr {
+//		__uint8_t	sa_len;		/* total length */
+//		sa_family_t	sa_family;	/* [XSI] address family */
+//		char		sa_data[14];	/* [XSI] addr value (actually larger) */
+//	};
+//	struct sockaddr_in {
+//		__uint8_t	sin_len;
+//		sa_family_t	sin_family;
+//		in_port_t	sin_port;
+//		struct	in_addr sin_addr;
+//		char		sin_zero[8];
+//	};
 
 	func getConnection( address: Int32 ) -> Int {
 		let portNo: UInt16 = 5555
-		let serv_addr: sockaddr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(portNo), sin_addr: address, sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+		let serv_addr: sockaddr = sockaddr(sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(portNo), sin_addr: in_addr(address), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) ))
 		let connectResult = connect(socketfd, &serv_addr, sizeof(sockaddr_in) )
 		if connectResult < 0 {
 			print("ERROR connecting")
@@ -40,13 +52,13 @@ class ConnectManager {
 	}
 
 	func doLoop() {
-		var n: long = 0
+		var n: ssize_t = 0
 		while n < 255 {
 			
 			// TODO: check inputs here to see if message is to be set else prompt
 			print("> ");
 			bzero(buffer!,256);
-			fgets(buffer!,255,stdin);    // Waits for input
+			fgets((char *)(buffer!),255,stdin);    // Waits for input
 			
 			n = write( socketfd, buffer!, strlen(buffer) );
 			if (n < 0) {
