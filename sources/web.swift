@@ -11,7 +11,7 @@ import Glibc
 class ConnectManager {
 	
 	let socketfd = socket( AF_INET, Int32(SOCK_STREAM.rawValue), 0 )
-	let buffer = malloc( 256 )
+	var buffer = malloc( 256 )
 
 	func doConnect( _ addr: Int32 ) {
 		let connectResult = getConnection( address: addr )
@@ -40,11 +40,11 @@ class ConnectManager {
 //		char		sin_zero[8];
 //	};
 
-	func getConnection( address: Int32 ) -> Int {
+	func getConnection( address: Int32 ) -> Int32 {
 		let portNo: UInt16 = 5555
-		let serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(portNo), sin_addr: in_addr( s_addr: address ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+		let serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(portNo), sin_addr: in_addr( s_addr: in_addr_t(address) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
 		var serv_addr: sockaddr = sockaddr( serv_addr_in )
-		let connectResult = connect(socketfd, &serv_addr, socklen_t( sizeof(sockaddr) ) )
+		let connectResult = connect(socketfd, &serv_addr, socklen_t( MemoryLayout<sockaddr>.size ) )
 		if connectResult < 0 {
 			print("ERROR connecting")
 		}
