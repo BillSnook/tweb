@@ -46,12 +46,13 @@ class ConnectManager {
 		}
 		print( "\nIn getConnection with connectResult: \(connectResult)\n\n" )
 		if connectResult < 0 {
-			print("ERROR connecting")
+			print("ERROR connecting, errno: \(errno)")
 		}
 		
 		return connectResult
 	}
 
+	
 	func doLoop() {
 		var buffer: [CChar] = [CChar](repeating: 0, count: 256)
 //		var buffer = &buff
