@@ -18,7 +18,7 @@ import Foundation
 var stayInProgram = true
 
 let sender = Snd()
-sender.doSnd( to: "zerowpi2.local" )
+sender.doSnd( to: "workpi.local" )
 
 
 //let watcher = WatchPins()

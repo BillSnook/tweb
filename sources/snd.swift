@@ -22,7 +22,6 @@ import Glibc
 class Snd {
 
 	var target: Host?
-	var socket: SocketPort?
 
 	func lookup( name: String ) -> Host? {
 		
@@ -60,9 +59,20 @@ class Snd {
 			print( "No addresses returned for \(to)" )
 			return
 		}
-		let addr = atoi( addrs.first! )
+//		let addr = atoi( addrs.first! )
+//		let addrArray = addr.split(separator: ".")
+//		var addrTarget:UInt32 = 0
+//		for addrByte in addrArray {
+//			let abyte = atoi( addrByte )
+//			addrTarget *= 256
+//			addrTarget += abyte
+//		}
+//		print( "Got new address: \(addrTarget)" )
+
+		let cchar = addrs.first!.cString(using: .utf8)!
+		print( "cchar string: \(cchar)" )
 		let cm = ConnectManager()
-		cm.doConnect( addr )
+		cm.doConnect( cchar )
 
 //		guard let connectResult = getConnection( socketfd, address: atoi(addr) ) else {
 //			print( "Could not connect to socket for \(addr)" )

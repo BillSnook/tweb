@@ -12,14 +12,22 @@ class ConnectManager {
 	
 	let socketfd = socket( AF_INET, Int32(SOCK_STREAM.rawValue), 0 )
 
-	func doConnect( _ addr: Int32 ) {
-		print( "\nIn doConnect\n\n" )
-		let connectResult = getConnection( address: addr )
+	func doConnect( _ addr: [CChar] ) {
+		var target: UInt32 = 0
+		let cchars = addr.split( separator: '.' )
+		for ipPart in cchars {
+			let ip = String( ipPart )
+			let num: UInt32 = UInt32(atoi( ip ))
+			target *= 256
+			target += num
+		}
+		print( "\nIn doConnect for \(target)\n\n" )
+		let connectResult = getConnection( address: target )
 		if connectResult < 0 {
 			print( "Could not connect to socket for \(addr)" )
 			return
 		}
-		print( "Got socket" )
+		print( "Got socket\n" )
 		
 		doLoop()
 		
@@ -27,9 +35,10 @@ class ConnectManager {
 	}
 
 
-	func getConnection( address: Int32 ) -> Int32 {
+	func getConnection( address: UInt32 ) -> Int32 {
 		let portNo: UInt16 = 5555
-		var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: portNo.bigEndian, sin_addr: in_addr( s_addr: in_addr_t(address) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+		var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(portNo), sin_addr: in_addr( s_addr: in_addr_t(address) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+		print( "in getConnection before calling connect\n" )
 		let connectResult = withUnsafeMutablePointer(to: &serv_addr_in) {
 		    $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
 		        connect(socketfd, $0, socklen_t(MemoryLayout.size(ofValue: serv_addr_in)))
