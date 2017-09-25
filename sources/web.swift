@@ -12,12 +12,12 @@ class ConnectManager {
 	
 	let socketfd = socket( AF_INET, Int32(SOCK_STREAM.rawValue), 0 )
 
-	func doConnect( _ addr: [CChar] ) {
+	func doConnect( _ addr: String ) {
 		var target: UInt32 = 0
-		let cchars = addr.split( separator: '.' )
-		for ipPart in cchars {
-			let ip = String( ipPart )
-			let num: UInt32 = UInt32(atoi( ip ))
+		let addrs = addr.split( separator: "." )
+		for ipPart in addrs {
+//			let ip = String( ipPart )
+			let num: UInt32 = UInt32(atoi( ipPart ))
 			target *= 256
 			target += num
 		}

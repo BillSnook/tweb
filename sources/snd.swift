@@ -69,10 +69,10 @@ class Snd {
 //		}
 //		print( "Got new address: \(addrTarget)" )
 
-		let cchar = addrs.first!.cString(using: .utf8)!
-		print( "cchar string: \(cchar)" )
+//		let cchar = addrs.first!.cString(using: .utf8)!
+		print( "Address string: \(addrs.first!)" )
 		let cm = ConnectManager()
-		cm.doConnect( cchar )
+		cm.doConnect( addrs.first! )
 
 //		guard let connectResult = getConnection( socketfd, address: atoi(addr) ) else {
 //			print( "Could not connect to socket for \(addr)" )
