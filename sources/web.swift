@@ -14,7 +14,7 @@ class ConnectManager {
 
 	func doConnect( _ addr: String ) {
 		var target: UInt32 = 0
-		let addrs = addr.split( separator: "." )
+		let addrs = addr._split( separator: "." )
 		for ipPart in addrs {
 //			let ip = String( ipPart )
 			let num: UInt32 = UInt32(atoi( ipPart ))
