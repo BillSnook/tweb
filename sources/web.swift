@@ -38,7 +38,7 @@ class ConnectManager {
 
 
 	func getConnection( address: String ) -> Int32 {
-		let portNo: UInt16 = CONNECTION_PORT
+		let portNo: UInt16 = UInt16(CONNECTION_PORT)
 		var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(portNo), sin_addr: in_addr( s_addr: inet_addr(address) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
 		print( "in getConnection before calling connect\n" )
 		let connectResult = withUnsafeMutablePointer(to: &serv_addr_in) {

@@ -16,12 +16,11 @@ import Foundation
 //import SwiftyGPIO
 
 let CONNECTION_PORT = 5555
-let CONNECTION_HOST = "zerowpi2.local"
-//let CONNECTION_HOST = "workpi.local"
+//let CONNECTION_HOST = "zerowpi2.local"
+let CONNECTION_HOST = "workpi.local"
 
 var stayInProgram = true
 
-func main(argc: Int, argv: )
 let sender = Snd()
 sender.doSnd( to: CONNECTION_HOST )
 
