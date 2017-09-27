@@ -8,22 +8,19 @@
 
 #if	os(Linux)
 import Glibc
+#else
+import Darwin
 #endif
 
 class ConnectManager {
 	
+#if	os(Linux)
 	let socketfd = socket( AF_INET, Int32(SOCK_STREAM.rawValue), 0 )
+#else
+	let socketfd = socket( AF_INET, SOCK_STREAM, 0 )
+#endif
 
 	func doConnect( _ addr: String ) {
-//		var target: UInt32 = 0
-//		let addrs = addr._split( separator: "." )
-//		for ipPart in addrs {
-////			let ip = String( ipPart )
-//			let num: UInt32 = UInt32(atoi( ipPart ))
-//			target *= 256
-//			target += num
-//		}
-//		print( "\nIn doConnect for \(target)\n\n" )
 		let connectResult = getConnection( address: addr )
 		if connectResult < 0 {
 			print( "Could not connect to socket for \(addr)" )
@@ -46,7 +43,7 @@ class ConnectManager {
 		        connect(socketfd, $0, socklen_t(MemoryLayout.size(ofValue: serv_addr_in)))
 		    }
 		}
-		print( "\nIn getConnection with connectResult: \(connectResult)\n\n" )
+		print( "\nIn getConnection with connectResult: \(connectResult)\n" )
 		if connectResult < 0 {
 			print("ERROR connecting, errno: \(errno)")
 		}
@@ -57,7 +54,6 @@ class ConnectManager {
 	
 	func doLoop() {
 		var buffer: [CChar] = [CChar](repeating: 0, count: 256)
-//		var buffer = &buff
 		var n: ssize_t = 0
 		print( "In doLoop" );
 		while n < 255 {
@@ -79,7 +75,7 @@ class ConnectManager {
 				print("ERROR reading from socket")
 			}
 			
-			print("%s\n", buffer);
+			print("\(buffer)");
 		}
 		
 	}
