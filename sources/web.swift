@@ -6,23 +6,25 @@
 //
 //
 
+#if	os(Linux)
 import Glibc
+#endif
 
 class ConnectManager {
 	
 	let socketfd = socket( AF_INET, Int32(SOCK_STREAM.rawValue), 0 )
 
 	func doConnect( _ addr: String ) {
-		var target: UInt32 = 0
-		let addrs = addr._split( separator: "." )
-		for ipPart in addrs {
-//			let ip = String( ipPart )
-			let num: UInt32 = UInt32(atoi( ipPart ))
-			target *= 256
-			target += num
-		}
-		print( "\nIn doConnect for \(target)\n\n" )
-		let connectResult = getConnection( address: target )
+//		var target: UInt32 = 0
+//		let addrs = addr._split( separator: "." )
+//		for ipPart in addrs {
+////			let ip = String( ipPart )
+//			let num: UInt32 = UInt32(atoi( ipPart ))
+//			target *= 256
+//			target += num
+//		}
+//		print( "\nIn doConnect for \(target)\n\n" )
+		let connectResult = getConnection( address: addr )
 		if connectResult < 0 {
 			print( "Could not connect to socket for \(addr)" )
 			return
@@ -35,9 +37,9 @@ class ConnectManager {
 	}
 
 
-	func getConnection( address: UInt32 ) -> Int32 {
-		let portNo: UInt16 = 5555
-		var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(portNo), sin_addr: in_addr( s_addr: in_addr_t(address) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+	func getConnection( address: String ) -> Int32 {
+		let portNo: UInt16 = CONNECTION_PORT
+		var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(portNo), sin_addr: in_addr( s_addr: inet_addr(address) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
 		print( "in getConnection before calling connect\n" )
 		let connectResult = withUnsafeMutablePointer(to: &serv_addr_in) {
 		    $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
