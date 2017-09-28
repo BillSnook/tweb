@@ -22,18 +22,18 @@ var hostAddress = "workpi.local"    // "zerowpi2.local"
 
 print( "There are \(CommandLine.arguments.count) command line arguments" )
 
-if CommandLine.arguments.count == 0 {
+if CommandLine.arguments.count == 1 {
 	print( "USAGE: tweb [listen | sender] [portNumber] [hostName]" )
 } else {
-	if CommandLine.arguments.count > 1 {
+	if CommandLine.arguments.count > 2 {
 		portNumber = UInt16(atoi( CommandLine.arguments[1] ))
 	}
 	
-	if CommandLine.arguments.count > 2 {
+	if CommandLine.arguments.count > 3 {
 		hostAddress = CommandLine.arguments[2]
 	}
 	
-	print( "" )
+//	print( "" )
 	if CommandLine.arguments[2] == "listen" {
 		print( "listen mode is not yet implemented" )
 	} else {
