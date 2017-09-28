@@ -77,7 +77,6 @@ class Sender {
 		#if	os(Linux)
 			var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: port.bigEndian, sin_addr: in_addr( s_addr: inet_addr(addr) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
 		#else
-//			var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: port.bigEndian, sin_addr: in_addr( s_addr: inet_addr(addr) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
 			var serv_addr_in = sockaddr_in( sin_len: __uint8_t(MemoryLayout< sockaddr_in >.size), sin_family: sa_family_t(AF_INET), sin_port: port.bigEndian, sin_addr: in_addr( s_addr: inet_addr(addr) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
 		#endif
 		let serv_addr_len = socklen_t(MemoryLayout.size( ofValue: serv_addr_in ))
@@ -97,29 +96,32 @@ class Sender {
 	
 	
 	func doLoop() {
-		var buffer: [CChar] = [CChar](repeating: 0, count: 256)
-		var n: ssize_t = 0
-		//		print( "Enter doLoop" );
-		while n < 255 {
-			
-			// TODO: check inputs here to see if message is to be set else prompt
+		var readBuffer = UnsafeMutablePointer<UInt8>.allocate(capacity: 256)
+		var writeBuffer: [CChar] = [CChar](repeating: 0, count: 256)
+		var sndLen: ssize_t = 0
+		var rcvLen: ssize_t = 0
+		while sndLen < 255 {
 			print( "> ", terminator: "" );
-			bzero( &buffer, 256 );
-			fgets( &buffer, 255, stdin );    // Blocks for input
+			bzero( &writeBuffer, 256 );
+			fgets( &writeBuffer, 255, stdin );    // Blocks for input
 			
-			let len = strlen( &buffer )
-			n = write( socketfd, &buffer, Int(len) );
-			if (n < 0) {
-				print("\n\nERROR writing to socket")
+			let len = strlen( &writeBuffer )
+			sndLen = write( socketfd, &writeBuffer, Int(len) );
+			if ( sndLen < 0 ) {
+				print( "\n\nERROR writing to socket" )
 			}
 			
-			bzero( &buffer, 256 );
-			n = read( socketfd, &buffer, 255 );
-			if (n < 0) {
-				print("\n\nERROR reading from socket")
+			bzero( &readBuffer, 256 );
+			rcvLen = read( socketfd, &readBuffer, 255 );
+			if (rcvLen < 0) {
+				print( "\n\nERROR reading from socket" )
 			}
 			
-			print("\(n) bytes received: \(buffer)");
+			if let newdata = String( bytesNoCopy: readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) {
+				print( "\(rcvLen) bytes received: \(newdata)" )
+			} else {
+				print( "No valid data receive, length: \(rcvLen)" )
+			}
 		}
 		
 	}
