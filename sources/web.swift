@@ -14,74 +14,7 @@ import Darwin
 
 class ConnectManager {
 	
-#if	os(Linux)
-	let socketfd = socket( AF_INET, Int32(SOCK_STREAM.rawValue), 0 )
-#else
-	let socketfd = socket( AF_INET, SOCK_STREAM, 0 )
-#endif
 
-	func doConnect( _ addr: String, port: UInt16 ) {
-		let connectResult = getConnection( address: addr, port: port )
-		if connectResult < 0 {
-			print( "Could not connect to socket for \(addr)" )
-			return
-		}
-		print( "Got socket\n" )
-		
-		doLoop()
-		
-		close( socketfd )
-	}
-
-
-	func getConnection( address: String, port: UInt16 ) -> Int32 {
-		#if	os(Linux)
-			var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(port), sin_addr: in_addr( s_addr: inet_addr(address) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
-		#else
-//			var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: port, sin_addr: in_addr( s_addr: inet_addr(address) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
-		#endif
-		print( "in getConnection before calling connect\n" )
-		let connectResult = withUnsafeMutablePointer(to: &serv_addr_in) {
-		    $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
-		        connect(socketfd, $0, socklen_t(MemoryLayout.size(ofValue: serv_addr_in)))
-		    }
-		}
-		print( "\nIn getConnection with connectResult: \(connectResult)\n" )
-		if connectResult < 0 {
-			print("ERROR connecting, errno: \(errno)")
-		}
-		
-		return connectResult
-	}
-
-	
-	func doLoop() {
-		var buffer: [CChar] = [CChar](repeating: 0, count: 256)
-		var n: ssize_t = 0
-		print( "In doLoop" );
-		while n < 255 {
-			
-			// TODO: check inputs here to see if message is to be set else prompt
-			print("> ");
-			bzero( &buffer, 256 );
-			fgets( &buffer, 255, stdin );    // Waits for input
-			
-			let len = strlen( &buffer )
-			n = write( socketfd, &buffer, Int(len) );
-			if (n < 0) {
-				print("ERROR writing to socket")
-			}
-			
-			bzero( &buffer, 256 );
-			n = read( socketfd, &buffer, 255 );
-			if (n < 0) {
-				print("ERROR reading from socket")
-			}
-			
-			print("\(buffer)");
-		}
-		
-	}
 }
 
 
