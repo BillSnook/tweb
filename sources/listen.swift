@@ -41,7 +41,11 @@ class Listen {
 	
 	
 	func getConnector( on port: UInt16 ) -> Int32 {
-		var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(port), sin_addr: INADDR_ANY, sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+		#if	os(Linux)
+			var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(port), sin_addr: in_addr( s_addr: INADDR_ANY ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+		#else
+			var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: port, sin_addr: in_addr( s_addr: INADDR_ANY ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+		#endif
 
 		print( "\n\nIn getConnection before calling bind\n" )
 		let bindResult = withUnsafeMutablePointer(to: &serv_addr_in) {
@@ -58,9 +62,14 @@ class Listen {
 		
 		var cli_addr: sockaddr_in
 		
+//		let newsockfd = withUnsafeMutablePointer(to: &cli_addr) {
+//			$0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+//				accept(socketfd, $0, socklen_t(MemoryLayout.size(ofValue: cli_addr)))
+//			}
+//		}
 		let newsockfd = withUnsafeMutablePointer(to: &cli_addr) {
 			$0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
-				accept(socketfd, $0, socklen_t(MemoryLayout.size(ofValue: cli_addr)))
+				connect(socketfd, $0, socklen_t(MemoryLayout.size(ofValue: cli_addr)))
 			}
 		}
 		if newsockfd < 0 {
