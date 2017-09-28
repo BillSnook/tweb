@@ -75,9 +75,10 @@ class Sender {
 
 	func doConnect( _ addr: String, port: UInt16 ) -> Int32 {
 		#if	os(Linux)
-			var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(port), sin_addr: in_addr( s_addr: inet_addr(addr) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+			var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: port.bigEndian, sin_addr: in_addr( s_addr: inet_addr(addr) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
 		#else
-//			var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: port, sin_addr: in_addr( s_addr: inet_addr(address) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+//			var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: port.bigEndian, sin_addr: in_addr( s_addr: inet_addr(addr) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+			var serv_addr_in = sockaddr_in( sin_len: __uint8_t(MemoryLayout< sockaddr_in >.size), sin_family: sa_family_t(AF_INET), sin_port: port.bigEndian, sin_addr: in_addr( s_addr: inet_addr(addr) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
 		#endif
 		let serv_addr_len = socklen_t(MemoryLayout.size( ofValue: serv_addr_in ))
 		print( "in getConnection before calling connect\n" )
@@ -118,7 +119,7 @@ class Sender {
 				print("\n\nERROR reading from socket")
 			}
 			
-			print("\(buffer)");
+			print("\(n) bytes received: \(buffer)");
 		}
 		
 	}
