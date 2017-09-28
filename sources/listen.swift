@@ -60,7 +60,7 @@ class Listen {
 		}
 		listen( socketfd, 5 )
 		
-		var cli_addr: sockaddr_in
+		var cli_addr = sockaddr_in()
 		let cli_len = socklen_t(MemoryLayout.size(ofValue: cli_addr))
 		
 //		let newsockfd = withUnsafeMutablePointer(to: &cli_addr) {
