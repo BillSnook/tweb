@@ -61,33 +61,29 @@ class Sender {
 		}
 
 		print( "Address string: \(addrs.first!)" )
-		doConnect( addrs.first!, port: at )
-	}
-
-	func doConnect( _ addr: String, port: UInt16 ) {
-		let connectResult = getConnection( address: addr, port: port )
-		if connectResult < 0 {
-			print( "Could not connect to socket for \(addr)" )
+		let result = doConnect( addrs.first!, port: at )
+		guard result >= 0 else {
+			print( "Connect failed" )
 			return
 		}
-		print( "Got socket\n" )
-		
+		print( "Got socket on which to send\n" )
+
 		doLoop()
 		
 		close( socketfd )
 	}
-	
-	
-	func getConnection( address: String, port: UInt16 ) -> Int32 {
+
+	func doConnect( _ addr: String, port: UInt16 ) -> Int32 {
 		#if	os(Linux)
-			var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(port), sin_addr: in_addr( s_addr: inet_addr(address) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+			var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(port), sin_addr: in_addr( s_addr: inet_addr(addr) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
 		#else
-			//			var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: port, sin_addr: in_addr( s_addr: inet_addr(address) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+//			var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: port, sin_addr: in_addr( s_addr: inet_addr(address) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
 		#endif
+		let serv_addr_len = socklen_t(MemoryLayout.size( ofValue: serv_addr_in ))
 		print( "in getConnection before calling connect\n" )
-		let connectResult = withUnsafeMutablePointer(to: &serv_addr_in) {
-			$0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
-				connect(socketfd, $0, socklen_t(MemoryLayout.size(ofValue: serv_addr_in)))
+		let connectResult = withUnsafeMutablePointer( to: &serv_addr_in ) {
+			$0.withMemoryRebound( to: sockaddr.self, capacity: 1 ) {
+				connect( socketfd, $0, serv_addr_len )
 			}
 		}
 		print( "\nIn getConnection with connectResult: \(connectResult)\n" )
