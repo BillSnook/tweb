@@ -58,6 +58,7 @@ class Listen {
 			print("\n\nERROR binding, errno: \(errno)")
 			return bindResult
 		}
+		print("\n\nListening on socket for port \(port)\n")
 		listen( socketfd, 5 )
 		
 		var cli_addr = sockaddr_in()
