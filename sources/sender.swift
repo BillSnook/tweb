@@ -110,9 +110,12 @@ class Sender {
 			if ( sndLen < 0 ) {
 				print( "\n\nERROR writing to socket" )
 			}
-			
+			print( "Wrote \(sndLen) of \(len) bytes" );
+
 			bzero( &readBuffer, 256 );
 			rcvLen = read( socketfd, &readBuffer, 255 );
+			print( "Read \(rcvLen) bytes" );
+			
 			if (rcvLen < 0) {
 				print( "\n\nERROR reading from socket" )
 			}
