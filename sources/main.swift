@@ -35,9 +35,10 @@ if CommandLine.arguments.count == 1 {
 	
 //	print( "" )
 	if CommandLine.arguments[1] == "listen" {
-		print( "listen mode is not yet implemented" )
+		let listener = Listen()
+		listener.doRcv( on: portNumber )
 	} else {
-		let sender = Snd()
+		let sender = Sender()
 		sender.doSnd( to: hostAddress, at: portNumber )
 	}
 }

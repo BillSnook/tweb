@@ -1,5 +1,5 @@
 //
-//  snd.swift
+//  sender.swift
 //  tweb
 //
 //  Created by William Snook on 9/20/17.
@@ -9,11 +9,11 @@ import Foundation
 #if os(Linux)
 import Glibc
 #else
-import Darwin
+import Darwin.C
 #endif
 
 
-class Snd {
+class Sender {
 
 	var target: Host?
 	#if	os(Linux)
