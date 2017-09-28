@@ -61,6 +61,7 @@ class Listen {
 		listen( socketfd, 5 )
 		
 		var cli_addr: sockaddr_in
+		let cli_len = socklen_t(MemoryLayout.size(ofValue: cli_addr))
 		
 //		let newsockfd = withUnsafeMutablePointer(to: &cli_addr) {
 //			$0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
@@ -69,7 +70,7 @@ class Listen {
 //		}
 		let newsockfd = withUnsafeMutablePointer(to: &cli_addr) {
 			$0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
-				connect(socketfd, $0, socklen_t(MemoryLayout.size(ofValue: cli_addr)))
+				connect(socketfd, $0, cli_len)
 			}
 		}
 		if newsockfd < 0 {
