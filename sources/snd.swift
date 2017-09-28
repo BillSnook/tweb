@@ -52,7 +52,7 @@ class Snd {
 	}
 	
 
-	func doSnd( to: String ) {
+	func doSnd( to: String, at: UInt16 ) {
 	
 		guard let server = lookup( name: to ) else {
 			print( "Lookup failed for \(to)" )
@@ -66,7 +66,7 @@ class Snd {
 
 		print( "Address string: \(addrs.first!)" )
 		let cm = ConnectManager()
-		cm.doConnect( addrs.first! )
+		cm.doConnect( addrs.first!, port: at )
 	}
 }
 
