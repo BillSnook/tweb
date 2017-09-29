@@ -89,14 +89,13 @@ class Listen {
 				print("\n\nERROR reading from newsocket")
 			}
 
-			if let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) {
-				print( "\(newdata)" )
-			} else {
-				print( "No valid data received, length: \(rcvLen)" )
-			}
-//			print("\(readBuffer)");
-
 			if (rcvLen > 0) {
+				if let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) {
+					print( "\(newdata)" )
+				} else {
+					print( "No valid data received, length: \(rcvLen)" )
+				}
+
 				sndLen = write( newSocket, readBuffer, rcvLen);
 				if (sndLen < 0) {
 					print("\n\nERROR writing to socket");
