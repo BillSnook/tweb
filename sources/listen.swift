@@ -32,7 +32,6 @@ class Listen {
 			print( "Failed accepting socket" )
 			return
 		}
-		print( "Got listener socket\n" )
 		
 		doWait( newSocket: newsocket )
 		
@@ -42,7 +41,7 @@ class Listen {
 	
 	func getConnector( on port: UInt16 ) -> Int32 {
 		#if	os(Linux)
-			var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: ntohs(port), sin_addr: in_addr( s_addr: INADDR_ANY ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
+			var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(port), sin_addr: in_addr( s_addr: INADDR_ANY ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
 		#else
 			var serv_addr_in = sockaddr_in( sin_len: __uint8_t(MemoryLayout< sockaddr_in >.size), sin_family: sa_family_t(AF_INET), sin_port: port.bigEndian, sin_addr: in_addr( s_addr: INADDR_ANY ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
 		#endif
@@ -71,7 +70,9 @@ class Listen {
 		}
 		if newsockfd < 0 {
 			print("\n\nERROR accepting, errno: \(errno)")
+			return newsockfd
 		}
+		print( "Got listener socket: \(ntohs(cli_addr.sin_port))\n" )
 
 		return newsockfd
 	}
