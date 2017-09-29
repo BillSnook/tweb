@@ -60,13 +60,13 @@ class Sender {
 			return
 		}
 
-		print( "Address string: \(addrs.first!)" )
+		print( "\nAddress string: \(addrs.first!)\n" )
 		let result = doConnect( addrs.first!, port: at )
 		guard result >= 0 else {
 			print( "Connect failed" )
 			return
 		}
-		print( "Got socket on which to send\n" )
+		print( "\nGot socket on which to send\n" )
 
 		doLoop()
 		
@@ -80,15 +80,15 @@ class Sender {
 			var serv_addr_in = sockaddr_in( sin_len: __uint8_t(MemoryLayout< sockaddr_in >.size), sin_family: sa_family_t(AF_INET), sin_port: port.bigEndian, sin_addr: in_addr( s_addr: inet_addr(addr) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
 		#endif
 		let serv_addr_len = socklen_t(MemoryLayout.size( ofValue: serv_addr_in ))
-		print( "in getConnection before calling connect\n" )
+		print( "In getConnection before calling connect\n" )
 		let connectResult = withUnsafeMutablePointer( to: &serv_addr_in ) {
 			$0.withMemoryRebound( to: sockaddr.self, capacity: 1 ) {
 				connect( socketfd, $0, serv_addr_len )
 			}
 		}
-		print( "\nIn getConnection with connectResult: \(connectResult)\n" )
+		print( "\n\nIn getConnection with connectResult: \(connectResult)\n" )
 		if connectResult < 0 {
-			print("ERROR connecting, errno: \(errno)")
+			print("\nERROR connecting, errno: \(errno)")
 		}
 		
 		return connectResult

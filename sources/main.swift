@@ -25,20 +25,26 @@ print( "There are \(CommandLine.arguments.count) command line arguments" )
 if CommandLine.arguments.count == 1 {
 	print( "USAGE: tweb [listen | sender] [portNumber] [hostName]" )
 } else {
-	if CommandLine.arguments.count > 2 {
-		portNumber = UInt16(atoi( CommandLine.arguments[2] ))
-	}
-	
-	if CommandLine.arguments.count > 3 {
-		hostAddress = CommandLine.arguments[3]
-	}
-	
-//	print( "" )
 	if CommandLine.arguments[1] == "listen" {
+		if CommandLine.arguments.count != 2 {
+			print( "USAGE: tweb listen" )
+			exit(0)
+		}
 		let listener = Listen()
 		listener.doRcv( on: portNumber )
 	} else {
+		if CommandLine.arguments.count > 2 {
+			hostAddress = CommandLine.arguments[2] + ".local"
+		}
+		if CommandLine.arguments.count > 3 {
+			portNumber = UInt16(atoi( CommandLine.arguments[3] ))
+		}
+		if CommandLine.arguments.count > 4 {
+			print( "USAGE: tweb sender [hostName [portNumber]]" )
+			exit(0)
+		}
 		let sender = Sender()
 		sender.doSnd( to: hostAddress, at: portNumber )
 	}
+//	print( "" )
 }
