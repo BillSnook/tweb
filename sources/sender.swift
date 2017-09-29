@@ -118,11 +118,11 @@ class Sender {
 				print( "\n\nERROR reading from socket" )
 			}
 
-			if let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) {
-//				print( "\(newdata)" )
-			} else {
-				print( "No valid data received, length: \(rcvLen)" )
-			}
+//			if let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) {
+////				print( "\(newdata)" )
+//			} else {
+//				print( "No valid data received, length: \(rcvLen)" )
+//			}
 		}
 		
 	}
