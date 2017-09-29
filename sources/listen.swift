@@ -64,7 +64,6 @@ class Listen {
 		var cli_len = socklen_t(MemoryLayout.size(ofValue: cli_addr))
 		let cli_addr_ptr = UnsafeMutablePointer<socklen_t>(withUnsafeMutablePointer(to: &cli_len, { $0 }))
 
-//		let newsockfd = accept( socketfd, &cli_addr, cli_addr_ptr )
 		let newsockfd = withUnsafeMutablePointer( to: &cli_addr ) {
 			$0.withMemoryRebound( to: sockaddr.self, capacity: 1 ) {
 				accept( socketfd, $0, cli_addr_ptr )
@@ -74,75 +73,36 @@ class Listen {
 			print("\n\nERROR accepting, errno: \(errno)")
 			return newsockfd
 		}
-		print( "\nGot accept socket: \(ntohs(cli_addr.sin_port))\n" )
 
 		return newsockfd
 	}
 	
 	
 	func doWait( newSocket: Int32 ) {
-		var buffer: [CChar] = [CChar](repeating: 0, count: 256)
-		var n: ssize_t = 0
-		while n < 255 {
-			bzero( &buffer, 256 );
-			n = read( newSocket, &buffer, 255 );
-			if (n < 0) {
+		var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
+		var sndLen: ssize_t = 0
+		var rcvLen: ssize_t = 0
+		while rcvLen < 255 {
+			bzero( &readBuffer, 256 );
+			rcvLen = read( newSocket, &readBuffer, 255 );
+			if (rcvLen < 0) {
 				print("\n\nERROR reading from newsocket")
 			}
-			if (n > 0) {
-				n = write( newSocket, "OK", 2);
-				if (n < 0) {
+
+			if let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) {
+				print( "\(newdata)" )
+			} else {
+				print( "No valid data received, length: \(rcvLen)" )
+			}
+			print("\(readBuffer)");
+
+			if (rcvLen > 0) {
+				sndLen = write( newSocket, readBuffer, rcvLen);
+				if (sndLen < 0) {
 					print("\n\nERROR writing to socket");
 				}
 			}
-			print("\(buffer)");
 		}
 		
 	}
 }
-
-/*
-long n = 0;
-int sockfd, newsockfd, portno;
-char buffer[256];
-struct sockaddr_in serv_addr, cli_addr;
-socklen_t clilen = sizeof(cli_addr);
-
-sockfd = socket(AF_INET, SOCK_STREAM, 0);
-if (sockfd < 0)
-error("ERROR opening socket");
-bzero((char *) &serv_addr, sizeof(serv_addr));
-portno = CONNECTION_PORT; // atoi(argv[1]);
-serv_addr.sin_family = AF_INET;
-serv_addr.sin_addr.s_addr = INADDR_ANY;
-serv_addr.sin_port = htons(portno);
-if (bind(sockfd, (struct sockaddr *) &serv_addr,
-sizeof(serv_addr)) < 0)
-error("ERROR on binding");
-listen(sockfd,5);
-
-newsockfd = accept(sockfd,
-(struct sockaddr *) &cli_addr,
-&clilen);
-if (newsockfd < 0)
-error("ERROR on accept");
-
-messagesInit();
-
-while ( n < 255 ) {
-	bzero(buffer,256);
-	n = read(newsockfd,buffer,255);
-	if (n < 0)
-	error("ERROR reading from socket");
-	// TODO: handle message here
-	if ( n > 0 ) {
-		messageHandler( buffer );
-		n = write(newsockfd,"OK",2);
-		if (n < 0)
-		error("ERROR writing to socket");
-	}
-}
-
-close(newsockfd);
-close(sockfd);
-*/

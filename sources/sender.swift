@@ -96,10 +96,10 @@ class Sender {
 	
 	
 	func doLoop() {
-		var readBuffer: [CChar] = [CChar](repeating: 0, count: 256) //  = UnsafeMutablePointer<UInt8>.allocate(capacity: 256)
+		var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
 		var writeBuffer: [CChar] = [CChar](repeating: 0, count: 256)
-		var sndLen: ssize_t = 0
 		var rcvLen: ssize_t = 0
+		var sndLen: ssize_t = 0
 		while sndLen < 255 {
 			print( "> ", terminator: "" );
 			bzero( &writeBuffer, 256 );
