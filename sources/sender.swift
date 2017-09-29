@@ -96,7 +96,7 @@ class Sender {
 	
 	
 	func doLoop() {
-		var readBuffer = UnsafeMutablePointer<UInt8>.allocate(capacity: 256)
+		var readBuffer: [CChar] = [CChar](repeating: 0, count: 256) //  = UnsafeMutablePointer<UInt8>.allocate(capacity: 256)
 		var writeBuffer: [CChar] = [CChar](repeating: 0, count: 256)
 		var sndLen: ssize_t = 0
 		var rcvLen: ssize_t = 0
@@ -120,7 +120,7 @@ class Sender {
 				print( "\n\nERROR reading from socket" )
 			}
 			
-			if let newdata = String( bytesNoCopy: readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) {
+			if let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) {
 				print( "\(rcvLen) bytes received: \(newdata)" )
 			} else {
 				print( "No valid data receive, length: \(rcvLen)" )
