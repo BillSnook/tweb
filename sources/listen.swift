@@ -60,16 +60,16 @@ class Listen {
 		print("\nListening on socket for port \(port)\n")
 		listen( socketfd, 5 )
 		
-		var cli_addr = sockaddr()
+		var cli_addr = sockaddr_in()
 		var cli_len = socklen_t(MemoryLayout.size(ofValue: cli_addr))
 		let cli_addr_ptr = UnsafeMutablePointer<socklen_t>(withUnsafeMutablePointer(to: &cli_len, { $0 }))
 
-		let newsockfd = accept( socketfd, &cli_addr, cli_addr_ptr )
-//		let newsockfd = /*withUnsafeMutablePointer( to: &cli_addr ) {
-//			$0.withMemoryRebound( to: sockaddr.self, capacity: 1 ) {*/
-//			accept( socketfd, &cli_addr, cli_len )
-////			}
-////		}
+//		let newsockfd = accept( socketfd, &cli_addr, cli_addr_ptr )
+		let newsockfd = withUnsafeMutablePointer( to: &cli_addr ) {
+			$0.withMemoryRebound( to: sockaddr.self, capacity: 1 ) {
+				accept( socketfd, $0, cli_addr_ptr )
+			}
+		}
 		if newsockfd < 0 {
 			print("\n\nERROR accepting, errno: \(errno)")
 			return newsockfd
