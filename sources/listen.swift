@@ -94,7 +94,7 @@ class Listen {
 			} else {
 				print( "No valid data received, length: \(rcvLen)" )
 			}
-			print("\(readBuffer)");
+//			print("\(readBuffer)");
 
 			if (rcvLen > 0) {
 				sndLen = write( newSocket, readBuffer, rcvLen);
