@@ -91,7 +91,7 @@ class Listen {
 
 			if (rcvLen > 0) {
 				if let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) {
-					print( "\(newdata)" )
+					print( "\(newdata)", terminator: "" )
 				} else {
 					print( "No valid data received, length: \(rcvLen)" )
 				}
