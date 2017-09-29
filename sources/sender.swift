@@ -86,7 +86,7 @@ class Sender {
 				connect( socketfd, $0, serv_addr_len )
 			}
 		}
-		print( "\n\nIn getConnection with connectResult: \(connectResult)\n" )
+		print( "\nIn getConnection with connectResult: \(connectResult)\n" )
 		if connectResult < 0 {
 			print("\nERROR connecting, errno: \(errno)")
 		}
@@ -119,7 +119,7 @@ class Sender {
 			}
 
 			if let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) {
-				print( "\(newdata)" )
+//				print( "\(newdata)" )
 			} else {
 				print( "No valid data received, length: \(rcvLen)" )
 			}
