@@ -62,11 +62,11 @@ class Listen {
 		
 		var cli_addr = sockaddr_in()
 		var cli_len = socklen_t(MemoryLayout.size(ofValue: cli_addr))
-		let cli_addr_ptr = UnsafeMutablePointer<socklen_t>(withUnsafeMutablePointer(to: &cli_len, { $0 }))
+		let cli_len_ptr = UnsafeMutablePointer<socklen_t>(withUnsafeMutablePointer(to: &cli_len, { $0 }))
 
 		let newsockfd = withUnsafeMutablePointer( to: &cli_addr ) {
 			$0.withMemoryRebound( to: sockaddr.self, capacity: 1 ) {
-				accept( socketfd, $0, cli_addr_ptr )
+				accept( socketfd, $0, cli_len_ptr )
 			}
 		}
 		if newsockfd < 0 {
@@ -79,27 +79,31 @@ class Listen {
 	
 	
 	func doWait( newSocket: Int32 ) {
+		let messageHandler = Handler()
 		var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
-		var sndLen: ssize_t = 0
-		var rcvLen: ssize_t = 0
-		while rcvLen < 255 {
-			bzero( &readBuffer, 256 );
-			rcvLen = read( newSocket, &readBuffer, 255 );
+		var stopLoop = false
+		while !stopLoop  {
+			bzero( &readBuffer, 256 )
+			let rcvLen = read( newSocket, &readBuffer, 255 )
 			if (rcvLen < 0) {
 				print("\n\nERROR reading from newsocket")
+				continue
 			}
 
 			if (rcvLen > 0) {
-				if let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) {
-					print( "\(newdata)", terminator: "" )
-				} else {
+				guard let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) else {
 					print( "No valid data received, length: \(rcvLen)" )
+					continue
 				}
+				print( "\(newdata)", terminator: "" )	// Currently a newline is included in the sent string
 
-				sndLen = write( newSocket, readBuffer, rcvLen);
+				let sndLen = write( newSocket, readBuffer, rcvLen)
 				if (sndLen < 0) {
-					print("\n\nERROR writing to socket");
+					print("\n\nERROR writing to socket")
+					continue
 				}
+				
+				stopLoop = messageHandler.processMsg( newdata )	// Returns true if quit message is received
 			}
 		}
 		

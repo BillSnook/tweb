@@ -68,7 +68,7 @@ class Sender {
 		}
 		print( "\nGot socket on which to send\n" )
 
-		doLoop()
+		doLoop( socketfd )
 		
 		close( socketfd )
 	}
@@ -95,34 +95,29 @@ class Sender {
 	}
 	
 	
-	func doLoop() {
+	func doLoop( _ socketfd: Int32 ) {
 		var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
 		var writeBuffer: [CChar] = [CChar](repeating: 0, count: 256)
-		var rcvLen: ssize_t = 0
-		var sndLen: ssize_t = 0
-		while sndLen < 255 {
-			print( "> ", terminator: "" );
-			bzero( &writeBuffer, 256 );
-			fgets( &writeBuffer, 255, stdin );    // Blocks for input
+		let stopLoop = false
+		while !stopLoop {
+			print( "> ", terminator: "" )
+			bzero( &writeBuffer, 256 )
+			fgets( &writeBuffer, 255, stdin )    // Blocks for input
 			
 			let len = strlen( &writeBuffer )
-			sndLen = write( socketfd, &writeBuffer, Int(len) );
+			let sndLen = write( socketfd, &writeBuffer, Int(len) )
 			if ( sndLen < 0 ) {
 				print( "\n\nERROR writing to socket" )
+				break
 			}
-//			print( "Wrote \(sndLen) of \(len) bytes" );
+//			print( "Wrote \(sndLen) of \(len) bytes" )
 
-			bzero( &readBuffer, 256 );
-			rcvLen = read( socketfd, &readBuffer, 255 );
+			bzero( &readBuffer, 256 )
+			let rcvLen = read( socketfd, &readBuffer, 255 )
 			if (rcvLen < 0) {
 				print( "\n\nERROR reading from socket" )
+				break
 			}
-
-//			if let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) {
-////				print( "\(newdata)" )
-//			} else {
-//				print( "No valid data received, length: \(rcvLen)" )
-//			}
 		}
 		
 	}

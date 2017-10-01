@@ -7,10 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A9357C0B1F624E12001350EF /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = A9357C0A1F624E12001350EF /* README.md */; };
 		A9C2D8351F7D651900970784 /* listen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C2D8341F7D651900970784 /* listen.swift */; };
 		A9C9AB361F73535200144878 /* sender.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C9AB351F73535200144878 /* sender.swift */; };
-		A9CF0BAD1F623826005AFB60 /* web.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CF0BAC1F623826005AFB60 /* web.swift */; };
+		A9CF0BAD1F623826005AFB60 /* handler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CF0BAC1F623826005AFB60 /* handler.swift */; };
 		OBJ_45 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_8 /* main.swift */; };
 /* End PBXBuildFile section */
 
@@ -18,7 +17,7 @@
 		A9357C0A1F624E12001350EF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A9C2D8341F7D651900970784 /* listen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = listen.swift; sourceTree = "<group>"; };
 		A9C9AB351F73535200144878 /* sender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sender.swift; sourceTree = "<group>"; };
-		A9CF0BAC1F623826005AFB60 /* web.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = web.swift; sourceTree = "<group>"; };
+		A9CF0BAC1F623826005AFB60 /* handler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = handler.swift; sourceTree = "<group>"; };
 		OBJ_13 /* ADC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ADC.swift; path = ".build/checkouts/SwiftyGPIO.git-6330852604069455572/Sources/ADC.swift"; sourceTree = SOURCE_ROOT; };
 		OBJ_14 /* I2C.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = I2C.swift; sourceTree = "<group>"; };
 		OBJ_15 /* Mailbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mailbox.swift; sourceTree = "<group>"; };
@@ -102,7 +101,7 @@
 				OBJ_8 /* main.swift */,
 				A9C9AB351F73535200144878 /* sender.swift */,
 				A9C2D8341F7D651900970784 /* listen.swift */,
-				A9CF0BAC1F623826005AFB60 /* web.swift */,
+				A9CF0BAC1F623826005AFB60 /* handler.swift */,
 			);
 			name = Sources;
 			path = sources;
@@ -158,11 +157,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				A9357C0B1F624E12001350EF /* README.md in Sources */,
+				OBJ_45 /* main.swift in Sources */,
 				A9C9AB361F73535200144878 /* sender.swift in Sources */,
 				A9C2D8351F7D651900970784 /* listen.swift in Sources */,
-				A9CF0BAD1F623826005AFB60 /* web.swift in Sources */,
-				OBJ_45 /* main.swift in Sources */,
+				A9CF0BAD1F623826005AFB60 /* handler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
