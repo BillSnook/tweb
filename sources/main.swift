@@ -44,18 +44,19 @@ func createThread() {
 	let numCPU = sysconf( Int32(_SC_NPROCESSORS_ONLN) )
 	print("You have \(numCPU) cores")	// 4 for Pi3B,  for Pi0W
 	
-	var t = pthread_t(nil)
-	let a = 5
+//	var t = pthread_t(nil)
+	var t: pthread_t? = nil
+//	let a = 5
 	
 	//  pthread_create(&t, nil, sayHello, nil)
-	let x = transform(f: sayHello)
+//	let x = transform(f: sayHello)
 	pthread_create(&t, nil,
 	               { _ in sayHello(); return nil },
 	               nil)
 	// pthread_create(&t, nil, sayNumber, &a)
 	
 	let ep = UnsafeMutablePointer<
-		UnsafeMutableRawPointer
+		UnsafeMutableRawPointer?
 		>.allocate(capacity: 1)
 	
 	pthread_join(t!, ep)
