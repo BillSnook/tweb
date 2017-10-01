@@ -50,7 +50,7 @@ if CommandLine.arguments.count == 1 {
 		let sender = Sender()
 		sender.doSnd( to: hostAddress, at: portNumber )
 	} else if CommandLine.arguments[1] == "tester" {
-		let numCPU = sysconf(_SC_NPROCESSORS_ONLN)
+		let numCPU = sysconf( Int32(_SC_NPROCESSORS_ONLN) )
 		print("You have \(numCPU) cores")
 	}
 //	print( "" )
