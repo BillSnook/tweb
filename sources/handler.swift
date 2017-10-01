@@ -15,7 +15,12 @@ import Darwin
 class Handler {
 	
 	public func processMsg( _ message: String ) -> Bool {
-		print( "Got message: \(message)" )
+		
+		if message == "quit" {
+			return true
+		}
+//		print( "Got message: \(message)" )
+		
 		return false	// Default to false to have data processing continue
 	}
 }

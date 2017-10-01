@@ -92,7 +92,7 @@ class Listen {
 
 			if (rcvLen > 0) {
 				guard let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) else {
-					print( "No valid data received, length: \(rcvLen)" )
+					print( "No recognizable data received, length: \(rcvLen)" )
 					continue
 				}
 				print( "\(newdata)", terminator: "" )	// Currently a newline is included in the sent string
