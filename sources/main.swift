@@ -44,7 +44,7 @@ func createThread() {
 	let numCPU = sysconf( Int32(_SC_NPROCESSORS_ONLN) )
 	print("You have \(numCPU) cores")	// 4 for Pi3B,  for Pi0W
 	
-	var t: pthread_t?
+	var t: pthread_t
 	
 	//  pthread_create(&t, nil, sayHello, nil)
 	let threadPtr = withUnsafeMutablePointer( to: &t ) { $0 }
