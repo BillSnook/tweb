@@ -38,13 +38,13 @@ if CommandLine.arguments.count == 1 {
 		listener.doRcv( on: portNumber )
 	} else {
 		if CommandLine.arguments.count > 2 {
-			hostAddress = CommandLine.arguments[2] + ".local"
+			portNumber = UInt16(atoi( CommandLine.arguments[2] ))
 		}
 		if CommandLine.arguments.count > 3 {
-			portNumber = UInt16(atoi( CommandLine.arguments[3] ))
+			hostAddress = CommandLine.arguments[3] + ".local"
 		}
 		if CommandLine.arguments.count > 4 {
-			print( "USAGE: tweb sender [hostName(=\(hostAddress)) [portNumber(=\(portNumber))]]" )
+			print( "USAGE: tweb sender [portNumber(=\(portNumber)) [hostName(=\(hostAddress))]]" )
 			exit(0)
 		}
 		let sender = Sender()
