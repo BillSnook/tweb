@@ -50,7 +50,7 @@ func createThread() {
 	print("You have \(numCPU) cores")	// 4 for Pi3B, ? for Pi0W
 	
 	var t = getPthread()
-	pthread_create(&t,
+	pthread_create(&t!,
 	               nil,
 	               { _ in sayHello(); return nil },
 	               nil)
