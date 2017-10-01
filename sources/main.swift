@@ -6,11 +6,11 @@
 //
 //
 
-//#if os(Linux)
-//import Glibc
-//#else
-//import Darwin.c
-//#endif
+#if os(Linux)
+import Glibc
+#else
+import Darwin.C
+#endif
 
 import Foundation
 
@@ -22,6 +22,46 @@ var portNumber: UInt16 = 5555
 var hostAddress = "workpi.local"    // "zerowpi2.local"
 
 print( "There are \(CommandLine.arguments.count) command line arguments" )
+
+func sayHello() {
+	//sleep(5)
+	print("Hello!")
+}
+
+func transform <S, T> (f: (S)->T)
+	->  (UnsafeMutablePointer<S>) -> UnsafeMutablePointer<T>?
+{
+	return {
+		( u: UnsafeMutablePointer<S>) -> UnsafeMutablePointer<T>? in
+		let r = UnsafeMutablePointer<T>(allocatingCapacity: 1) //leak?
+		r.pointee = f(u.pointee)
+		return r
+	}
+}
+
+func createThread() {
+	
+	let numCPU = sysconf( Int32(_SC_NPROCESSORS_ONLN) )
+	print("You have \(numCPU) cores")	// 4 for Pi3B,  for Pi0W
+	
+	var t = pthread_t(nil)
+	let a = 5
+	
+	//  pthread_create(&t, nil, sayHello, nil)
+	let x = transform(f: sayHello)
+	pthread_create(&t, nil,
+	               { _ in sayHello(); return nil },
+	               nil)
+	// pthread_create(&t, nil, sayNumber, &a)
+	
+	let ep = UnsafeMutablePointer<
+		UnsafeMutablePointer<Swift.Void>?
+		>(allocatingCapacity: 1)
+	
+	pthread_join(t!, ep)
+	print( "ep \(ep.pointee)" )
+	
+}
 
 if CommandLine.arguments.count == 1 {
 	print( "USAGE: tweb [listen | sender] [portNumber] [hostName]" )
@@ -50,8 +90,7 @@ if CommandLine.arguments.count == 1 {
 		let sender = Sender()
 		sender.doSnd( to: hostAddress, at: portNumber )
 	} else if CommandLine.arguments[1] == "tester" {
-		let numCPU = sysconf( Int32(_SC_NPROCESSORS_ONLN) )
-		print("You have \(numCPU) cores")
+		createThread()
 	}
 //	print( "" )
 }
