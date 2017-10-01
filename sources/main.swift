@@ -25,22 +25,12 @@ print( "There are \(CommandLine.arguments.count) command line arguments" )
 
 func sayHello() {
 	//sleep(5)
-	print("Hello!")
+	print("\nHello world!\n")
 }
-
-//func transform <S, T> (f: @escaping (S)->T) ->  (UnsafeMutablePointer<S>) -> UnsafeMutablePointer<T>? {
-//	return {
-//		( u: UnsafeMutablePointer<S>) -> UnsafeMutablePointer<T>? in
-//		let r = UnsafeMutablePointer<T>.allocate(capacity: 1) //leak?
-//		r.pointee = f(u.pointee)
-//		return r
-//	}
-//}
 
 func getPthread() -> pthread_t? {
 	
-//  pthread_create(&t, nil, sayHello, nil)
-	var threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
+	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
 	return threadPtr.pointee
 }
 
