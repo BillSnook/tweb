@@ -28,23 +28,22 @@ func sayHello() {
 	print("Hello!")
 }
 
-func transform <S, T> (f: @escaping (S)->T) ->  (UnsafeMutablePointer<S>) -> UnsafeMutablePointer<T>? {
-	return {
-		( u: UnsafeMutablePointer<S>) -> UnsafeMutablePointer<T>? in
-		let r = UnsafeMutablePointer<T>.allocate(capacity: 1) //leak?
-		r.pointee = f(u.pointee)
-		return r
-	}
-}
+//func transform <S, T> (f: @escaping (S)->T) ->  (UnsafeMutablePointer<S>) -> UnsafeMutablePointer<T>? {
+//	return {
+//		( u: UnsafeMutablePointer<S>) -> UnsafeMutablePointer<T>? in
+//		let r = UnsafeMutablePointer<T>.allocate(capacity: 1) //leak?
+//		r.pointee = f(u.pointee)
+//		return r
+//	}
+//}
 
 func createThread() {
 	
 	let numCPU = sysconf( Int32(_SC_NPROCESSORS_ONLN) )
 	print("You have \(numCPU) cores")	// 4 for Pi3B, ? for Pi0W
 	
-	
 	//  pthread_create(&t, nil, sayHello, nil)
-	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
+	var threadPtr = UnsafeMutablePointer<pthread_t>.allocate(capacity: 1)
 	var t: pthread_t? = threadPtr.pointee
 	pthread_create(&t,
 	               nil,
