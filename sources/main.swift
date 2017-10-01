@@ -36,7 +36,7 @@ if CommandLine.arguments.count == 1 {
 		}
 		let listener = Listen()
 		listener.doRcv( on: portNumber )
-	} else {
+	} else if CommandLine.arguments[1] == "sender" {
 		if CommandLine.arguments.count > 2 {
 			portNumber = UInt16(atoi( CommandLine.arguments[2] ))
 		}
@@ -49,6 +49,9 @@ if CommandLine.arguments.count == 1 {
 		}
 		let sender = Sender()
 		sender.doSnd( to: hostAddress, at: portNumber )
+	} else if CommandLine.arguments[1] == "tester" {
+		let numCPU = sysconf(_SC_NPROCESSORS_ONLN)
+		print("You have \(numCPU) cores")
 	}
 //	print( "" )
 }
