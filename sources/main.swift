@@ -58,7 +58,7 @@ func createThread() {
 		UnsafeMutableRawPointer?
 		>.allocate(capacity: 1)
 	
-	pthread_join(t!, ep)
+	pthread_join(t, ep)
 	print( "ep \(String(describing: ep.pointee))" )
 	
 }
