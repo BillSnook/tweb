@@ -28,9 +28,7 @@ func sayHello() {
 	print("Hello!")
 }
 
-func transform <S, T> (f: @escaping (S)->T)
-	->  (UnsafeMutablePointer<S>) -> UnsafeMutablePointer<T>?
-{
+func transform <S, T> (f: @escaping (S)->T) ->  (UnsafeMutablePointer<S>) -> UnsafeMutablePointer<T>? {
 	return {
 		( u: UnsafeMutablePointer<S>) -> UnsafeMutablePointer<T>? in
 		let r = UnsafeMutablePointer<T>.allocate(capacity: 1) //leak?
@@ -42,21 +40,19 @@ func transform <S, T> (f: @escaping (S)->T)
 func createThread() {
 	
 	let numCPU = sysconf( Int32(_SC_NPROCESSORS_ONLN) )
-	print("You have \(numCPU) cores")	// 4 for Pi3B,  for Pi0W
+	print("You have \(numCPU) cores")	// 4 for Pi3B, ? for Pi0W
 	
-	var t: pthread_t?
 	
 	//  pthread_create(&t, nil, sayHello, nil)
-//	let threadPtr = withUnsafeMutablePointer( to: &t ) { $0 }
+	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
+	var t: pthread_t? = threadPtr.pointee
 	pthread_create(&t,
 	               nil,
 	               { _ in sayHello(); return nil },
 	               nil)
 	// pthread_create(&t, nil, sayNumber, &a)
 	
-	let ep = UnsafeMutablePointer<
-		UnsafeMutableRawPointer?
-		>.allocate(capacity: 1)
+	let ep = UnsafeMutablePointer<UnsafeMutableRawPointer?>.allocate(capacity: 1)
 	
 	pthread_join(t!, ep)
 	print( "ep \(String(describing: ep.pointee))" )
