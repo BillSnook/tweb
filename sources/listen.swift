@@ -6,8 +6,6 @@
 //
 
 import Foundation
-
-import Foundation
 #if os(Linux)
 	import Glibc
 #else
@@ -18,6 +16,7 @@ import Foundation
 class Listen {
 	
 	var target: Host?
+	var stopListening = false
 	
 #if	os(Linux)
 	let socketfd = socket( AF_INET, Int32(SOCK_STREAM.rawValue), 0 )
@@ -27,15 +26,15 @@ class Listen {
 	
 
 	func doRcv( on port: UInt16 ) {
-		let newsocket = getConnector( on: port )
-		if newsocket < 0 {
-			print( "Failed accepting socket" )
+		let bindResult = getConnector( on: port )
+		if bindResult < 0 {
+			print( "\nFailed binding to port \(port)" )
 			return
 		}
+		print( "\n\nBound to port \(port), start listening\n" )
+		doListen()
 		
-		doWait( newSocket: newsocket )
-		
-		close( newsocket )
+//		close( newsocket )
 	}
 	
 	
@@ -55,57 +54,21 @@ class Listen {
 		print( "\nIn getConnection with bindResult: \(bindResult)\n" )
 		if bindResult < 0 {
 			print("\n\nERROR binding, errno: \(errno)")
-			return bindResult
+//			return bindResult
 		}
-		print("\nListening on socket for port \(port)\n")
-		listen( socketfd, 5 )
-		
-		var cli_addr = sockaddr_in()
-		var cli_len = socklen_t(MemoryLayout.size(ofValue: cli_addr))
-		let cli_len_ptr = UnsafeMutablePointer<socklen_t>(withUnsafeMutablePointer(to: &cli_len, { $0 }))
-
-		let newsockfd = withUnsafeMutablePointer( to: &cli_addr ) {
-			$0.withMemoryRebound( to: sockaddr.self, capacity: 1 ) {
-				accept( socketfd, $0, cli_len_ptr )
-			}
-		}
-		if newsockfd < 0 {
-			print("\n\nERROR accepting, errno: \(errno)")
-			return newsockfd
-		}
-
-		return newsockfd
+		return bindResult
 	}
 	
 	
-	func doWait( newSocket: Int32 ) {
-		let messageHandler = Handler()
-		var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
-		var stopLoop = false
-		while !stopLoop  {
-			bzero( &readBuffer, 256 )
-			let rcvLen = read( newSocket, &readBuffer, 255 )
-			if (rcvLen < 0) {
-				print("\n\nERROR reading from newsocket")
-				continue
-			}
-
-			if (rcvLen > 0) {
-				guard let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) else {
-					print( "No recognizable data received, length: \(rcvLen)" )
-					continue
-				}
-				print( "\(newdata)", terminator: "" )	// Currently a newline is included in the sent string
-
-				let sndLen = write( newSocket, readBuffer, rcvLen)
-				if (sndLen < 0) {
-					print("\n\nERROR writing to socket")
-					continue
-				}
-				
-				stopLoop = messageHandler.processMsg( newdata )	// Returns true if quit message is received
-			}
-		}
+	func doListen() {
+		var notDone = true
+		repeat {
+			listen( socketfd, 5 )
+			
+			let tMgr = Threader( socketfd )
+			tMgr.createThread()
+			
+		} while notDone
 		
 	}
 }

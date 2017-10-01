@@ -6,12 +6,6 @@
 //
 //
 
-#if os(Linux)
-import Glibc
-#else
-import Darwin.C
-#endif
-
 import Foundation
 
 
@@ -19,39 +13,12 @@ var stayInProgram = true
 
 // Defaults
 var portNumber: UInt16 = 5555
-var hostAddress = "workpi.local"    // "zerowpi2.local"
+var hostAddress = "workpi.local"    // or "zerowpi2.local"
+
+
+// Mark - executable code starts here
 
 print( "There are \(CommandLine.arguments.count) command line arguments" )
-
-func sayHello() {
-	//sleep(5)
-	print("\nHello world!\n")
-}
-
-func getPthread() -> pthread_t? {
-	
-	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
-	return threadPtr.pointee
-}
-
-func createThread() {
-	
-	let numCPU = sysconf( Int32(_SC_NPROCESSORS_ONLN) )
-	print("You have \(numCPU) cores")	// 4 for Pi3B, ? for Pi0W
-	
-	var t = getPthread()
-	pthread_create(&t!,
-	               nil,
-	               { _ in sayHello(); return nil },
-	               nil)
-	// pthread_create(&t, nil, sayNumber, &a)
-	
-	let ep = UnsafeMutablePointer<UnsafeMutableRawPointer?>.allocate(capacity: 1)
-	
-	pthread_join(t!, ep)
-	print( "ep \(String(describing: ep.pointee))" )
-	
-}
 
 if CommandLine.arguments.count == 1 {
 	print( "USAGE: tweb [listen | sender] [portNumber] [hostName]" )
@@ -80,7 +47,7 @@ if CommandLine.arguments.count == 1 {
 		let sender = Sender()
 		sender.doSnd( to: hostAddress, at: portNumber )
 	} else if CommandLine.arguments[1] == "tester" {
-		createThread()
+//		createThread()
 	}
 //	print( "" )
 }
