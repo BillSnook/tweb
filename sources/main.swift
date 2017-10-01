@@ -37,14 +37,19 @@ func sayHello() {
 //	}
 //}
 
+func getPthread() -> pthread_t? {
+	
+//  pthread_create(&t, nil, sayHello, nil)
+	var threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
+	return threadPtr.pointee
+}
+
 func createThread() {
 	
 	let numCPU = sysconf( Int32(_SC_NPROCESSORS_ONLN) )
 	print("You have \(numCPU) cores")	// 4 for Pi3B, ? for Pi0W
 	
-	//  pthread_create(&t, nil, sayHello, nil)
-	var threadPtr = UnsafeMutablePointer<pthread_t>.allocate(capacity: 1)
-	var t: pthread_t? = threadPtr.pointee
+	var t = getPthread()
 	pthread_create(&t,
 	               nil,
 	               { _ in sayHello(); return nil },
