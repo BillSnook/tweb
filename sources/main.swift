@@ -27,8 +27,8 @@ if CommandLine.arguments.count == 1 {
 	print( "USAGE: tweb [listen | sender] [portNumber] [hostName]" )
 } else {
 	if CommandLine.arguments[1] == "listen" {
-		if CommandLine.arguments.count != 2 || CommandLine.arguments.count != 3 {
-			print( "USAGE: tweb listen [portNumber(=\(portNumber)]" )
+		if CommandLine.arguments.count != 2 && CommandLine.arguments.count != 3 {
+			print( "USAGE: tweb listen [portNumber(=\(portNumber))]" )
 			exit(0)
 		}
 		if CommandLine.arguments.count > 2 {
@@ -44,7 +44,7 @@ if CommandLine.arguments.count == 1 {
 			portNumber = UInt16(atoi( CommandLine.arguments[3] ))
 		}
 		if CommandLine.arguments.count > 4 {
-			print( "USAGE: tweb sender [hostName(=\(hostAddress)) [portNumber(=\(portNumber)]]" )
+			print( "USAGE: tweb sender [hostName(=\(hostAddress)) [portNumber(=\(portNumber))]]" )
 			exit(0)
 		}
 		let sender = Sender()
