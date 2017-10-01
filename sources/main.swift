@@ -28,12 +28,12 @@ func sayHello() {
 	print("Hello!")
 }
 
-func transform <S, T> (f: (S)->T)
+func transform <S, T> (f: @escaping (S)->T)
 	->  (UnsafeMutablePointer<S>) -> UnsafeMutablePointer<T>?
 {
 	return {
 		( u: UnsafeMutablePointer<S>) -> UnsafeMutablePointer<T>? in
-		let r = UnsafeMutablePointer<T>(allocatingCapacity: 1) //leak?
+		let r = UnsafeMutablePointer<T>.allocate(capacity: 1) //leak?
 		r.pointee = f(u.pointee)
 		return r
 	}
@@ -55,8 +55,8 @@ func createThread() {
 	// pthread_create(&t, nil, sayNumber, &a)
 	
 	let ep = UnsafeMutablePointer<
-		UnsafeMutablePointer<Swift.Void>?
-		>(allocatingCapacity: 1)
+		UnsafeMutableRawPointer
+		>.allocate(capacity: 1)
 	
 	pthread_join(t!, ep)
 	print( "ep \(ep.pointee)" )
