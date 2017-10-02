@@ -31,7 +31,7 @@ class Listen {
 			print( "\nFailed binding to port \(port)" )
 			return
 		}
-		print( "\n\nBound to port \(port), start listening\n" )
+		print( "\nBound to port \(port), start listening\n" )
 		doListen()
 		
 //		close( newsocket )
@@ -64,26 +64,26 @@ class Listen {
 		let notDone = true
 		repeat {
 			listen( socketfd, 5 )
-			print( "Got listen end-call, wait on accept" )
+			print( "  Got listen end-call, wait on accept" )
 			var cli_addr = sockaddr_in()
 			var cli_len = socklen_t(MemoryLayout.size(ofValue: cli_addr))
 			let cli_len_ptr = UnsafeMutablePointer<socklen_t>(withUnsafeMutablePointer(to: &cli_len, { $0 }))
 			
 			let newsockfd = withUnsafeMutablePointer( to: &cli_addr ) {
 				$0.withMemoryRebound( to: sockaddr.self, capacity: 1 ) {
-					accept( socketfd, $0, cli_len_ptr )
+					accept( socketfd, $0, cli_len_ptr )	// Blocks waiting for connection
 				}
 			}
 			if newsockfd < 0 {
 				print("\n\nERROR accepting, errno: \(errno)")
 				exit(0)
 			}
-			print( "Got accept end-call, create new thread" )
+			print( "  Got accept end-call, create new thread" )
 //			let tMgr = Threader( socketfd )
 //			tMgr.createThread()
 			createThread( newsockfd )
 
-			usleep( 1000000 )
+			usleep( 500000 )
 		} while notDone
 		
 	}

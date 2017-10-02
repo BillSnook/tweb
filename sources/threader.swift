@@ -16,14 +16,14 @@ var nextIncomingSocket: Int32 = 0
 
 
 func runServerThread() {
-	print("  Hello world!")
+	print("Hello world! Thread started.")
 
 	let newsockfd = nextIncomingSocket
 
 	let messageHandler = Handler()
 	var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
 	var stopLoop = false
-	print("\nStart loop\n")
+	print("\n  Start loop\n")
 	while !stopLoop  {
 		bzero( &readBuffer, 256 )
 		let rcvLen = read( newsockfd, &readBuffer, 255 )
@@ -53,14 +53,6 @@ func runServerThread() {
 
 }
 
-
-
-
-func sayHello() {
-	//sleep(5)
-	print("  Hello!")
-}
-
 func getPthread() -> pthread_t? {
 	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
 	return threadPtr.pointee
@@ -74,11 +66,6 @@ func createThread( _ newsockfd: Int32 ) {
 	               nil,
 	               { _ in runServerThread(); return nil },
 	               nil)
-	
-//	let ep = UnsafeMutablePointer<UnsafeMutableRawPointer?>.allocate(capacity: 1)
-//	pthread_join(t!, ep)
-//	print( "ep \(String(describing: ep.pointee))" )
-	
 }
 
 
