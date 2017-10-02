@@ -64,9 +64,11 @@ class Listen {
 		let notDone = true
 		repeat {
 			listen( socketfd, 5 )
-			print( "Got listen end-call" )
-			let tMgr = Threader( socketfd )
-			tMgr.createThread()
+			print( "Got listen end-call, create new thread" )
+//			let tMgr = Threader( socketfd )
+//			tMgr.createThread()
+			createThread()
+
 			
 		} while notDone
 		

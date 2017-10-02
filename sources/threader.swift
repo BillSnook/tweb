@@ -63,41 +63,70 @@ func runServerThread() {
 */
 }
 
-func sayHello2() {
+
+
+
+func sayHello() {
 	//sleep(5)
 	print("Hello!")
 }
 
-class Threader {
+func getPthread() -> pthread_t? {
 	
-//	let numberOfCores: Int	// 4 for Pi3B, 1 for Pi0W
-//
-	let socketfd: Int32 = 0
-	
-	init( _ newsocketfd: Int32 ) {
-		socketfd = newsocketfd
-	}
-
-	
-	func getPthreadPtr() -> pthread_t? {
-		
-		let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
-		return threadPtr.pointee
-	}
-	
-	func createThread() {
-		
-		var t = getPthreadPtr()
-		pthread_create( &t!, nil, { (x:UnsafeMutableRawPointer) in
-			print( "Thread: \(x.description)" )
-//			runServerThread()
-			sayHello2()
-			return nil
-		}, nil )
-		
-//		let ep = UnsafeMutablePointer<UnsafeMutableRawPointer?>.allocate(capacity: 1)
-//		pthread_join(t!, ep)
-		
-	}
-
+	//  pthread_create(&t, nil, sayHello, nil)
+	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
+	return threadPtr.pointee
 }
+
+func createThread() {
+	
+	var t = getPthread()
+	pthread_create(&t!,
+	               nil,
+	               { (x:UnsafeMutableRawPointer) in print( "Thread: \(x.description)" ); sayHello(); return nil },
+	               nil)
+	
+	let ep = UnsafeMutablePointer<UnsafeMutableRawPointer?>.allocate(capacity: 1)
+	pthread_join(t!, ep)
+	print( "ep \(String(describing: ep.pointee))" )
+	
+}
+
+
+
+
+
+//class Threader {
+//
+////	let numberOfCores: Int	// 4 for Pi3B, 1 for Pi0W
+////
+//	let socketfd: Int32 = 0
+//
+//	init( _ newsocketfd: Int32 ) {
+//		socketfd = newsocketfd
+//	}
+//
+//
+//	func getPthreadPtr() -> pthread_t? {
+//
+//		let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
+//		return threadPtr.pointee
+//	}
+//
+//	func createThread() {
+//
+//		var t = getPthreadPtr()
+//		pthread_create( &t!, nil, { (x:UnsafeMutableRawPointer) in
+//			print( "Thread: \(x.description)" )
+////			runServerThread()
+//			sayHello2()
+//			return nil
+//		}, nil )
+//
+////		let ep = UnsafeMutablePointer<UnsafeMutableRawPointer?>.allocate(capacity: 1)
+////		pthread_join(t!, ep)
+//
+//	}
+//
+//}
+
