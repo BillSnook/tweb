@@ -63,6 +63,11 @@ func runServerThread() {
 */
 }
 
+func sayHello2() {
+	//sleep(5)
+	print("Hello!")
+}
+
 class Threader {
 	
 //	let numberOfCores: Int	// 4 for Pi3B, 1 for Pi0W
@@ -85,7 +90,8 @@ class Threader {
 		var t = getPthreadPtr()
 		pthread_create( &t!, nil, { (x:UnsafeMutableRawPointer) in
 			print( "Thread: \(x.description)" )
-			runServerThread()
+//			runServerThread()
+			sayHello2()
 			return nil
 		}, nil )
 		

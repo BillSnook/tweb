@@ -46,8 +46,13 @@ if CommandLine.arguments.count == 1 {
 		}
 		let sender = Sender()
 		sender.doSnd( to: hostAddress, at: portNumber )
-//	} else if CommandLine.arguments[1] == "tester" {
-//		createThread()
+	} else if CommandLine.arguments[1] == "tester" {
+		let tMgr = Threader( 0 )
+		tMgr.createThread()
+		print( "repeating" )
+		repeat {
+			usleep( 500000 )
+		} while true
 	}
 //	print( "" )
 }
