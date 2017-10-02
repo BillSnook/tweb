@@ -46,7 +46,7 @@ if CommandLine.arguments.count == 1 {
 		}
 		let sender = Sender()
 		sender.doSnd( to: hostAddress, at: portNumber )
-	} else if CommandLine.arguments[1] == "tester" {
+//	} else if CommandLine.arguments[1] == "tester" {
 //		createThread()
 	}
 //	print( "" )

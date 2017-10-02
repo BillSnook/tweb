@@ -41,6 +41,7 @@ class Threader {
 		let messageHandler = Handler()
 		var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
 		var stopLoop = false
+		print("\nStart loop\n")
 		while !stopLoop  {
 			bzero( &readBuffer, 256 )
 			let rcvLen = read( newsockfd, &readBuffer, 255 )
@@ -81,6 +82,7 @@ class Threader {
 		var t = getPthreadPtr()
 		pthread_create( &t!, nil, { _ in
 			runServerThread()
+			return nil
 		}, nil )
 		
 //		let ep = UnsafeMutablePointer<UnsafeMutableRawPointer?>.allocate(capacity: 1)
