@@ -81,7 +81,7 @@ class Threader {
 		
 		var t = getPthreadPtr()
 		pthread_create( &t!, nil, { _ in
-			runServerThread()
+			self.runServerThread()
 			return nil
 		}, nil )
 		
