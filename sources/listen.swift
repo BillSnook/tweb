@@ -65,11 +65,25 @@ class Listen {
 		repeat {
 			listen( socketfd, 5 )
 			print( "Got listen end-call, create new thread" )
+			var cli_addr = sockaddr_in()
+			var cli_len = socklen_t(MemoryLayout.size(ofValue: cli_addr))
+			let cli_len_ptr = UnsafeMutablePointer<socklen_t>(withUnsafeMutablePointer(to: &cli_len, { $0 }))
+			
+			let newsockfd = withUnsafeMutablePointer( to: &cli_addr ) {
+				$0.withMemoryRebound( to: sockaddr.self, capacity: 1 ) {
+					accept( socketfd, $0, cli_len_ptr )
+				}
+			}
+			if newsockfd < 0 {
+				print("\n\nERROR accepting, errno: \(errno)")
+				exit(0)
+			}
+			print( "Got accept end-call, create new thread" )
 //			let tMgr = Threader( socketfd )
 //			tMgr.createThread()
 			createThread()
 
-			
+			usleep( 1000000 )
 		} while notDone
 		
 	}
