@@ -12,7 +12,7 @@
 #endif
 
 
-func runServerThread() -> Void {
+func runServerThread() {
 	print("\nHello world!\n")
 /*
 	var sockfd: Int32 = 0
@@ -61,7 +61,6 @@ func runServerThread() -> Void {
 		}
 	}
 */
-	return ()
 }
 
 class Threader {
