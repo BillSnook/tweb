@@ -64,7 +64,7 @@ class Listen {
 		let notDone = true
 		repeat {
 			listen( socketfd, 5 )
-			print( "  Got listen end-call, wait on accept" )
+			print( "  Got listen end-call, wait on accept\n" )
 			var cli_addr = sockaddr_in()
 			var cli_len = socklen_t(MemoryLayout.size(ofValue: cli_addr))
 			let cli_len_ptr = UnsafeMutablePointer<socklen_t>(withUnsafeMutablePointer(to: &cli_len, { $0 }))
@@ -78,7 +78,7 @@ class Listen {
 				print("\n\nERROR accepting, errno: \(errno)")
 				exit(0)
 			}
-			print( "  Got accept end-call, create new thread" )
+			print( "  Got accept end-call, create new thread\n" )
 //			let tMgr = Threader( socketfd )
 //			tMgr.createThread()
 			createThread( newsockfd )

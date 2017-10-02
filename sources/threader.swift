@@ -16,7 +16,7 @@ var nextIncomingSocket: Int32 = 0
 
 
 func runServerThread() {
-	print("Hello world! Thread started.")
+	print("  Server thread started.")
 
 	let newsockfd = nextIncomingSocket
 
