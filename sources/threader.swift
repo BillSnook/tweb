@@ -23,7 +23,6 @@ func runServerThread() {
 	let messageHandler = Handler()
 	var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
 	var stopLoop = false
-	print("\n  Start loop\n")
 	while !stopLoop  {
 		bzero( &readBuffer, 256 )
 		let rcvLen = read( newsockfd, &readBuffer, 255 )
@@ -39,7 +38,7 @@ func runServerThread() {
 				print( "No recognizable string data received, length: \(rcvLen)" )
 				continue
 			}
-			print( "\(newdata)", terminator: "" )	// Currently a newline is included in the sent string
+			print( "] \(newdata)", terminator: "" )	// Currently a newline is included in the sent string
 			
 			let sndLen = write( newsockfd, readBuffer, rcvLen)
 			if (sndLen < 0) {
