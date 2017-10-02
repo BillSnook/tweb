@@ -12,10 +12,10 @@
 #endif
 
 
-func runServerThread() {
+func runServerThread( _ newsockfd: Int32 ) {
 	print("  Hello world!")
 
-/*
+
 	let messageHandler = Handler()
 	var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
 	var stopLoop = false
@@ -46,7 +46,7 @@ func runServerThread() {
 			stopLoop = messageHandler.processMsg( newdata )	// Returns true if quit message is received
 		}
 	}
-*/
+
 }
 
 
@@ -62,12 +62,12 @@ func getPthread() -> pthread_t? {
 	return threadPtr.pointee
 }
 
-func createThread() {
+func createThread( _ newsockfd: Int32 ) {
 	
 	var t = getPthread()
 	pthread_create(&t!,
 	               nil,
-	               { _ in runServerThread(); return nil },
+	               { _ in runServerThread( newsockfd ); return nil },
 	               nil)
 	
 //	let ep = UnsafeMutablePointer<UnsafeMutableRawPointer?>.allocate(capacity: 1)
