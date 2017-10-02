@@ -64,7 +64,7 @@ class Listen {
 		let notDone = true
 		repeat {
 			listen( socketfd, 5 )
-			print( "Got listen end-call, create new thread" )
+			print( "Got listen end-call, wait on accept" )
 			var cli_addr = sockaddr_in()
 			var cli_len = socklen_t(MemoryLayout.size(ofValue: cli_addr))
 			let cli_len_ptr = UnsafeMutablePointer<socklen_t>(withUnsafeMutablePointer(to: &cli_len, { $0 }))

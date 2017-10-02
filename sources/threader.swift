@@ -68,7 +68,7 @@ func runServerThread() {
 
 func sayHello() {
 	//sleep(5)
-	print("Hello!")
+	print("  Hello!")
 }
 
 func getPthread() -> pthread_t? {
@@ -84,9 +84,9 @@ func createThread() {
 	               { _ in sayHello(); return nil },
 	               nil)
 	
-	let ep = UnsafeMutablePointer<UnsafeMutableRawPointer?>.allocate(capacity: 1)
-	pthread_join(t!, ep)
-	print( "ep \(String(describing: ep.pointee))" )
+//	let ep = UnsafeMutablePointer<UnsafeMutableRawPointer?>.allocate(capacity: 1)
+//	pthread_join(t!, ep)
+//	print( "ep \(String(describing: ep.pointee))" )
 	
 }
 
