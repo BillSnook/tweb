@@ -13,23 +13,9 @@
 
 
 func runServerThread() {
-	print("\nHello world!\n")
+	print("  Hello world!")
+
 /*
-	var sockfd: Int32 = 0
-	var cli_addr = sockaddr_in()
-	var cli_len = socklen_t(MemoryLayout.size(ofValue: cli_addr))
-	let cli_len_ptr = UnsafeMutablePointer<socklen_t>(withUnsafeMutablePointer(to: &cli_len, { $0 }))
-	
-	let newsockfd = withUnsafeMutablePointer( to: &cli_addr ) {
-		$0.withMemoryRebound( to: sockaddr.self, capacity: 1 ) {
-			accept( socketfd, $0, cli_len_ptr )
-		}
-	}
-	if newsockfd < 0 {
-		print("\n\nERROR accepting, errno: \(errno)")
-		exit(0)
-	}
-	
 	let messageHandler = Handler()
 	var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
 	var stopLoop = false
@@ -81,7 +67,7 @@ func createThread() {
 	var t = getPthread()
 	pthread_create(&t!,
 	               nil,
-	               { _ in sayHello(); return nil },
+	               { _ in runServerThread(); return nil },
 	               nil)
 	
 //	let ep = UnsafeMutablePointer<UnsafeMutableRawPointer?>.allocate(capacity: 1)
