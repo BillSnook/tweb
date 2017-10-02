@@ -81,7 +81,7 @@ func createThread() {
 	var t = getPthread()
 	pthread_create(&t!,
 	               nil,
-	               sayHello(),	//	{ _ in sayHello(); return nil },
+	               { _ in sayHello(); return nil },
 	               nil)
 	
 	let ep = UnsafeMutablePointer<UnsafeMutableRawPointer?>.allocate(capacity: 1)
