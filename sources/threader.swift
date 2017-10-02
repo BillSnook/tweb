@@ -12,9 +12,13 @@
 #endif
 
 
-func runServerThread( _ newsockfd: Int32 ) {
+var nextIncomingSocket: Int32 = 0
+
+
+func runServerThread() {
 	print("  Hello world!")
 
+	let newsockfd = nextIncomingSocket
 
 	let messageHandler = Handler()
 	var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
@@ -65,9 +69,10 @@ func getPthread() -> pthread_t? {
 func createThread( _ newsockfd: Int32 ) {
 	
 	var t = getPthread()
+	nextIncomingSocket = newsockfd
 	pthread_create(&t!,
 	               nil,
-	               { _ in runServerThread( newsockfd ); return nil },
+	               { _ in runServerThread(); return nil },
 	               nil)
 	
 //	let ep = UnsafeMutablePointer<UnsafeMutableRawPointer?>.allocate(capacity: 1)
