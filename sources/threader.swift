@@ -42,7 +42,7 @@ func runServerThread() {
 				print( "No recognizable string data received, length: \(rcvLen)" )
 				continue
 			}
-			print( "] \(newdata)", terminator: "" )	// Currently a newline is included in the sent string
+			print( "\(newsockfd)] \(newdata)", terminator: "" )	// Currently a newline is included in the sent string
 			
 			let sndLen = write( newsockfd, readBuffer, rcvLen)
 			if (sndLen < 0) {
