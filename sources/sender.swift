@@ -60,8 +60,20 @@ class Sender {
 			return
 		}
 
-		print( "\nAddress string: \(addrs.first!)\n" )
-		let result = doConnect( addrs.first!, port: at )
+		let targetAddr: String
+		for addr in addrs {
+			if addr.count < 16 {	// Probably ipv4
+				targetAddr = addr
+				break
+			}
+		}
+		guard targetAddr != nil else {
+			print( "No ipv4 addresses returned for \(to)" )
+			return
+		}
+
+		print( "\nAddress string: \(targetAddr)\n" )
+		let result = doConnect( targetAddr, port: at )
 		guard result >= 0 else {
 			print( "Connect failed" )
 			return
