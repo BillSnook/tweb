@@ -36,7 +36,7 @@ func runServerThread() {
 		}
 		if rcvLen == 0 {
 			print("\n\nDisconnected from the other endpoint. Exiting thread now.")
-			break  // exit(0)
+			break
 		} else {	// rcvLen > 0
 			guard let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) else {
 				print( "No recognizable string data received, length: \(rcvLen)" )

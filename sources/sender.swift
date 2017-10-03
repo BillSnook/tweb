@@ -62,7 +62,8 @@ class Sender {
 
 		var targetAddr: String?
 		for addr in addrs {
-			if addr.count < 16 {	// Probably ipv4
+			let a8 = addr.cString( using: .utf8 )
+			if strlen( a8 ) < 16 {	// Probably ipv4
 				targetAddr = addr
 				break
 			}
