@@ -16,7 +16,7 @@ class Handler {
 	
 	public func processMsg( _ message: String ) -> Bool {
 		
-		print( "Got message: \(message)" )
+//		print( "Got message: \(message)" )
 		if message == "quit\n" {
 			return true
 		}
