@@ -6,9 +6,13 @@
 //
 
 #if	os(Linux)
-	import Glibc
+
+import Glibc
+
 #else
-	import Darwin.C
+
+import Darwin.C
+
 #endif
 
 
@@ -16,9 +20,9 @@ var nextIncomingSocket: Int32 = 0
 
 
 func runServerThread() {
-	print("  Server thread started.\n")
 
 	let newsockfd = nextIncomingSocket
+	print("  Server thread runServerThread started for socketfd \(newsockfd)\n")
 
 	let messageHandler = Handler()
 	var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
@@ -49,7 +53,7 @@ func runServerThread() {
 			stopLoop = messageHandler.processMsg( newdata )	// Returns true if quit message is received
 		}
 	}
-
+	print( "  Exiting thread runServerThread for socketfd \(newsockfd)\n" )
 }
 
 func getPthread() -> pthread_t? {
@@ -61,10 +65,17 @@ func createThread( _ newsockfd: Int32 ) {
 	
 	var t = getPthread()
 	nextIncomingSocket = newsockfd
+#if	os(Linux)
 	pthread_create(&t!,
 	               nil,
 	               { _ in runServerThread(); return nil },
 	               nil)
+#else
+	pthread_create(&t,
+				   nil,
+				   { _ in runServerThread(); return nil },
+				   nil)
+#endif
 }
 
 
