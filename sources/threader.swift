@@ -36,7 +36,7 @@ func runServerThread() {
 		}
 		if rcvLen == 0 {
 			print("\n\nDisconnected from the other endpoint. Exiting thread now.")
-			exit(0)
+			break  // exit(0)
 		} else {	// rcvLen > 0
 			guard let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) else {
 				print( "No recognizable string data received, length: \(rcvLen)" )
@@ -54,6 +54,7 @@ func runServerThread() {
 		}
 	}
 	print( "  Exiting thread runServerThread for socketfd \(newsockfd)\n" )
+	close( newsockfd )
 }
 
 func getPthread() -> pthread_t? {
