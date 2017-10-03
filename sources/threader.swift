@@ -35,14 +35,14 @@ func runServerThread() {
 			continue
 		}
 		if rcvLen == 0 {
-			print("\n\nDisconnected from the other endpoint. Exiting thread now.")
+			print("\n  Disconnected from the other endpoint. Exiting thread now.")
 			break
 		} else {	// rcvLen > 0
 			guard let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) else {
 				print( "No recognizable string data received, length: \(rcvLen)" )
 				continue
 			}
-			print( "\(newsockfd)] \(newdata)", terminator: "" )	// Currently a newline is included in the sent string
+			print( "\(newsockfd)] \(newdata)", terminator: "" )	// Currently a newline is already included in the sent string
 			
 			let sndLen = write( newsockfd, readBuffer, rcvLen)
 			if (sndLen < 0) {
