@@ -22,6 +22,7 @@ var nextIncomingSocket: Int32 = 0
 func runServerThread() {
 
 	let newsockfd = nextIncomingSocket
+	nextIncomingSocket = 0
 	print("  Server thread runServerThread started for socketfd \(newsockfd)\n")
 
 	let messageHandler = Handler()
@@ -62,21 +63,31 @@ func getPthread() -> pthread_t? {
 	return threadPtr.pointee
 }
 
-func createThread( _ newsockfd: Int32 ) {
+func createThread( with newsockfd: Int32 ) {
 	
-	var t = getPthread()
+//	Needs testing first
+//	var loopCount = 0
+//	while nextIncomingSocket == 0 {	// If ready to process a new session
+//		usleep( 10000 )	// 1/100 second
+//		loopCount += 1
+//			Need check on loopCount to avoid lockout - not a real problem for our purposes?
+//	}
+//	print( "Captured nextIncomingSocket fd, count (1/100 second): \(loopCount)" )
+	
 	nextIncomingSocket = newsockfd
+	var t = getPthread()			// Memory leak, needs good solution
 #if	os(Linux)
 	pthread_create(&t!,
 	               nil,
 	               { _ in runServerThread(); return nil },
 	               nil)
-#else
+#else	// Darwin - MacOS    iOS?
 	pthread_create(&t,
 				   nil,
 				   { _ in runServerThread(); return nil },
 				   nil)
 #endif
+	//	free( t )	// Really needs testing, assumes pthread_create is done with t
 }
 
 
