@@ -27,16 +27,16 @@ class Sender {
 		
 		target = Host( name: name )
 		guard target != nil else {
-			print( "Lookup failed for \(name)" )
+			print( "\nLookup failed for \(name)" )
 			return nil
 		}
 		let addrs = target!.addresses
 		guard addrs.count > 0 else {
-			print( "Host call succeeded but no addresses were returned" )
+			print( "\nHost call succeeded but no addresses were returned" )
 			return nil
 		}
 		
-		print( "Host call succeeds, count: \(addrs.count)" )
+		print( "\nHost call succeeds, address count: \(addrs.count)" )
 		for addr in addrs {
 			print( "  addr: \(addr)" )
 		}
@@ -51,12 +51,12 @@ class Sender {
 	func doSnd( to: String, at: UInt16 ) {
 	
 		guard let server = lookup( name: to ) else {
-			print( "Lookup failed for \(to)" )
+//			print( "\nLookup failed for \(to)" )
 			return
 		}
 		let addrs = server.addresses
 		guard addrs.count > 0 else {
-			print( "No addresses returned for \(to)" )
+			print( "\nNo addresses returned for \(to)" )
 			return
 		}
 
@@ -69,18 +69,22 @@ class Sender {
 			}
 		}
 		guard targetAddr != nil else {
-			print( "No ipv4 addresses returned for \(to)" )
+			print( "\nNo ipv4 addresses returned for \(to)" )
 			return
 		}
 
-		print( "\nAddress string: \(targetAddr!)\n" )
+//		print( "\nFound target address: \(targetAddr!)" )
 		let result = doConnect( targetAddr!, port: at )
 		guard result >= 0 else {
-			print( "Connect failed" )
+			print( "\nConnect failed" )
 			return
 		}
-		print( "\nGot socket on which to send\n" )
-
+		var name = to + ".local"
+		if server.names.first != nil {
+			name = server.names.first!
+		}
+		print( "\nConnecting on port \(at) to host \(name) (\(targetAddr!))\n" )
+		
 		doLoop( socketfd )
 		
 		close( socketfd )
@@ -93,13 +97,12 @@ class Sender {
 			var serv_addr_in = sockaddr_in( sin_len: __uint8_t(MemoryLayout< sockaddr_in >.size), sin_family: sa_family_t(AF_INET), sin_port: port.bigEndian, sin_addr: in_addr( s_addr: inet_addr(addr) ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
 		#endif
 		let serv_addr_len = socklen_t(MemoryLayout.size( ofValue: serv_addr_in ))
-		print( "In getConnection before calling connect\n" )
 		let connectResult = withUnsafeMutablePointer( to: &serv_addr_in ) {
 			$0.withMemoryRebound( to: sockaddr.self, capacity: 1 ) {
 				connect( socketfd, $0, serv_addr_len )
 			}
 		}
-		print( "\nIn getConnection with connectResult: \(connectResult)\n" )
+//		print( "\nIn getConnection with connectResult: \(connectResult)\n" )
 		if connectResult < 0 {
 			print("\nERROR connecting, errno: \(errno)")
 		}
@@ -123,7 +126,6 @@ class Sender {
 				print( "\n\nERROR writing to socket" )
 				break
 			}
-//			print( "Wrote \(sndLen) of \(len) bytes" )
 
 			bzero( &readBuffer, 256 )
 			let rcvLen = read( socketfd, &readBuffer, 255 )
