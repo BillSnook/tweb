@@ -79,7 +79,7 @@ class Sender {
 			print( "\nConnect failed" )
 			return
 		}
-		var name = to + ".local"
+		var name = to
 		if server.names.first != nil {
 			name = server.names.first!
 		}

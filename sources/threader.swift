@@ -15,6 +15,7 @@ import Darwin.C
 
 #endif
 
+
 enum ThreadType {
 	case serverThread
 	case inputThread
@@ -36,6 +37,52 @@ var threadArray = [ThreadControl]()
 func testThread() {
 	
 	print("  Test thread testThread started\n")
+}
+
+func consumeThread() {
+	
+	print("  Thread consumeThread started\n")
+	
+	let messageHandler = Handler()
+	var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
+
+	var oflags = termios()
+	var nflags = termios()
+	
+	tcgetattr( fileno(stdin), &oflags )
+	nflags = oflags
+	var flags = Int32(nflags.c_lflag)
+	flags = flags & ~ECHO
+	flags = flags & ~ECHONL
+	nflags.c_lflag = UInt(flags)
+	
+	let result = tcsetattr( fileno(stdin), TCSADRAIN, &nflags )
+	guard result == 0 else {
+		print("\n  Thread consumeThread failed setting tcsetattr with error: \(result)\n")
+		return
+	}
+
+	var stopLoop = false
+	while !stopLoop {
+		bzero( &readBuffer, 256 )
+		fgets( &readBuffer, 255, stdin )    // Blocks for input
+		// Then does nothing with it!?
+		let len = strlen( &readBuffer )
+		guard let newdata = String( bytesNoCopy: &readBuffer, length: Int(len), encoding: .utf8, freeWhenDone: false ) else {
+			print( "\n  No recognizable string data received, length: \(len)" )
+			continue
+		}
+//		print( newdata, terminator: "" )
+		
+		stopLoop = messageHandler.processMsg( newdata )	// Returns true if quit message is received
+	}
+	tcsetattr( fileno(stdin), TCSANOW, &oflags )		// Restore input echo behavior
+	guard result == 0 else {
+		print("\n  Thread consumeThread failed resetting tcsetattr with error: \(result)\n")
+		return
+	}
+
+	print("  Thread consumeThread stopped\n")
 }
 
 func serverThread( sockfd: Int32 ) {
@@ -85,7 +132,7 @@ func runThreads() {
 	case .serverThread:
 		serverThread( sockfd: nextThreadControl.nextSocket )
 	case .inputThread:
-		testThread()
+		consumeThread()
 	}
 
 }

@@ -59,6 +59,10 @@ class Listen {
 	
 	
 	func doListen() {
+
+//		threadArray.append( ThreadControl( socket: 0, threadType: .inputThread ) )
+//		startThread()		// Consumes keyboard input on listener side
+
 		let notDone = true
 		repeat {
 			listen( socketfd, 5 )
@@ -79,8 +83,7 @@ class Listen {
 			}
 			print( "  Got accept end-call, create new thread\n" )
 
-			let threadControl = ThreadControl( socket: newsockfd, threadType: .serverThread )
-			threadArray.append( threadControl )
+			threadArray.append( ThreadControl( socket: newsockfd, threadType: .serverThread ) )
 			startThread()
 		} while notDone
 		
