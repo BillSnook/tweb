@@ -18,7 +18,7 @@ var hostAddress = "workpi.local"    // or "zerowpi2.local"
 
 // Mark - executable code starts here
 
-print( "There are \(CommandLine.arguments.count) command line arguments" )
+//print( "There are \(CommandLine.arguments.count) command line arguments" )
 
 if CommandLine.arguments.count == 1 {
 	print( "USAGE: tweb [listen | sender] [portNumber] [hostName]" )
