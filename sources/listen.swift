@@ -81,7 +81,9 @@ class Listen {
 			print( "  Got accept end-call, create new thread\n" )
 //			let tMgr = Threader( socketfd )
 //			tMgr.createThread()
-			createThread( with: newsockfd )
+			let threadControl = ThreadControl( socket: newsockfd, threadType: .serverThread )
+			threadArray.append( threadControl )
+			startThread()
 
 			usleep( 500000 )	// Delete when wait on thread start is done - it will protect newsockfd from overwrite
 		} while notDone

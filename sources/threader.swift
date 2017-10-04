@@ -15,22 +15,39 @@ import Darwin.C
 
 #endif
 
+enum ThreadType {
+	case serverThread
+	case inputThread
+}
 
-var nextIncomingSocket: Int32 = 0
+struct ThreadControl {
+	var nextSocket: Int32
+	var nextThreadType: ThreadType
+	init( socket: Int32, threadType: ThreadType ) {
+		nextSocket = socket
+		nextThreadType = threadType
+	}
+}
+
+var threadArray = [ThreadControl]()
 
 
-func runServerThread() {
+// MARK: - Threads
+func testThread() {
+	
+	print("  Test thread testThread started\n")
+}
 
-	let newsockfd = nextIncomingSocket
-	nextIncomingSocket = 0
-	print("  Server thread runServerThread started for socketfd \(newsockfd)\n")
-
+func serverThread( sockfd: Int32 ) {
+	
+	print("  Server thread serverThread started for socketfd \(sockfd)\n")
+	
 	let messageHandler = Handler()
 	var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
 	var stopLoop = false
 	while !stopLoop  {
 		bzero( &readBuffer, 256 )
-		let rcvLen = read( newsockfd, &readBuffer, 255 )
+		let rcvLen = read( sockfd, &readBuffer, 255 )
 		if (rcvLen < 0) {
 			print("\n\nERROR reading from newsocket")
 			continue
@@ -43,9 +60,9 @@ func runServerThread() {
 				print( "No recognizable string data received, length: \(rcvLen)" )
 				continue
 			}
-			print( "\(newsockfd)] \(newdata)", terminator: "" )	// Currently a newline is already included in the sent string
+			print( "\(sockfd)] \(newdata)", terminator: "" )	// Currently a newline is already included in the sent string
 			
-			let sndLen = write( newsockfd, readBuffer, rcvLen)
+			let sndLen = write( sockfd, readBuffer, rcvLen)
 			if (sndLen < 0) {
 				print("\n\nERROR writing to socket")
 				continue
@@ -54,8 +71,23 @@ func runServerThread() {
 			stopLoop = messageHandler.processMsg( newdata )	// Returns true if quit message is received
 		}
 	}
-	print( "  Exiting thread runServerThread for socketfd \(newsockfd)\n" )
-	close( newsockfd )
+	print( "  Exiting thread serverThread for socketfd \(sockfd)\n" )
+	close( sockfd )
+}
+
+// MARK: - Thread controller
+func runThreads() {
+
+	guard threadArray.count > 0 else { return }
+	
+	let nextThreadControl = threadArray.remove(at: 0)
+	switch nextThreadControl.nextThreadType {
+	case .serverThread:
+		serverThread( sockfd: nextThreadControl.nextSocket )
+	case .inputThread:
+		testThread()
+	}
+
 }
 
 func getPthread() -> pthread_t? {
@@ -63,68 +95,19 @@ func getPthread() -> pthread_t? {
 	return threadPtr.pointee
 }
 
-func createThread( with newsockfd: Int32 ) {
+// MARK: - Entry point - Start next thread in list
+func startThread() {
 	
-//	Needs testing first
-//	var loopCount = 0
-//	while nextIncomingSocket == 0 {	// If ready to process a new session
-//		usleep( 10000 )	// 1/100 second
-//		loopCount += 1
-//			Need check on loopCount to avoid lockout - not a real problem for our purposes?
-//	}
-//	print( "Captured nextIncomingSocket fd, count (1/100 second): \(loopCount)" )
-	
-	nextIncomingSocket = newsockfd
-	var t = getPthread()			// Memory leak, needs good solution
+	var t = getPthread()			// Memory leak, needs solution
 #if	os(Linux)
 	pthread_create(&t!,
 	               nil,
-	               { _ in runServerThread(); return nil },
+	               { _ in runThreads(); return nil },
 	               nil)
 #else	// Darwin - MacOS    iOS?
 	pthread_create(&t,
 				   nil,
-				   { _ in runServerThread(); return nil },
+				   { _ in runThreads(); return nil },
 				   nil)
 #endif
-	//	free( t )	// Really needs testing, assumes pthread_create is done with t
 }
-
-
-
-
-
-//class Threader {
-//
-////	let numberOfCores: Int	// 4 for Pi3B, 1 for Pi0W
-////
-//	let socketfd: Int32 = 0
-//
-//	init( _ newsocketfd: Int32 ) {
-//		socketfd = newsocketfd
-//	}
-//
-//
-//	func getPthreadPtr() -> pthread_t? {
-//
-//		let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
-//		return threadPtr.pointee
-//	}
-//
-//	func createThread() {
-//
-//		var t = getPthreadPtr()
-//		pthread_create( &t!, nil, { (x:UnsafeMutableRawPointer) in
-//			print( "Thread: \(x.description)" )
-////			runServerThread()
-//			sayHello2()
-//			return nil
-//		}, nil )
-//
-////		let ep = UnsafeMutablePointer<UnsafeMutableRawPointer?>.allocate(capacity: 1)
-////		pthread_join(t!, ep)
-//
-//	}
-//
-//}
-
