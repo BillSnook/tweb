@@ -55,7 +55,12 @@ func consumeThread() {
 	flags = flags & ~ECHO
 	flags = flags & ~ECHONL
 	nflags.c_lflag = UInt(flags)
-	
+#if	os(Linux)
+	nflags.c_lflag = UInt32(flags)
+#else
+	nflags.c_lflag = UInt(flags)
+#endif
+
 	let result = tcsetattr( fileno(stdin), TCSADRAIN, &nflags )
 	guard result == 0 else {
 		print("\n  Thread consumeThread failed setting tcsetattr with error: \(result)\n")
