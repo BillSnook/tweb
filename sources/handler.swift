@@ -12,7 +12,26 @@
 	import Darwin.C
 #endif
 
+import SwiftyGPIO
+
+
 class Handler {
+	
+	let gpios: [GPIOName: GPIO]
+	let redLED: GPIO
+	let yellowLED: GPIO
+	
+	var state = 0
+
+	init() {
+		gpios = SwiftyGPIO.GPIOs(for:.RaspberryPi3)
+		redLED = gpios[.P17]!
+		yellowLED = gpios[.P18]!
+
+		redLED.direction = .OUT
+		yellowLED.direction = .OUT
+		
+}
 	
 	public func processMsg( _ message: String ) -> Bool {
 		
@@ -21,6 +40,8 @@ class Handler {
 			return true
 		}
 
+		redLED.value = state
+		state = state == 1 ? 0 : 1
 		return false	// Default to false to have data processing continue
 	}
 }
@@ -30,7 +51,6 @@ class Handler {
 /*
 import Foundation
 
-import SwiftyGPIO
 
 public class WatchPins {
     
