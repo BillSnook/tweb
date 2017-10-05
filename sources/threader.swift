@@ -19,6 +19,7 @@ import Darwin.C
 enum ThreadType {
 	case serverThread
 	case inputThread
+	case testThread
 }
 
 struct ThreadControl {
@@ -36,7 +37,7 @@ var threadArray = [ThreadControl]()
 // MARK: - Threads
 func testThread() {
 	
-	print("  Test thread testThread started\n")
+	print("  Thread testThread started\n")
 }
 
 func consumeThread() {
@@ -70,7 +71,7 @@ func consumeThread() {
 	while !stopLoop {
 		bzero( &readBuffer, 256 )
 		fgets( &readBuffer, 255, stdin )    // Blocks for input
-		// Then does nothing with it!?
+
 		let len = strlen( &readBuffer )
 		guard let newdata = String( bytesNoCopy: &readBuffer, length: Int(len), encoding: .utf8, freeWhenDone: false ) else {
 			print( "\n  No recognizable string data received, length: \(len)" )
@@ -91,7 +92,7 @@ func consumeThread() {
 
 func serverThread( sockfd: Int32 ) {
 	
-	print("  Server thread serverThread started for socketfd \(sockfd)\n")
+	print("  Thread serverThread started for socketfd \(sockfd)\n")
 	
 	let messageHandler = Handler()
 	var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
@@ -137,6 +138,8 @@ func runThreads() {
 		serverThread( sockfd: nextThreadControl.nextSocket )
 	case .inputThread:
 		consumeThread()
+	case .testThread:
+		testThread()
 	}
 
 }
