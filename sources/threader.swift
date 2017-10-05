@@ -54,7 +54,6 @@ func consumeThread() {
 	var flags = Int32(nflags.c_lflag)
 	flags = flags & ~ECHO
 	flags = flags & ~ECHONL
-	nflags.c_lflag = UInt(flags)
 #if	os(Linux)
 	nflags.c_lflag = UInt32(flags)
 #else
