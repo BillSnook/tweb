@@ -10,14 +10,14 @@ import Foundation
 #if	os(Linux)
 	
 import Glibc
-	
+import SwiftyGPIO
+
 #else
 	
 import Darwin.C
 	
 #endif
 
-//import SwiftyGPIO
 
 
 let off = 0
@@ -35,9 +35,9 @@ class Hardware {
 	
 	init() {
 		gpios = SwiftyGPIO.GPIOs(for:.RaspberryPi3)
-		red = gpios[.P2]!		// p17
-		yellow = gpios[.P3]!	// p18
-		green = gpios[.P4]!	// p23
+		red = gpios[.P18]!		// p17
+		yellow = gpios[.P17]!	// p18
+		green = gpios[.P23]!	// p23
 		
 		red.direction = .OUT
 		yellow.direction = .OUT
@@ -48,4 +48,26 @@ class Hardware {
 		green.value = on
 	}
 	
+	func blink() {
+
+		func delay() {
+			_ = usleep(400000)
+		}
+		
+		repeat {
+			red.value = 1
+			yellow.value = 0
+			green.value = 0
+			delay()
+			red.value = 0
+			yellow.value = 1
+			green.value = 0
+			delay()
+			red.value = 0
+			yellow.value = 0
+			green.value = 1
+			delay()
+		} while true
+	}
+
 }
