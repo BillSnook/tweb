@@ -34,6 +34,8 @@ struct ThreadControl {
 
 var threadArray = [ThreadControl]()
 
+let hardware = Hardware()
+
 
 // MARK: - Threads
 func testThread() {
@@ -49,9 +51,9 @@ func blinkThread() {
 	
 	print("  Thread blinkThread started\n")
 	
-	let hardware = Hardware()
 	hardware.blink()
 
+	print("  Thread blinkThread stopped\n")
 }
 
 func consumeThread() {

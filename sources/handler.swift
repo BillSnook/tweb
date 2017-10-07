@@ -26,7 +26,11 @@ class Handler {
 			threadArray.append( ThreadControl( socket: 0, threadType: .blinkThread ) )
 			startThread()
 		}
-
+		
+		if message == "blinkstop\n" {
+			hardware.blinkLoop = false
+		}
+		
 		return false	// Default to false to have loop and thread continue
 	}
 }

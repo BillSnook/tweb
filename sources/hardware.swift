@@ -33,7 +33,7 @@ class Hardware {
 	let yellow: GPIO
 	let green: GPIO
 
-	var state = 0
+	var blinkLoop = true
 	
 	init() {
 		
@@ -77,7 +77,7 @@ class Hardware {
 			yellow.value = 0
 			green.value = 1
 			delay()
-		} while true
+		} while blinkLoop
 	}
 
 }
