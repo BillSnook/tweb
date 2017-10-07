@@ -13,7 +13,7 @@ var stayInProgram = true
 
 // Defaults
 var portNumber: UInt16 = 5555
-var hostAddress = "workpi.local"    // or "zerowpi2.local"
+var hostAddress = "zerowpi2"    // or "workpi"
 
 
 // Mark - executable code starts here
@@ -35,15 +35,16 @@ if CommandLine.arguments.count == 1 {
 		listener.doRcv( on: portNumber )
 	} else if CommandLine.arguments[1] == "sender" {
 		if CommandLine.arguments.count > 4 {
-			print( "USAGE: tweb sender [portNumber(=\(portNumber))] [hostName(=\(hostAddress))]]" )
+			print( "USAGE: tweb sender [hostName(=\(hostAddress))]] [portNumber(=\(portNumber))]" )
 			exit(0)
 		}
-		if CommandLine.arguments.count > 2 {
-			portNumber = UInt16(atoi( CommandLine.arguments[2] ))
-		}
 		if CommandLine.arguments.count > 3 {
-			hostAddress = CommandLine.arguments[3] + ".local"
+			portNumber = UInt16(atoi( CommandLine.arguments[3] ))
 		}
+		if CommandLine.arguments.count > 2 {
+			hostAddress = CommandLine.arguments[2]
+		}
+		hostAddress = hostAddress + ".local"
 		let sender = Sender()
 		sender.doSnd( to: hostAddress, at: portNumber )
 //	} else if CommandLine.arguments[1] == "tester" {
