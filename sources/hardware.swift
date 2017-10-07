@@ -64,6 +64,7 @@ class Hardware {
 			_ = usleep(400000)
 		}
 		
+		blinkLoop = true
 		repeat {
 			red.value = 1
 			yellow.value = 0
