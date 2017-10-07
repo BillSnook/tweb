@@ -32,11 +32,11 @@ class Sender {
 		}
 		let addrs = target!.addresses
 		guard addrs.count > 0 else {
-			print( "\nHost call succeeded but no addresses were returned" )
+			print( "\nHost call succeeded for \(name) but no addresses were returned" )
 			return nil
 		}
 		
-		print( "\nHost call succeeds, address count: \(addrs.count)" )
+		print( "\nHost call succeeds for \(name), address count: \(addrs.count)" )
 		for addr in addrs {
 			print( "  addr: \(addr)" )
 		}

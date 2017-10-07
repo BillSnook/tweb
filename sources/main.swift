@@ -34,15 +34,15 @@ if CommandLine.arguments.count == 1 {
 		let listener = Listen()
 		listener.doRcv( on: portNumber )
 	} else if CommandLine.arguments[1] == "sender" {
+		if CommandLine.arguments.count > 4 {
+			print( "USAGE: tweb sender [portNumber(=\(portNumber))] [hostName(=\(hostAddress))]]" )
+			exit(0)
+		}
 		if CommandLine.arguments.count > 2 {
 			portNumber = UInt16(atoi( CommandLine.arguments[2] ))
 		}
 		if CommandLine.arguments.count > 3 {
 			hostAddress = CommandLine.arguments[3] + ".local"
-		}
-		if CommandLine.arguments.count > 4 {
-			print( "USAGE: tweb sender [portNumber(=\(portNumber)) [hostName(=\(hostAddress))]]" )
-			exit(0)
 		}
 		let sender = Sender()
 		sender.doSnd( to: hostAddress, at: portNumber )
