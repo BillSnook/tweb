@@ -38,7 +38,7 @@ class Hardware {
 	init() {
 		
 		let numberOfProcessors = sysconf( Int32(_SC_NPROCESSORS_ONLN) )
-//		print("Number of processors: \(numberOfProcessors)")
+		print("Number of cores: \(numberOfProcessors)")
 		if numberOfProcessors == 1 {	// Must be ZeroW
 			gpios = SwiftyGPIO.GPIOs(for:.RaspberryPiPlusZero)
 		} else {
@@ -61,24 +61,27 @@ class Hardware {
 	func blink() {
 
 		func delay() {
-			_ = usleep(400000)
+			_ = usleep(300000)
 		}
 		
 		blinkLoop = true
 		repeat {
-			red.value = 1
-			yellow.value = 0
-			green.value = 0
+			red.value = on
+			yellow.value = off
+			green.value = off
 			delay()
-			red.value = 0
-			yellow.value = 1
-			green.value = 0
+			red.value = off
+			yellow.value = on
+			green.value = off
 			delay()
-			red.value = 0
-			yellow.value = 0
-			green.value = 1
+			red.value = off
+			yellow.value = off
+			green.value = on
 			delay()
 		} while blinkLoop
+		red.value = off
+		yellow.value = off
+		green.value = off
 	}
 
 }
