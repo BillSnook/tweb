@@ -69,11 +69,7 @@ func consumeThread() {
 	var flags = Int32(nflags.c_lflag)
 	flags = flags & ~ECHO
 	flags = flags & ~ECHONL
-//#if	os(Linux)
 	nflags.c_lflag = UInt32(flags)
-//#else
-//	nflags.c_lflag = UInt(flags)
-//#endif
 
 	let result = tcsetattr( fileno(stdin), TCSADRAIN, &nflags )
 	guard result == 0 else {

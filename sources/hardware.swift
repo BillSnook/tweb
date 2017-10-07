@@ -15,6 +15,8 @@ import SwiftyGPIO
 #else
 	
 import Darwin.C
+// We implicitly link to SwiftyGPIO in our project so we can compile in Xcode.
+// This should fail using the SPM in command line mode in MacOSX since we need to import there.
 	
 #endif
 
@@ -34,8 +36,16 @@ class Hardware {
 	var state = 0
 	
 	init() {
-		gpios = SwiftyGPIO.GPIOs(for:.RaspberryPi3)
-		red = gpios[.P18]!		// p17
+		
+		let numberOfProcessors = sysconf(_SC_NPROCESSORS_ONLN)
+//		print("Number of processors: \(numberOfProcessors)")
+		if numberOfProcessors == 1 {	// Must be ZeroW
+			gpios = SwiftyGPIO.GPIOs(for:.RaspberryPiPlusZero)
+		} else {
+			gpios = SwiftyGPIO.GPIOs(for:.RaspberryPi3)
+		}
+
+		red = gpios[.P18]!		// GPIO_GEN0
 		yellow = gpios[.P17]!	// p18
 		green = gpios[.P23]!	// p23
 		
