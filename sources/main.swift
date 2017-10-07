@@ -21,7 +21,7 @@ var hostAddress = "zerowpi2"    // or "workpi"
 //print( "There are \(CommandLine.arguments.count) command line arguments" )
 
 if CommandLine.arguments.count == 1 {
-	print( "USAGE: tweb [listen | sender] [portNumber] [hostName]" )
+	print( "USAGE: tweb [listen [portNumber (=\(portNumber))] | sender [hostName (=\(hostAddress))] [portNumber (=\(portNumber))]]" )
 } else {
 	if CommandLine.arguments[1] == "listen" {
 		if CommandLine.arguments.count != 2 && CommandLine.arguments.count != 3 {
