@@ -37,7 +37,7 @@ class Hardware {
 	
 	init() {
 		
-		let numberOfProcessors = sysconf(_SC_NPROCESSORS_ONLN)
+		let numberOfProcessors = sysconf( Int32(_SC_NPROCESSORS_ONLN) )
 //		print("Number of processors: \(numberOfProcessors)")
 		if numberOfProcessors == 1 {	// Must be ZeroW
 			gpios = SwiftyGPIO.GPIOs(for:.RaspberryPiPlusZero)
