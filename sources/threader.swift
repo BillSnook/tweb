@@ -19,6 +19,7 @@ import Darwin.C
 enum ThreadType {
 	case serverThread
 	case inputThread
+	case blinkThread
 	case testThread
 }
 
@@ -40,6 +41,18 @@ func testThread() {
 	print("  Thread testThread started\n")
 }
 
+func blinkThread() {
+
+	func delay() {
+		_ = usleep(400000)
+	}
+	
+	print("  Thread blinkThread started\n")
+	
+
+
+}
+
 func consumeThread() {
 	
 	print("  Thread consumeThread started\n")
@@ -50,16 +63,16 @@ func consumeThread() {
 	var oflags = termios()
 	var nflags = termios()
 	
-	tcgetattr( fileno(stdin), &oflags )
+	_ = tcgetattr( fileno(stdin), &oflags )
 	nflags = oflags
 	var flags = Int32(nflags.c_lflag)
 	flags = flags & ~ECHO
 	flags = flags & ~ECHONL
-#if	os(Linux)
+//#if	os(Linux)
 	nflags.c_lflag = UInt32(flags)
-#else
-	nflags.c_lflag = UInt(flags)
-#endif
+//#else
+//	nflags.c_lflag = UInt(flags)
+//#endif
 
 	let result = tcsetattr( fileno(stdin), TCSADRAIN, &nflags )
 	guard result == 0 else {
@@ -81,7 +94,7 @@ func consumeThread() {
 		
 		stopLoop = messageHandler.processMsg( newdata )	// Returns true if quit message is received
 	}
-	tcsetattr( fileno(stdin), TCSANOW, &oflags )		// Restore input echo behavior
+	_ = tcsetattr( fileno(stdin), TCSANOW, &oflags )		// Restore input echo behavior
 	guard result == 0 else {
 		print("\n  Thread consumeThread failed resetting tcsetattr with error: \(result)\n")
 		return
@@ -138,6 +151,8 @@ func runThreads() {
 		serverThread( sockfd: nextThreadControl.nextSocket )
 	case .inputThread:
 		consumeThread()
+	case .blinkThread:
+		blinkThread()
 	case .testThread:
 		testThread()
 	}

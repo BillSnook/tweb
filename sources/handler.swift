@@ -12,37 +12,22 @@
 	import Darwin.C
 #endif
 
-import SwiftyGPIO
-
 
 class Handler {
-	
-	let gpios: [GPIOName: GPIO]
-	let redLED: GPIO
-	let yellowLED: GPIO
-	
-	var state = 0
-
-	init() {
-		gpios = SwiftyGPIO.GPIOs(for:.RaspberryPi3)
-		redLED = gpios[.P17]!
-		yellowLED = gpios[.P18]!
-
-		redLED.direction = .OUT
-		yellowLED.direction = .OUT
-		
-}
 	
 	public func processMsg( _ message: String ) -> Bool {
 		
 //		print( "Got message: \(message)" )
 		if message == "quit\n" {
-			return true
+			return true				// Returning true causes this loop and therefore this thread to exit
+		}
+		
+		if message == "blink\n" {
+			threadArray.append( ThreadControl( socket: 0, threadType: .blinkThread ) )
+			startThread()
 		}
 
-		redLED.value = state
-		state = state == 1 ? 0 : 1
-		return false	// Default to false to have data processing continue
+		return false	// Default to false to have loop and thread continue
 	}
 }
 

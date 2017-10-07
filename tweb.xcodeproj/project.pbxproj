@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A9187F301F892F9E00E2CE4C /* hardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9187F2F1F892F9E00E2CE4C /* hardware.swift */; };
+		A9187F321F8932E200E2CE4C /* ADC.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* ADC.swift */; };
+		A9187F331F8932E200E2CE4C /* I2C.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* I2C.swift */; };
+		A9187F341F8932E200E2CE4C /* Mailbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* Mailbox.swift */; };
+		A9187F351F8932E200E2CE4C /* Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* Presets.swift */; };
+		A9187F361F8932E200E2CE4C /* PWM.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* PWM.swift */; };
+		A9187F371F8932E200E2CE4C /* SPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* SPI.swift */; };
+		A9187F381F8932E200E2CE4C /* SunXi.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* SunXi.swift */; };
+		A9187F391F8932E200E2CE4C /* SwiftyGPIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* SwiftyGPIO.swift */; };
+		A9187F3A1F8932E200E2CE4C /* UART.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* UART.swift */; };
 		A9C2D8351F7D651900970784 /* listen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C2D8341F7D651900970784 /* listen.swift */; };
 		A9C2D8371F81867D00970784 /* threader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C2D8361F81867D00970784 /* threader.swift */; };
 		A9C9AB361F73535200144878 /* sender.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C9AB351F73535200144878 /* sender.swift */; };
@@ -15,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A9187F2F1F892F9E00E2CE4C /* hardware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hardware.swift; sourceTree = "<group>"; };
 		A9357C0A1F624E12001350EF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A9C2D8341F7D651900970784 /* listen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = listen.swift; sourceTree = "<group>"; };
 		A9C2D8361F81867D00970784 /* threader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = threader.swift; sourceTree = "<group>"; };
@@ -105,6 +116,7 @@
 				A9C2D8341F7D651900970784 /* listen.swift */,
 				A9CF0BAC1F623826005AFB60 /* handler.swift */,
 				A9C2D8361F81867D00970784 /* threader.swift */,
+				A9187F2F1F892F9E00E2CE4C /* hardware.swift */,
 			);
 			name = Sources;
 			path = sources;
@@ -160,11 +172,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				A9187F371F8932E200E2CE4C /* SPI.swift in Sources */,
 				OBJ_45 /* main.swift in Sources */,
 				A9C9AB361F73535200144878 /* sender.swift in Sources */,
+				A9187F3A1F8932E200E2CE4C /* UART.swift in Sources */,
+				A9187F361F8932E200E2CE4C /* PWM.swift in Sources */,
+				A9187F331F8932E200E2CE4C /* I2C.swift in Sources */,
 				A9C2D8351F7D651900970784 /* listen.swift in Sources */,
 				A9C2D8371F81867D00970784 /* threader.swift in Sources */,
+				A9187F381F8932E200E2CE4C /* SunXi.swift in Sources */,
 				A9CF0BAD1F623826005AFB60 /* handler.swift in Sources */,
+				A9187F321F8932E200E2CE4C /* ADC.swift in Sources */,
+				A9187F391F8932E200E2CE4C /* SwiftyGPIO.swift in Sources */,
+				A9187F341F8932E200E2CE4C /* Mailbox.swift in Sources */,
+				A9187F351F8932E200E2CE4C /* Presets.swift in Sources */,
+				A9187F301F892F9E00E2CE4C /* hardware.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
