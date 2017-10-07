@@ -49,7 +49,8 @@ func blinkThread() {
 	
 	print("  Thread blinkThread started\n")
 	
-
+	let hardware = Hardware()
+	hardware.blink()
 
 }
 
