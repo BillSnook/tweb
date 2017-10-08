@@ -33,8 +33,6 @@ class Listen {
 		}
 		print( "\nBound to local port \(port), start listening\n" )
 		doListen()
-		
-//		close( newsocket )
 	}
 	
 	
@@ -52,7 +50,6 @@ class Listen {
 		}
 		if bindResult < 0 {
 			print("\n\nERROR binding, errno: \(errno)")
-//			return bindResult
 		}
 		return bindResult
 	}
@@ -60,13 +57,9 @@ class Listen {
 	
 	func doListen() {
 
-//		threadArray.append( ThreadControl( socket: 0, threadType: .inputThread ) )
-//		startThread()		// Consumes keyboard input on listener side
-
 		let notDone = true
 		repeat {
 			listen( socketfd, 5 )
-//			print( "  Got listen end-call, wait on accept\n" )
 			
 			var cli_addr = sockaddr_in()
 			var cli_len = socklen_t(MemoryLayout.size(ofValue: cli_addr))
@@ -81,7 +74,7 @@ class Listen {
 				print("\n\nERROR accepting, errno: \(errno)")
 				exit(0)
 			}
-			print( "  Got accept end-call, create new thread\n" )
+//			print( "  Got accept end-call, create new thread\n" )
 
 			threadArray.append( ThreadControl( socket: newsockfd, threadType: .serverThread ) )
 			startThread()

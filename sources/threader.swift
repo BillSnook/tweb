@@ -40,7 +40,7 @@ let hardware = Hardware()
 // MARK: - Threads
 func testThread() {
 	
-	print("  Thread testThread started\n")
+	print("  Thread testThread started and stopped\n")
 }
 
 func blinkThread() {
@@ -58,7 +58,7 @@ func blinkThread() {
 
 func consumeThread() {
 	
-	print("  Thread consumeThread started\n")
+//	print("  Thread consumeThread started\n")
 	
 	let messageHandler = Handler()
 	var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
@@ -104,7 +104,7 @@ func consumeThread() {
 
 func serverThread( sockfd: Int32 ) {
 	
-	print("  Thread serverThread started for socketfd \(sockfd)\n")
+//	print("  Thread serverThread started for socketfd \(sockfd)\n")
 	
 	let messageHandler = Handler()
 	var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
@@ -117,11 +117,12 @@ func serverThread( sockfd: Int32 ) {
 			continue
 		}
 		if rcvLen == 0 {
-			print("\n  Disconnected from the other endpoint. Exiting thread now.")
+//			print("\n  Disconnected from the other endpoint. Exiting thread now.")
+			print( "\(sockfd)] Connection closed by other end" )
 			break
 		} else {	// rcvLen > 0
 			guard let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) else {
-				print( "No recognizable string data received, length: \(rcvLen)" )
+				print( "\nNo recognizable string data received, length: \(rcvLen)" )
 				continue
 			}
 			print( "\(sockfd)] \(newdata)", terminator: "" )	// Currently a newline is already included in the sent string
@@ -135,7 +136,7 @@ func serverThread( sockfd: Int32 ) {
 			stopLoop = messageHandler.processMsg( newdata )	// Returns true if quit message is received
 		}
 	}
-	print( "  Exiting thread serverThread for socketfd \(sockfd)\n" )
+//	print( "  Exiting thread serverThread for socketfd \(sockfd)\n" )
 	close( sockfd )
 }
 
