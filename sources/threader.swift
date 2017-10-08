@@ -117,8 +117,6 @@ func serverThread( sockfd: Int32, address: UInt32 ) {
 	inet_ntop(AF_INET, &inaddr, addrCString, 16)
 	let addrString = String( cString: addrCString )
 	print( "\(sockfd)] Connection accepted from \(addrString)" )
-	addrCString.deinitialize()
-	addrCString.deallocate(capacity: 16)
 	
 	while !stopLoop  {
 		bzero( &readBuffer, 256 )
@@ -129,7 +127,7 @@ func serverThread( sockfd: Int32, address: UInt32 ) {
 		}
 		if rcvLen == 0 {
 //			print("\n  Disconnected from the other endpoint. Exiting thread now.")
-			print( "\(sockfd)] Connection closed by other end" )
+			print( "\(sockfd)] Connection closed by \(addrString)" )
 			break
 		} else {	// rcvLen > 0
 			guard let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) else {
@@ -148,6 +146,8 @@ func serverThread( sockfd: Int32, address: UInt32 ) {
 		}
 	}
 //	print( "  Exiting thread serverThread for socketfd \(sockfd)\n" )
+	addrCString.deinitialize()
+	addrCString.deallocate(capacity: 16)
 	close( sockfd )
 }
 
