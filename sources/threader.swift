@@ -112,12 +112,12 @@ func serverThread( sockfd: Int32, address: UInt32 ) {
 	var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
 	var stopLoop = false
 	
-	let addrCString = UnsafeMutablePointer<Int8>.allocate(capacity: 16)
+	let addrCString = UnsafeMutablePointer<Int8>.allocate( capacity: Int(INET_ADDRSTRLEN) )
 	var inaddr = in_addr( s_addr: address )
-	inet_ntop(AF_INET, &inaddr, addrCString, 16)
+	inet_ntop(AF_INET, &inaddr, addrCString, UInt32(INET_ADDRSTRLEN))
 	let addrString = String( cString: addrCString )
 	addrCString.deinitialize()
-	addrCString.deallocate(capacity: 16)
+	addrCString.deallocate( capacity: Int(INET_ADDRSTRLEN) )
 	print( "\(sockfd)] Connection accepted from \(addrString)" )
 	
 	while !stopLoop  {
