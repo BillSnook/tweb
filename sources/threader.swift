@@ -166,25 +166,24 @@ func getPthread() -> pthread_t? {
 // MARK: - Entry point - Start next thread in list
 func startThread() {
 	
-	var t = getPthread()			// Memory leak, needs solution
-
-#if	os(Linux)
+//	var t = getPthread()			// Memory leak, needs solution
+	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
+	var t = threadPtr.pointee
+	
 	let attrPtr = UnsafeMutablePointer<pthread_attr_t>.allocate(capacity: 1)
 	pthread_attr_init( attrPtr )
 	pthread_attr_setdetachstate( attrPtr, 0 )
+
+#if	os(Linux)
 	pthread_create(&t!,
 	               attrPtr,
 	               { _ in runThreads(); return nil },
 	               nil)
-	pthread_attr_destroy( attrPtr )
 #else	// Darwin - MacOS    iOS?
-	let attrPtr = UnsafeMutablePointer<pthread_attr_t>.allocate(capacity: 1)
-	pthread_attr_init( attrPtr )
-	pthread_attr_setdetachstate( attrPtr, 0 )
 	pthread_create(&t,
 				   nil,
 				   { _ in runThreads(); return nil },
 				   nil)
-	pthread_attr_destroy( attrPtr )
 #endif
+	pthread_attr_destroy( attrPtr )
 }
