@@ -23,7 +23,7 @@ class Handler {
 		}
 		
 		if message == "blink\n" {
-			threadArray.append( ThreadControl( socket: 0, threadType: .blinkThread ) )
+			threadArray.append( ThreadControl( socket: 0, address: 0, threadType: .blinkThread ) )
 			startThread()
 		}
 		

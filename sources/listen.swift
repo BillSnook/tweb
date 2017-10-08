@@ -76,7 +76,8 @@ class Listen {
 			}
 //			print( "  Got accept end-call, create new thread\n" )
 
-			threadArray.append( ThreadControl( socket: newsockfd, threadType: .serverThread ) )
+			let ipaddr = UInt32(cli_addr.sin_addr.s_addr)
+			threadArray.append( ThreadControl( socket: newsockfd, address: ipaddr, threadType: .serverThread ) )
 			startThread()
 		} while notDone
 		

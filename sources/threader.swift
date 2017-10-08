@@ -25,9 +25,11 @@ enum ThreadType {
 
 struct ThreadControl {
 	var nextSocket: Int32
+	var newAddress: UInt32
 	var nextThreadType: ThreadType
-	init( socket: Int32, threadType: ThreadType ) {
+	init( socket: Int32, address: UInt32, threadType: ThreadType ) {
 		nextSocket = socket
+		newAddress = address
 		nextThreadType = threadType
 	}
 }
@@ -102,13 +104,22 @@ func consumeThread() {
 	print("  Thread consumeThread stopped\n")
 }
 
-func serverThread( sockfd: Int32 ) {
+func serverThread( sockfd: Int32, address: UInt32 ) {
 	
 //	print("  Thread serverThread started for socketfd \(sockfd)\n")
 	
 	let messageHandler = Handler()
 	var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
 	var stopLoop = false
+	
+	let addrCString = UnsafeMutablePointer<Int8>.allocate(capacity: 16)
+	var inaddr = in_addr( s_addr: address )
+	inet_ntop(AF_INET, &inaddr, addrCString, 16)
+	let addrString = String( cString: addrCString )
+	print( "\(sockfd)] Connection accepted from \(addrString)" )
+	addrCString.deinitialize()
+	addrCString.deallocate(capacity: 16)
+	
 	while !stopLoop  {
 		bzero( &readBuffer, 256 )
 		let rcvLen = read( sockfd, &readBuffer, 255 )
@@ -148,7 +159,7 @@ func runThreads() {
 	let nextThreadControl = threadArray.remove(at: 0)
 	switch nextThreadControl.nextThreadType {
 	case .serverThread:
-		serverThread( sockfd: nextThreadControl.nextSocket )
+		serverThread( sockfd: nextThreadControl.nextSocket, address: nextThreadControl.newAddress )
 	case .inputThread:
 		consumeThread()
 	case .blinkThread:
