@@ -57,6 +57,7 @@ class Listen {
 	
 	func doListen() {
 
+		initThreads()
 		let notDone = true
 		repeat {
 			listen( socketfd, 5 )
