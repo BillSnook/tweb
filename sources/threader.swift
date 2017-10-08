@@ -35,9 +35,11 @@ struct ThreadControl {
 }
 
 var threadArray = [ThreadControl]()
+var threadControlMutex = pthread_mutex_t()
 
 let hardware = Hardware()
 
+//--	----	----	----
 
 // MARK: - Threads
 func testThread() {
@@ -154,9 +156,14 @@ func serverThread( sockfd: Int32, address: UInt32 ) {
 // MARK: - Thread controller
 func runThreads() {
 
-	guard threadArray.count > 0 else { return }
-	
-	let nextThreadControl = threadArray.remove(at: 0)
+	var tc: ThreadControl?
+	pthread_mutex_lock( &threadControlMutex )
+	if threadArray.count > 0 {
+		tc = threadArray.remove(at: 0)
+	}
+	pthread_mutex_lock( &threadControlMutex )
+	guard let nextThreadControl = tc else { return }
+
 	switch nextThreadControl.nextThreadType {
 	case .serverThread:
 		serverThread( sockfd: nextThreadControl.nextSocket, address: nextThreadControl.newAddress )
@@ -167,9 +174,14 @@ func runThreads() {
 	case .testThread:
 		testThread()
 	}
-
 }
 
+
+// Intialize thread environment
+func initThreads() {
+	
+	pthread_mutex_init( &threadControlMutex, nil )
+}
 
 // MARK: - Entry point - Start next thread in list
 func startThread() {
