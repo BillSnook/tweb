@@ -116,6 +116,8 @@ func serverThread( sockfd: Int32, address: UInt32 ) {
 	var inaddr = in_addr( s_addr: address )
 	inet_ntop(AF_INET, &inaddr, addrCString, 16)
 	let addrString = String( cString: addrCString )
+	addrCString.deinitialize()
+	addrCString.deallocate(capacity: 16)
 	print( "\(sockfd)] Connection accepted from \(addrString)" )
 	
 	while !stopLoop  {
@@ -146,8 +148,6 @@ func serverThread( sockfd: Int32, address: UInt32 ) {
 		}
 	}
 //	print( "  Exiting thread serverThread for socketfd \(sockfd)\n" )
-	addrCString.deinitialize()
-	addrCString.deallocate(capacity: 16)
 	close( sockfd )
 }
 
