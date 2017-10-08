@@ -156,14 +156,12 @@ func serverThread( sockfd: Int32, address: UInt32 ) {
 // MARK: - Thread controller
 func runThreads() {
 
-	print( "  About to lock mutex\n" )
 	var tc: ThreadControl?
 	pthread_mutex_lock( &threadControlMutex )
 	if threadArray.count > 0 {
 		tc = threadArray.remove(at: 0)
 	}
 	pthread_mutex_unlock( &threadControlMutex )
-	print( "  Done with mutex\n" )
 	guard let nextThreadControl = tc else { return }
 
 	switch nextThreadControl.nextThreadType {
