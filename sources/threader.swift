@@ -167,15 +167,24 @@ func getPthread() -> pthread_t? {
 func startThread() {
 	
 	var t = getPthread()			// Memory leak, needs solution
+
 #if	os(Linux)
+	let attrPtr = UnsafeMutablePointer<pthread_attr_t>.allocate(capacity: 1)
+	pthread_attr_init( attrPtr )
+	pthread_attr_setdetachstate( attrPtr, 0 )
 	pthread_create(&t!,
-	               nil,
+	               attrPtr,
 	               { _ in runThreads(); return nil },
 	               nil)
+	pthread_attr_destroy( attrPtr )
 #else	// Darwin - MacOS    iOS?
+	let attrPtr = UnsafeMutablePointer<pthread_attr_t>.allocate(capacity: 1)
+	pthread_attr_init( attrPtr )
+	pthread_attr_setdetachstate( attrPtr, 0 )
 	pthread_create(&t,
 				   nil,
 				   { _ in runThreads(); return nil },
 				   nil)
+	pthread_attr_destroy( attrPtr )
 #endif
 }
