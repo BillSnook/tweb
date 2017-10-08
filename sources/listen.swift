@@ -58,7 +58,7 @@ class Listen {
 	func doListen() {
 
 		initThreads()
-		let notDone = true
+		var notDone = true
 		repeat {
 			listen( socketfd, 5 )
 			
@@ -73,14 +73,14 @@ class Listen {
 			}
 			if newsockfd < 0 {
 				print("\n\nERROR accepting, errno: \(errno)")
-				exit(0)
+				notDone = false
+			} else {
+				let ipaddr = UInt32(cli_addr.sin_addr.s_addr)
+				threadArray.append( ThreadControl( socket: newsockfd, address: ipaddr, threadType: .serverThread ) )
+				startThread()
 			}
-//			print( "  Got accept end-call, create new thread\n" )
-
-			let ipaddr = UInt32(cli_addr.sin_addr.s_addr)
-			threadArray.append( ThreadControl( socket: newsockfd, address: ipaddr, threadType: .serverThread ) )
-			startThread()
 		} while notDone
-		
+		freeThreads()
+		exit( 0 )
 	}
 }

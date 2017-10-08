@@ -162,7 +162,7 @@ func runThreads() {
 	if threadArray.count > 0 {
 		tc = threadArray.remove(at: 0)
 	}
-	pthread_mutex_lock( &threadControlMutex )
+	pthread_mutex_unlock( &threadControlMutex )
 	print( "  Done with mutex\n" )
 	guard let nextThreadControl = tc else { return }
 
@@ -179,10 +179,15 @@ func runThreads() {
 }
 
 
-// Intialize thread environment
+// Manage thread environment
 func initThreads() {
 	
 	pthread_mutex_init( &threadControlMutex, nil )
+}
+
+func freeThreads() {
+	
+	pthread_mutex_destroy( &threadControlMutex )
 }
 
 // MARK: - Entry point - Start next thread in list
