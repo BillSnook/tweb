@@ -42,7 +42,7 @@ func setupSignalHandling() {
 	
 	// This method works
 	trap( signum: .INT ) { signal in
-		print("Received INT signal")
+		print("\nReceived INT signal, exiting now.\n")
 		// Time for all threads to stop and cleanup, then exit
 		exit(0)
 	}
