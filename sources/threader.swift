@@ -50,8 +50,9 @@ class ThreadTester {
 	
 	func testThread() {
 		
-		print("  Thread ThreadTester.testThread() started and stopped\n")
+		print("  Thread ThreadTester.testThread() started\n")
 		usleep( 2000000 )		// Let print text clear buffers, before exiting
+		print("  Thread ThreadTester.testThread() stopped\n")
 	}
 	
 }
@@ -87,11 +88,11 @@ func consumeThread() {
 	var flags = Int32(nflags.c_lflag)
 	flags = flags & ~ECHO
 	flags = flags & ~ECHONL
-//	#if	os(Linux)
+	#if	os(Linux)
 		nflags.c_lflag = tcflag_t(flags)
-//	#else
-//		nflags.c_lflag = UInt32(flags)
-//	#endif
+	#else
+		nflags.c_lflag = UInt32(flags)
+	#endif
 
 	let result = tcsetattr( fileno(stdin), TCSADRAIN, &nflags )
 	guard result == 0 else {
@@ -188,7 +189,6 @@ func runThreads() {
 	case .blinkThread:
 		blinkThread()
 	case .testThread:
-		print( "In runThreads for .testThread" )
 		let testerThread = ThreadTester()
 		testerThread.testThread()
 	}
