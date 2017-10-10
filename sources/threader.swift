@@ -8,6 +8,15 @@
 #if	os(Linux)
 	
 import Glibc
+	
+#else
+	
+import Darwin.C
+
+#endif
+
+
+#if	os(Linux)
 
 enum Signal:Int32 {
 	case HUP    = 1
