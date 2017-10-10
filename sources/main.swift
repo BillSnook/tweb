@@ -16,6 +16,8 @@ var hostAddress = "zerowpi2"    // or "workpi"
 
 // Mark - executable code starts here
 
+setupSignalHandling()
+
 //print( "There are \(CommandLine.arguments.count) command line arguments" )
 
 if CommandLine.arguments.count == 1 {
