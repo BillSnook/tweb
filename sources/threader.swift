@@ -37,7 +37,7 @@ let hupHandler:SigactionHandler = { signal in
 func trap(signum:Signal, action:SigactionHandler) {
 	var sigAction = sigaction()
 	
-	sigAction.__sigaction_handler = unsafeBitCast(to: action, sigaction.__Unnamed_union___sigaction_handler.self)
+	sigAction.__sigaction_handler = unsafeBitCast(action, to:  sigaction.__Unnamed_union___sigaction_handler.self)
 	
 	sigaction(signum.rawValue, &sigAction, nil)
 }
