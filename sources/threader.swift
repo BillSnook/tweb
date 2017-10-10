@@ -37,7 +37,7 @@ let hupHandler:SigactionHandler = { signal in
 func trap(signum:Signal, action:SigactionHandler) {
 	var sigAction = sigaction()
 	
-	sigAction.__sigaction_handler = unsafeBitCast(action, sigaction.__Unnamed_union___sigaction_handler.self)
+	sigAction.__sigaction_handler = unsafeBitCast(to: action, sigaction.__Unnamed_union___sigaction_handler.self)
 	
 	sigaction(signum.rawValue, &sigAction, nil)
 }
@@ -45,13 +45,13 @@ func trap(signum:Signal, action:SigactionHandler) {
 func setupSignalhandling() {
 	
 	// This method works
-	trap(.INT) { signal in
+	trap( signum: .INT) { signal in
 		print("Received INT signal")
 		exit(0)
 	}
 	
 	// And this works of course
-	trap(.HUP, action:hupHandler)
+	trap( signum: .HUP, action:hupHandler)
 }
 
 #endif
