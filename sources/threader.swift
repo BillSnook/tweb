@@ -210,7 +210,7 @@ func freeThreads() {
 // MARK: - Entry point - Start next thread in list
 func startThread() {
 	
-	print( "\n  In startThread" )
+//	print( "\n  In startThread" )
 	
 	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
 	defer { threadPtr.deallocate(capacity: 1) }
