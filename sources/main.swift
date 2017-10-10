@@ -9,8 +9,6 @@
 import Foundation
 
 
-var stayInProgram = true
-
 // Defaults
 var portNumber: UInt16 = 5555
 var hostAddress = "zerowpi2"    // or "workpi"
@@ -44,13 +42,15 @@ if CommandLine.arguments.count == 1 {
 		if CommandLine.arguments.count > 2 {
 			hostAddress = CommandLine.arguments[2]
 		}
-		hostAddress = hostAddress + ".local"
+		let localHostAddress = hostAddress + ".local"
 		let sender = Sender()
-		sender.doSnd( to: hostAddress, at: portNumber )
-//	} else if CommandLine.arguments[1] == "tester" {
+		sender.doSnd( to: localHostAddress, at: portNumber )
+	} else if CommandLine.arguments[1] == "tester" {
+		threadArray.append( ThreadControl( socket: 0, address: 0, threadType: .testThread ) )
+		startThread()
 ////		let tMgr = Threader( 0 )
 ////		tMgr.createThread()
-//		createThread()
+
 //		print( "repeating" )
 //		repeat {
 //			usleep( 500000 )

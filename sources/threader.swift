@@ -34,18 +34,28 @@ struct ThreadControl {
 	}
 }
 
+//	Globals
 var threadArray = [ThreadControl]()
 var threadControlMutex = pthread_mutex_t()
 
+#if	os(Linux)
 let hardware = Hardware()
+#endif
+
 
 //--	----	----	----
 
 // MARK: - Threads
-func testThread() {
+class ThreadTester {
 	
-	print("  Thread testThread started and stopped\n")
+	func testThread() {
+		
+		print("  Thread ThreadTester.testThread() started and stopped\n")
+		usleep( 200000 )		// Let print text clear buffers, before exiting
+	}
+	
 }
+
 
 func blinkThread() {
 
@@ -55,7 +65,9 @@ func blinkThread() {
 	
 	print("  Thread blinkThread started\n")
 	
+#if	os(Linux)
 	hardware.blink()
+#endif
 
 	print("  Thread blinkThread stopped\n")
 }
@@ -75,7 +87,11 @@ func consumeThread() {
 	var flags = Int32(nflags.c_lflag)
 	flags = flags & ~ECHO
 	flags = flags & ~ECHONL
-	nflags.c_lflag = UInt32(flags)
+//	#if	os(Linux)
+		nflags.c_lflag = tcflag_t(flags)
+//	#else
+//		nflags.c_lflag = UInt32(flags)
+//	#endif
 
 	let result = tcsetattr( fileno(stdin), TCSADRAIN, &nflags )
 	guard result == 0 else {
@@ -172,12 +188,13 @@ func runThreads() {
 	case .blinkThread:
 		blinkThread()
 	case .testThread:
-		testThread()
+		let testerThread = ThreadTester()
+		testerThread.testThread()
 	}
 }
 
 
-// Manage thread environment
+// Manage thread environment because mutexes need this
 func initThreads() {
 	
 	pthread_mutex_init( &threadControlMutex, nil )

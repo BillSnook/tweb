@@ -27,10 +27,12 @@ class Handler {
 			startThread()
 		}
 		
-		if message == "blinkstop\n" {
-			hardware.blinkLoop = false
-		}
-		
+#if	os(Linux)
+	if message == "blinkstop\n" {
+		hardware.blinkLoop = false
+	}
+#endif
+
 		return false	// Default to false to have loop and thread continue
 	}
 }

@@ -12,14 +12,6 @@ import Foundation
 import Glibc
 import SwiftyGPIO
 
-#else
-	
-import Darwin.C
-// We implicitly link to SwiftyGPIO in our project so we can compile in Xcode.
-// This should fail using the SPM in command line mode in MacOSX since we need to import there.
-	
-#endif
-
 
 
 let off = 0
@@ -85,3 +77,11 @@ class Hardware {
 	}
 
 }
+
+#else
+	
+//	import Darwin.C
+	// We implicitly link to SwiftyGPIO in our project so we can compile in Xcode.
+	// This should fail using the SPM in command line mode in MacOSX since we need to import there.
+	
+#endif
