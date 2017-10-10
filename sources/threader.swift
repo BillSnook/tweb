@@ -51,8 +51,8 @@ class ThreadTester {
 	func testThread() {
 		
 		print("  Thread ThreadTester.testThread() started\n")
-		usleep( 2000000 )		// Let print text clear buffers, before exiting
 		print("  Thread ThreadTester.testThread() stopped\n")
+		usleep( 2000000 )		// Let print text clear buffers, before exiting
 	}
 	
 }
