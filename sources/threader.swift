@@ -6,13 +6,9 @@
 //
 
 #if	os(Linux)
-	
 import Glibc
-	
 #else
-	
 import Darwin.C
-
 #endif
 
 
@@ -31,30 +27,31 @@ enum Signal:Int32 {
 typealias SigactionHandler = @convention(c)(Int32) -> Void
 
 let hupHandler:SigactionHandler = { signal in
-	print("Received HUP signal, reread config file")
+	print( "Received HUP signal, reread config file" )
 }
 
-func trap(signum:Signal, action:SigactionHandler) {
+func trap( signum: Signal, action: SigactionHandler ) {
 	var sigAction = sigaction()
 	
-	sigAction.__sigaction_handler = unsafeBitCast(action, to:  sigaction.__Unnamed_union___sigaction_handler.self)
+	sigAction.__sigaction_handler = unsafeBitCast( action, to:  sigaction.__Unnamed_union___sigaction_handler.self )
 	
-	sigaction(signum.rawValue, &sigAction, nil)
+	sigaction( signum.rawValue, &sigAction, nil )
 }
 
 func setupSignalHandling() {
 	
 	// This method works
-	trap( signum: .INT) { signal in
+	trap( signum: .INT ) { signal in
 		print("Received INT signal")
+		// Time for all threads to stop and cleanup, then exit
 		exit(0)
 	}
 	
 	// And this works of course
-	trap( signum: .HUP, action:hupHandler)
+	trap( signum: .HUP, action: hupHandler )
 }
 
-#endif
+#endif	// End of Linux-only section for signal handling
 
 
 enum ThreadType {

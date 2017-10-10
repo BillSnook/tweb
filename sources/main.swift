@@ -16,12 +16,15 @@ var hostAddress = "zerowpi2"    // or "workpi"
 
 // Mark - executable code starts here
 
-setupSignalHandling()
+#if	os(Linux)
+setupSignalHandling()		// Allow proper cleanup on unexpected exit signals (like ^C)
+#endif
 
 //print( "There are \(CommandLine.arguments.count) command line arguments" )
 
-if CommandLine.arguments.count == 1 {
+if CommandLine.arguments.count == 1 {	// Just the program name is entered
 	print( "USAGE: tweb [listen [portNumber (=\(portNumber))] | sender [hostName (=\(hostAddress))] [portNumber (=\(portNumber))]]" )
+	exit(0)
 } else {
 	if CommandLine.arguments[1] == "listen" {
 		if CommandLine.arguments.count != 2 && CommandLine.arguments.count != 3 {
@@ -51,13 +54,5 @@ if CommandLine.arguments.count == 1 {
 		print( "\n  In Test Mode, starting test now\n" )
 		threadArray.append( ThreadControl( socket: 0, address: 0, threadType: .testThread ) )
 		startThread()
-////		let tMgr = Threader( 0 )
-////		tMgr.createThread()
-
-//		print( "repeating" )
-//		repeat {
-//			usleep( 500000 )
-//		} while true
 	}
-//	print( "" )
 }
