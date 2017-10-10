@@ -42,7 +42,7 @@ func trap(signum:Signal, action:SigactionHandler) {
 	sigaction(signum.rawValue, &sigAction, nil)
 }
 
-func setupSignalhandling() {
+func setupSignalHandling() {
 	
 	// This method works
 	trap( signum: .INT) { signal in
