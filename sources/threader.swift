@@ -189,6 +189,7 @@ func runThreads() {
 	case .blinkThread:
 		blinkThread()
 	case .testThread:
+		print( "\n  In runThreads for .testThread" )
 		let testerThread = ThreadTester()
 		testerThread.testThread()
 	}
@@ -209,6 +210,7 @@ func freeThreads() {
 // MARK: - Entry point - Start next thread in list
 func startThread() {
 	
+	print( "\n  In startThread" )
 	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
 	defer { threadPtr.deallocate(capacity: 1) }
 	var t = threadPtr.pointee
