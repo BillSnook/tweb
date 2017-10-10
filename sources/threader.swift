@@ -51,7 +51,7 @@ class ThreadTester {
 	func testThread() {
 		
 		print("  Thread ThreadTester.testThread() started and stopped\n")
-		usleep( 200000 )		// Let print text clear buffers, before exiting
+		usleep( 2000000 )		// Let print text clear buffers, before exiting
 	}
 	
 }
@@ -188,6 +188,7 @@ func runThreads() {
 	case .blinkThread:
 		blinkThread()
 	case .testThread:
+		print( "In runThreads for .testThread" )
 		let testerThread = ThreadTester()
 		testerThread.testThread()
 	}
