@@ -6,12 +6,44 @@
 //
 
 #if	os(Linux)
-
+	
 import Glibc
 
-#else
+enum Signal:Int32 {
+	case HUP    = 1
+	case INT    = 2
+	case QUIT   = 3
+	case ABRT   = 6
+	case KILL   = 9
+	case ALRM   = 14
+	case TERM   = 15
+}
 
-import Darwin.C
+typealias SigactionHandler = @convention(c)(Int32) -> Void
+
+let hupHandler:SigactionHandler = { signal in
+	print("Received HUP signal, reread config file")
+}
+
+func trap(signum:Signal, action:SigactionHandler) {
+	var sigAction = sigaction()
+	
+	sigAction.__sigaction_handler = unsafeBitCast(action, sigaction.__Unnamed_union___sigaction_handler.self)
+	
+	sigaction(signum.rawValue, &sigAction, nil)
+}
+
+func setupSignalhandling() {
+	
+	// This method works
+	trap(.INT) { signal in
+		print("Received INT signal")
+		exit(0)
+	}
+	
+	// And this works of course
+	trap(.HUP, action:hupHandler)
+}
 
 #endif
 
@@ -57,21 +89,6 @@ class ThreadTester {
 	
 }
 
-
-func blinkThread() {
-
-	func delay() {
-		_ = usleep(400000)
-	}
-	
-	print("  Thread blinkThread started\n")
-	
-#if	os(Linux)
-	hardware.blink()
-#endif
-
-	print("  Thread blinkThread stopped\n")
-}
 
 func consumeThread() {
 	
@@ -187,9 +204,10 @@ func runThreads() {
 	case .inputThread:
 		consumeThread()
 	case .blinkThread:
-		blinkThread()
+#if	os(Linux)
+		hardware.blink()
+#endif
 	case .testThread:
-//		print( "\n  In runThreads for .testThread\n" )
 		let testerThread = ThreadTester()
 		testerThread.testThread()
 	}
@@ -209,9 +227,7 @@ func freeThreads() {
 
 // MARK: - Entry point - Start next thread in list
 func startThread() {
-	
-//	print( "\n  In startThread" )
-	
+
 	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
 	defer { threadPtr.deallocate(capacity: 1) }
 	var t = threadPtr.pointee
