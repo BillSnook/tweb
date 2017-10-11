@@ -18,22 +18,37 @@ class Handler {
 	public func processMsg( _ message: String ) -> Bool {
 		
 //		print( "Got message: \(message)" )
-		if message == "quit\n" {
-			return true				// Returning true causes this loop and therefore this thread to exit
-		}
+//		if message == "quit\n" {
+//			return true				// Returning true causes this loop and therefore this thread to exit
+//		}
+//
+//		if message == "blink\n" {
+//			threadArray.append( ThreadControl( socket: 0, address: 0, threadType: .blinkThread ) )
+//			startThread()
+//		}
+//
+//#if	os(Linux)
+//		if message == "blinkstop\n" {
+//			hardware.blinkLoop = false
+//		}
+//#endif
 		
-		if message == "blink\n" {
+		var endLoop = false
+		switch message {
+		case "quit\n":
+			endLoop = true
+		case "blink\n":
 			threadArray.append( ThreadControl( socket: 0, address: 0, threadType: .blinkThread ) )
 			startThread()
-		}
-		
+		case "blinkstop\n":
 #if	os(Linux)
-	if message == "blinkstop\n" {
-		hardware.blinkLoop = false
-	}
+			hardware.blinkLoop = false
 #endif
+		default:
+			endLoop = false
+		}
 
-		return false	// Default to false to have loop and thread continue
+		return endLoop	// Default to false to have loop and thread continue
 	}
 }
 

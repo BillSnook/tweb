@@ -245,6 +245,7 @@ func startThread() {
 	pthread_attr_init( attrPtr )
 	pthread_attr_setdetachstate( attrPtr, 0 )
 
+	// No context can be captured in 3rd param because it is a C routine and knows not swift
 #if	os(Linux)
 	pthread_create(&t!,
 	               attrPtr,
