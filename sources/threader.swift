@@ -38,13 +38,14 @@ func trap( signum: Signal, action: SigactionHandler ) {
 	sigaction( signum.rawValue, &sigAction, nil )
 }
 
+// Entry, init function to setup trap handlers for common, expected signals
 func setupSignalHandling() {
 	
 	// This method works
 	trap( signum: .INT ) { signal in
 		print("\nReceived INT signal, exiting now.\n")
 		// Time for all threads to stop and cleanup, then exit
-		exit(0)
+		exit(0)		// ? May not want to exit ?
 	}
 	
 	// And this works of course
@@ -54,6 +55,7 @@ func setupSignalHandling() {
 #endif	// End of Linux-only section for signal handling
 
 
+// Possible types of threads with which we work
 enum ThreadType {
 	case serverThread
 	case inputThread
@@ -73,8 +75,8 @@ struct ThreadControl {
 }
 
 //	Globals
-var threadArray = [ThreadControl]()
-var threadControlMutex = pthread_mutex_t()
+var threadArray = [ThreadControl]()				// List of threads to initiate
+var threadControlMutex = pthread_mutex_t()		// Protect the list
 
 #if	os(Linux)
 let hardware = Hardware()
