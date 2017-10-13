@@ -57,7 +57,7 @@ class Sender {
 		var hints = addrinfo(
 			ai_flags: AI_PASSIVE,       // Assign the address of my local host to the socket structures
 			ai_family: AF_INET,      	// IPv4
-			ai_socktype: Int32(SOCK_STREAM),   // TCP
+			ai_socktype: Int32(SOCK_STREAM.rawValue),   // TCP
 			ai_protocol: 0, ai_addrlen: 0, ai_addr: nil, ai_canonname: nil, ai_next: nil )
 #else
 		var hints = addrinfo(
