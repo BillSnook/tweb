@@ -23,7 +23,7 @@ class Sender {
 	#endif
 
 	
-	func lookup( name: String ) -> Host? {
+	func lookup( name: String ) -> String? {
 		
 		target = Host( name: name )
 		guard target != nil else {
@@ -35,31 +35,15 @@ class Sender {
 			print( "\nHost call succeeded for \(name) but no addresses were returned" )
 			return nil
 		}
-		
+
 		print( "\nHost call succeeds for \(name), address count: \(addrs.count)" )
-		for addr in addrs {
-			print( "  addr: \(addr)" )
-		}
-		for name in target!.names { // We're not getting names when looking up Pi devices
-			print( "  name: \(name)" )
-		}
-
-		return target
-	}
-	
-
-	func doSnd( to: String, at: UInt16 ) {
-	
-		guard let server = lookup( name: to ) else {
-//			print( "\nLookup failed for \(to)" )
-			return
-		}
-		let addrs = server.addresses
-		guard addrs.count > 0 else {
-			print( "\nNo addresses returned for \(to)" )
-			return
-		}
-
+//		for addr in addrs {
+//			print( "  addr: \(addr)" )
+//		}
+//		for tname in target!.names { // We're not getting names when looking up Pi devices
+//			print( "  name: \(tname)" )
+//		}
+		
 		var targetAddr: String?
 		for addr in addrs {
 			let a8 = addr.cString( using: .utf8 )
@@ -69,22 +53,60 @@ class Sender {
 			}
 		}
 		guard targetAddr != nil else {
-			print( "\nNo ipv4 addresses returned for \(to)" )
+			print( "\nNo ipv4 addresses returned for \(name)" )
+			return nil
+		}
+		
+		return targetAddr
+
+	
+//		var hints = addrinfo(
+//			ai_flags: AI_PASSIVE,       // Assign the address of my local host to the socket structures
+//			ai_family: AF_INET,      	// IPv4
+//			ai_socktype: SOCK_STREAM,   // TCP
+//			ai_protocol: 0, ai_addrlen: 0, ai_canonname: nil, ai_addr: nil, ai_next: nil )
+//		var servinfo: UnsafeMutablePointer<addrinfo>? = nil		// For the result from the getaddrinfo
+//		let status = getaddrinfo( name + ".local", "5555", &hints, &servinfo)
+//		guard status == 0 else {
+//			let stat = strerror( errno )
+//			print( "\ngetaddrinfo failed for \(name), status: \(status), error: \(String(cString: stat!))" )
+//			return nil
+//		}
+//
+//		var targetAddr: String?
+//		var info = servinfo
+//		while info != nil {	// Get addresses
+//			var ipAddressString = [CChar]( repeating: 0, count: Int(INET_ADDRSTRLEN) )
+//			let sockAddrIn = info!.pointee.ai_addr.withMemoryRebound( to: sockaddr_in.self, capacity: 1 ) { $0 }
+//			var ipaddr_raw = sockAddrIn.pointee.sin_addr.s_addr
+//			inet_ntop( info!.pointee.ai_family, &ipaddr_raw, &ipAddressString, socklen_t(INET_ADDRSTRLEN))
+//			let ipaddrstr = String( cString: &ipAddressString )
+//			if strlen( ipaddrstr ) < 16 {
+//				targetAddr = ipaddrstr
+//				break		// Get first valid IPV4 address string
+//			}
+//			print( "\nGot target address: \(String(describing: target))" )
+//			info = info!.pointee.ai_next
+//		}
+//		freeaddrinfo( servinfo )
+//		return targetAddr
+	}
+	
+
+	func doSnd( to: String, at: UInt16 ) {
+	
+		guard let targetAddr = lookup( name: to ) else {
+//			print( "\nLookup failed for \(to)" )
 			return
 		}
-
 //		print( "\nFound target address: \(targetAddr!)" )
-		let result = doConnect( targetAddr!, port: at )
+
+		let result = doConnect( targetAddr, port: at )
 		guard result >= 0 else {
 			print( "\nConnect failed" )
 			return
 		}
-		
-		var name = to
-		if server.names.first != nil {
-			name = server.names.first!
-		}
-		print( "\nConnecting on port \(at) to host \(name) (\(targetAddr!))\n" )
+		print( "\nConnecting on port \(at) to host \(to) (\(targetAddr))\n" )
 		
 		doLoop( socketfd )
 		
