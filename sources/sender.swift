@@ -67,7 +67,7 @@ class Sender {
 			ai_protocol: 0, ai_addrlen: 0, ai_canonname: nil, ai_addr: nil, ai_next: nil )
 #endif
 		var servinfo: UnsafeMutablePointer<addrinfo>? = nil		// For the result from the getaddrinfo
-		let status = getaddrinfo( name + ".local", "5555", &hints, &servinfo)
+		let status = getaddrinfo( name, "5555", &hints, &servinfo)
 		guard status == 0 else {
 			let stat = strerror( errno )
 			print( "\ngetaddrinfo failed for \(name), status: \(status), error: \(String(cString: stat!))" )
