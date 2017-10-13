@@ -53,11 +53,19 @@ class Sender {
 //		return targetAddr
 
 	
+#if os(Linux)
+		var hints = addrinfo(
+			ai_flags: AI_PASSIVE,       // Assign the address of my local host to the socket structures
+			ai_family: AF_INET,      	// IPv4
+			ai_socktype: SOCK_STREAM,   // TCP
+			ai_protocol: 0, ai_addrlen: 0, ai_addr: nil, ai_canonname: nil, ai_next: nil )
+#else
 		var hints = addrinfo(
 			ai_flags: AI_PASSIVE,       // Assign the address of my local host to the socket structures
 			ai_family: AF_INET,      	// IPv4
 			ai_socktype: SOCK_STREAM,   // TCP
 			ai_protocol: 0, ai_addrlen: 0, ai_canonname: nil, ai_addr: nil, ai_next: nil )
+#endif
 		var servinfo: UnsafeMutablePointer<addrinfo>? = nil		// For the result from the getaddrinfo
 		let status = getaddrinfo( name + ".local", "5555", &hints, &servinfo)
 		guard status == 0 else {
