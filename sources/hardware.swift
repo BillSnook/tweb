@@ -75,6 +75,13 @@ class Hardware {
 		yellow.value = off
 		green.value = off
 	}
+	
+	func test() {
+		
+		red.value = on
+		delay()
+		red.value = off
+	}
 
 }
 

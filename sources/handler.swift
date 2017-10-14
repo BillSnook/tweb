@@ -18,10 +18,15 @@ class Handler {
 	public func processMsg( _ message: String ) -> Bool {
 
 		let command = message.replacingOccurrences( of: "\n", with: "" )
+		print( "\n  Got command: <\(command)>\n" )
 		var endLoop = false
 		switch command {
 		case "quit":
 			endLoop = true
+		case "test":
+#if	os(Linux)
+			hardware.test()
+#endif
 		case "blink":
 #if	os(Linux)
 			startThread( threadType: .blinkThread )
