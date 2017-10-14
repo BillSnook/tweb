@@ -236,7 +236,7 @@ func freeThreads() {
 }
 
 // MARK: - Entry point - Start next thread in list
-func startThread( threadType: ThreadType, socket: Int32, address: UInt32 ) {
+func startThread( threadType: ThreadType, socket: Int32 = 0, address: UInt32 = 0 ) {
 
 	threadArray.append( ThreadControl( socket: socket, address: address, threadType: threadType ) )
 	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)

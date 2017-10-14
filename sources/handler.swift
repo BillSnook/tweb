@@ -18,7 +18,6 @@ class Handler {
 	public func processMsg( _ message: String ) -> Bool {
 
 		let command = message.replacingOccurrences( of: "\n", with: "" )
-		print( "\n  Got command: <\(command)>\n" )
 		var endLoop = false
 		switch command {
 		case "quit":
