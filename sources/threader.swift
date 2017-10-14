@@ -113,12 +113,15 @@ func consumeThread() {
 	var flags = Int32(nflags.c_lflag)
 	flags = flags & ~ECHO
 	flags = flags & ~ECHONL
-	#if	os(Linux)
-		nflags.c_lflag = tcflag_t(flags)
-	#else
-		nflags.c_lflag = tcflag_t(flags)
-	#endif
-
+#if	os(Linux)
+	nflags.c_lflag = tcflag_t(flags)
+#else
+#if SWIFT_PACKAGE
+	nflags.c_lflag = UInt32(flags)
+#else
+	nflags.c_lflag = tcflag_t(flags)
+#endif
+#endif
 	let result = tcsetattr( fileno(stdin), TCSADRAIN, &nflags )
 	guard result == 0 else {
 		print("\n  Thread consumeThread failed setting tcsetattr with error: \(result)\n")
@@ -232,8 +235,9 @@ func freeThreads() {
 }
 
 // MARK: - Entry point - Start next thread in list
-func startThread() {
+func startThread( threadType: ThreadType, socket: Int32, address: UInt32 ) {
 
+	threadArray.append( ThreadControl( socket: socket, address: address, threadType: threadType ) )
 	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
 	defer { threadPtr.deallocate(capacity: 1) }
 	var t = threadPtr.pointee

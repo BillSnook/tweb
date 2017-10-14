@@ -52,7 +52,6 @@ if CommandLine.arguments.count == 1 {	// Just the program name is entered
 		sender.doSnd( to: localHostAddress, at: portNumber )
 	} else if CommandLine.arguments[1] == "tester" {
 		print( "\n  In Test Mode, starting test now\n" )
-		threadArray.append( ThreadControl( socket: 0, address: 0, threadType: .testThread ) )
-		startThread()
+		startThread( threadType: .testThread, socket: 0, address: 0 )
 	}
 }
