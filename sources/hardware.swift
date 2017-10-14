@@ -49,13 +49,13 @@ class Hardware {
 		yellow.value = on
 		green.value = on
 	}
+
+	func delay() {
+		_ = usleep(300000)
+	}
 	
 	func blink() {
 
-		func delay() {
-			_ = usleep(300000)
-		}
-		
 		blinkLoop = true
 		repeat {
 			red.value = on
