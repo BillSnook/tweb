@@ -24,34 +24,6 @@ class Sender {
 
 	
 	func lookup( name: String ) -> String? {
-		
-//		target = Host( name: name )
-//		guard target != nil else {
-//			print( "\nLookup failed for \(name)" )
-//			return nil
-//		}
-//		let addrs = target!.addresses
-//		guard addrs.count > 0 else {
-//			print( "\nHost call succeeded for \(name) but no addresses were returned" )
-//			return nil
-//		}
-//		print( "\nHost call succeeds for \(name), address count: \(addrs.count)" )
-//
-//		var targetAddr: String?
-//		for addr in addrs {
-//			let a8 = addr.cString( using: .utf8 )
-//			if strlen( a8! ) < 16 {	// Probably ipv4
-//				targetAddr = addr
-//				break
-//			}
-//		}
-//		guard targetAddr != nil else {
-//			print( "\nNo ipv4 addresses returned for \(name)" )
-//			return nil
-//		}
-//
-//		return targetAddr
-
 	
 #if os(Linux)
 		var hints = addrinfo(
