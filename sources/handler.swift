@@ -16,30 +16,17 @@
 class Handler {
 	
 	public func processMsg( _ message: String ) -> Bool {
-		
-//		print( "Got message: \(message)" )
-//		if message == "quit\n" {
-//			return true				// Returning true causes this loop and therefore this thread to exit
-//		}
-//
-//		if message == "blink\n" {
-//			threadArray.append( ThreadControl( socket: 0, address: 0, threadType: .blinkThread ) )
-//			startThread()
-//		}
-//
-//#if	os(Linux)
-//		if message == "blinkstop\n" {
-//			hardware.blinkLoop = false
-//		}
-//#endif
-		
+
+		let command = message.replacingOccurrences( of: "\n", with: "" )
 		var endLoop = false
-		switch message {
-		case "quit\n":
+		switch command {
+		case "quit":
 			endLoop = true
-		case "blink\n":
-			startThread( threadType: .blinkThread, socket: 0, address: 0 )
-		case "blinkstop\n":
+		case "blink":
+#if	os(Linux)
+			startThread( threadType: .blinkThread )
+#endif
+		case "blinkstop":
 #if	os(Linux)
 			hardware.blinkLoop = false
 #endif
@@ -55,7 +42,6 @@ class Handler {
 
 /*
 import Foundation
-
 
 public class WatchPins {
     
@@ -104,63 +90,3 @@ public class WatchPins {
     }
 }
 */
-
-/*
-public class SendPinState {
-
-    let session: URLSession
-    
-    init() {
-        let configuration = URLSessionConfiguration.default
-        self.session = URLSession( configuration: configuration )
-    }
-    
-    deinit {
-//        session
-    }
-    
-    func send( pin: String, state: String ) {
-        
-        let urlString = "http://workpi.local:8080/" + state + pin
-        send( urlString: urlString )
-    }
-    
-    func send( urlString: String ) {
-        let url = URL( string: urlString )
-        print( "Sending \(urlString))" )
-        
-        let request = URLRequest(url: url!)
-        //create dataTask using the session  to send data to the server
-        let task = self.session.dataTask(with: request,
-                            completionHandler: { data, response, error in
-            guard error == nil else {
-                print( "Error in response: \(String(describing: error))" )
-                return
-            }
-            guard let response = response as? HTTPURLResponse else {
-                print( "No response returned" )
-                return
-            }
-            guard response.statusCode == 200 else {
-                print( "Status code error: \(response.statusCode)" )
-                return
-            }
-            guard response.mimeType == "text/html" || response.mimeType == "text/plain" else {
-                print( "Unexpected response returned" )
-                return
-            }
-            guard let data = data else {
-                print( "No returned data" )
-                return
-            }
-
-            let dataString = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
-            print( dataString ?? "Unexpected data received" )
-        })
-        
-        task.resume()
-    }
-
-}
-*/
-
