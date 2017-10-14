@@ -28,8 +28,7 @@ class Handler {
 			hardware.test()
 #endif
 		case "blink\n":
-			threadArray.append( ThreadControl( socket: 0, address: 0, threadType: .blinkThread ) )
-			startThread()
+			startThread( threadType: .blinkThread, socket: 0, address: 0 )
 		case "blinkstop\n":
 #if	os(Linux)
 			hardware.blinkLoop = false
