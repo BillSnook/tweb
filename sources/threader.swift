@@ -113,11 +113,15 @@ func consumeThread() {
 	var flags = Int32(nflags.c_lflag)
 	flags = flags & ~ECHO
 	flags = flags & ~ECHONL
-	#if	os(Linux)
-		nflags.c_lflag = tcflag_t(flags)
-	#else
-		nflags.c_lflag = UInt32(flags)
-	#endif
+#if	os(Linux)
+	nflags.c_lflag = tcflag_t(flags)
+#else
+#if Xcode
+	nflags.c_lflag = UInt32(flags)
+#else
+	nflags.c_lflag = tcflag_t(flags)
+#endif
+#endif
 
 	let result = tcsetattr( fileno(stdin), TCSADRAIN, &nflags )
 	guard result == 0 else {
