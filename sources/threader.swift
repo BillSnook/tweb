@@ -64,10 +64,10 @@ enum ThreadType {
 }
 
 struct ThreadControl {
+	var nextThreadType: ThreadType
 	var nextSocket: Int32
 	var newAddress: UInt32
-	var nextThreadType: ThreadType
-	init( socket: Int32, address: UInt32, threadType: ThreadType ) {
+	init( threadType: ThreadType, socket: Int32, address: UInt32 ) {
 		nextSocket = socket
 		newAddress = address
 		nextThreadType = threadType
@@ -240,7 +240,7 @@ func runThreads() {
 func startThread( threadType: ThreadType, socket: Int32 = 0, address: UInt32 = 0 ) {
 
 	pthread_mutex_lock( &threadControlMutex )
-	threadArray.append( ThreadControl( socket: socket, address: address, threadType: threadType ) )
+	threadArray.append( ThreadControl( threadType: threadType, socket: socket, address: address ) )
 	pthread_mutex_unlock( &threadControlMutex )
 
 	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
