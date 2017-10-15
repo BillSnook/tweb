@@ -20,10 +20,10 @@ let on  = 1
 
 //class Hardware {
 	
-	let gpios: [GPIOName: GPIO]
-	let red: GPIO
-	let yellow: GPIO
-	let green: GPIO
+	let gpios = SwiftyGPIO.GPIOs(for:.RaspberryPiPlusZero)
+	let red: [gpios.P18]!
+	let yellow: [gpios.P17]!
+	let green: [gpios.P23]!
 
 	var blinkLoop = true
 	
@@ -31,15 +31,15 @@ let on  = 1
 		
 		let numberOfProcessors = sysconf( Int32(_SC_NPROCESSORS_ONLN) )
 //		print("\nNumber of cores: \(numberOfProcessors)\n")
-		if numberOfProcessors == 1 {	// Must be ZeroW
-			gpios = SwiftyGPIO.GPIOs(for:.RaspberryPiPlusZero)
-		} else {
-			gpios = SwiftyGPIO.GPIOs(for:.RaspberryPi3)
-		}
+//		if numberOfProcessors == 1 {	// Must be ZeroW
+//			gpios = SwiftyGPIO.GPIOs(for:.RaspberryPiPlusZero)
+//		} else {
+//			gpios = SwiftyGPIO.GPIOs(for:.RaspberryPi3)
+//		}
 
-		red = gpios[.P18]!		// GPIO_GEN0
-		yellow = gpios[.P17]!	// p18
-		green = gpios[.P23]!	// p23
+//		red = gpios[.P18]!		// GPIO_GEN0
+//		yellow = gpios[.P17]!	// p18
+//		green = gpios[.P23]!	// p23
 		
 		red.direction = .OUT
 		yellow.direction = .OUT
