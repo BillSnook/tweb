@@ -238,7 +238,10 @@ func freeThreads() {
 // MARK: - Entry point - Start next thread in list
 func startThread( threadType: ThreadType, socket: Int32 = 0, address: UInt32 = 0 ) {
 
-//	threadArray.append( ThreadControl( socket: socket, address: address, threadType: threadType ) )
+	pthread_mutex_lock( &threadControlMutex )
+	threadArray.append( ThreadControl( socket: socket, address: address, threadType: threadType ) )
+	pthread_mutex_unlock( &threadControlMutex )
+
 	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
 	defer { threadPtr.deallocate(capacity: 1) }
 	var t = threadPtr.pointee
