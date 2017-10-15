@@ -20,7 +20,7 @@ let on  = 1
 
 //class Hardware {
 	
-	let gpios = SwiftyGPIO.GPIOs(for:.RaspberryPiPlusZero)
+	let gpios: [GPIOName: GPIO] = SwiftyGPIO.GPIOs(for:.RaspberryPiPlusZero)
 	let red: [gpios.P18]!
 	let yellow: [gpios.P17]!
 	let green: [gpios.P23]!
