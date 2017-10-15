@@ -27,7 +27,7 @@ let on  = 1
 
 	var blinkLoop = true
 	
-	func startup() {
+	func startupThreads() {
 		
 		let numberOfProcessors = sysconf( Int32(_SC_NPROCESSORS_ONLN) )
 //		print("\nNumber of cores: \(numberOfProcessors)\n")

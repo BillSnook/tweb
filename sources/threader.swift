@@ -85,6 +85,18 @@ var threadControlMutex = pthread_mutex_t()		// Protect the list
 
 //--	----	----	----
 
+// Manage thread environment because mutexes need this
+func initThreads() {
+	
+	pthread_mutex_init( &threadControlMutex, nil )
+}
+
+func freeThreads() {
+	
+	pthread_mutex_destroy( &threadControlMutex )
+}
+
+
 // MARK: - Threads
 class ThreadTester {
 	
@@ -223,17 +235,6 @@ func runThreads() {
 	}
 }
 
-
-// Manage thread environment because mutexes need this
-func initThreads() {
-	
-	pthread_mutex_init( &threadControlMutex, nil )
-}
-
-func freeThreads() {
-	
-	pthread_mutex_destroy( &threadControlMutex )
-}
 
 // MARK: - Entry point - Start next thread in list
 func startThread( threadType: ThreadType, socket: Int32 = 0, address: UInt32 = 0 ) {

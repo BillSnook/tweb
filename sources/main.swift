@@ -18,6 +18,7 @@ var hostAddress = "zerowpi2"    // or "workpi"
 
 #if	os(Linux)
 setupSignalHandling()		// Allow proper cleanup on unexpected exit signals (like ^C)
+startupThreads()
 #endif
 
 //print( "There are \(CommandLine.arguments.count) command line arguments" )
@@ -26,6 +27,7 @@ if CommandLine.arguments.count == 1 {	// Just the program name is entered
 	print( "USAGE: tweb [listen [portNumber (=\(portNumber))] | sender [hostName (=\(hostAddress))] [portNumber (=\(portNumber))]]" )
 	exit(0)
 } else {
+	initThreads()
 	if CommandLine.arguments[1] == "listen" {
 		if CommandLine.arguments.count != 2 && CommandLine.arguments.count != 3 {
 			print( "USAGE: tweb listen [portNumber (=\(portNumber))]" )
@@ -55,4 +57,5 @@ if CommandLine.arguments.count == 1 {	// Just the program name is entered
 //		threadArray.append( ThreadControl( socket: 0, address: 0, threadType: .testThread ) )
 		startThread( threadType: .testThread )
 	}
+	freeThreads()
 }

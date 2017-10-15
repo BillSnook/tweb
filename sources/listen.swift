@@ -57,7 +57,6 @@ class Listen {
 	
 	func doListen() {
 
-		initThreads()
 		var notDone = true
 		repeat {
 			listen( socketfd, 5 )
@@ -80,7 +79,6 @@ class Listen {
 				startThread( threadType: .serverThread, socket: newsockfd, address: ipaddr )
 			}
 		} while notDone
-		freeThreads()
 		exit( 0 )
 	}
 }
