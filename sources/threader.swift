@@ -77,6 +77,7 @@ struct ThreadControl {
 //	Globals
 var threadArray = [ThreadControl]()				// List of threads to initiate
 var threadControlMutex = pthread_mutex_t()		// Protect the list
+var threadCount = 0
 
 #if	os(Linux)
 let hardware = Hardware()
@@ -93,6 +94,7 @@ class ThreadTester {
 		print("  Thread ThreadTester.testThread() started\n")
 		print("  Thread ThreadTester.testThread() stopped\n")
 		usleep( 2000000 )		// Let print text clear buffers, before exiting
+		threadCount -= 1
 	}
 	
 }
@@ -126,6 +128,7 @@ func consumeThread() {
 	let result = tcsetattr( fileno(stdin), TCSADRAIN, &nflags )
 	guard result == 0 else {
 		print("\n  Thread consumeThread failed setting tcsetattr with error: \(result)\n")
+		threadCount -= 1
 		return
 	}
 
@@ -143,12 +146,14 @@ func consumeThread() {
 		
 		stopLoop = messageHandler.processMsg( newdata )	// Returns true if quit message is received
 	}
-	_ = tcsetattr( fileno(stdin), TCSANOW, &oflags )		// Restore input echo behavior
-	guard result == 0 else {
-		print("\n  Thread consumeThread failed resetting tcsetattr with error: \(result)\n")
+	let result2 = tcsetattr( fileno(stdin), TCSANOW, &oflags )		// Restore input echo behavior
+	guard result2 == 0 else {
+		print("\n  Thread consumeThread failed resetting tcsetattr with error: \(result2)\n")
+		threadCount -= 1
 		return
 	}
 
+	threadCount -= 1
 	print("  Thread consumeThread stopped\n")
 }
 
@@ -175,7 +180,7 @@ func serverThread( sockfd: Int32, address: UInt32 ) {
 		}
 		if rcvLen == 0 {
 //			print("\n  Disconnected from the other endpoint. Exiting thread now.")
-			print( "\(sockfd)] Connection closed by \(addrString)" )
+			print( "\(sockfd)] Connection closed by \(addrString), threads: \(threadCount - 1)" )
 			break
 		} else {	// rcvLen > 0
 			guard let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) else {
@@ -195,6 +200,8 @@ func serverThread( sockfd: Int32, address: UInt32 ) {
 	}
 //	print( "  Exiting thread serverThread for socketfd \(sockfd)\n" )
 	close( sockfd )
+	threadCount -= 1
+
 }
 
 // MARK: - Thread controller
@@ -207,6 +214,8 @@ func runThreads() {
 	}
 	pthread_mutex_unlock( &threadControlMutex )
 	guard let nextThreadControl = tc else { return }
+	
+	threadCount += 1
 
 	switch nextThreadControl.nextThreadType {
 	case .serverThread:

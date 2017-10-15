@@ -74,6 +74,7 @@ class Hardware {
 		red.value = off
 		yellow.value = off
 		green.value = off
+		threadCount -= 1
 	}
 	
 	func test() {
@@ -81,6 +82,7 @@ class Hardware {
 		red.value = on
 		delay()
 		red.value = off
+		threadCount -= 1
 	}
 
 }
