@@ -171,7 +171,7 @@ func serverThread( sockfd: Int32, address: UInt32 ) {
 		let rcvLen = read( sockfd, &readBuffer, 255 )
 		if (rcvLen < 0) {
 			print("\n\nERROR reading from newsocket")
-			continue
+			break
 		}
 		if rcvLen == 0 {
 //			print("\n  Disconnected from the other endpoint. Exiting thread now.")
@@ -238,7 +238,7 @@ func freeThreads() {
 // MARK: - Entry point - Start next thread in list
 func startThread( threadType: ThreadType, socket: Int32 = 0, address: UInt32 = 0 ) {
 
-	threadArray.append( ThreadControl( socket: socket, address: address, threadType: threadType ) )
+//	threadArray.append( ThreadControl( socket: socket, address: address, threadType: threadType ) )
 	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
 	defer { threadPtr.deallocate(capacity: 1) }
 	var t = threadPtr.pointee

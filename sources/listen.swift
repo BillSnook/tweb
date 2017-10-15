@@ -76,6 +76,7 @@ class Listen {
 				notDone = false
 			} else {
 				let ipaddr = UInt32(cli_addr.sin_addr.s_addr)
+				threadArray.append( ThreadControl( socket: newsockfd, address: ipaddr, threadType: .serverThread ) )
 				startThread( threadType: .serverThread, socket: newsockfd, address: ipaddr )
 			}
 		} while notDone
