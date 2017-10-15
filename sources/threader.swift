@@ -205,9 +205,9 @@ func startThread( threadType: ThreadType, socket: Int32 = 0, address: UInt32 = 0
 	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
 	defer { threadPtr.deallocate(capacity: 1) }
 	var t = threadPtr.pointee
-	guard t != nil else {
+	if t == nil {
 		print( "\nUnable to create threadPointer \(threadType.rawValue)\n" )
-		return
+//		return
 	}
 	
 	let attrPtr = UnsafeMutablePointer<pthread_attr_t>.allocate(capacity: 1)
