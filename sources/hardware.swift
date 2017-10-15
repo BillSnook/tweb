@@ -18,7 +18,7 @@ let off = 0
 let on  = 1
 
 
-class Hardware {
+//class Hardware {
 	
 	let gpios: [GPIOName: GPIO]
 	let red: GPIO
@@ -27,7 +27,7 @@ class Hardware {
 
 	var blinkLoop = true
 	
-	init() {
+	func startup() {
 		
 		let numberOfProcessors = sysconf( Int32(_SC_NPROCESSORS_ONLN) )
 //		print("\nNumber of cores: \(numberOfProcessors)\n")
@@ -56,6 +56,7 @@ class Hardware {
 	
 	func blink() {
 
+		guard !blinkLoop else { return }
 		blinkLoop = true
 		repeat {
 			red.value = on
@@ -83,7 +84,7 @@ class Hardware {
 		red.value = off
 	}
 
-}
+//}
 
 #else
 	

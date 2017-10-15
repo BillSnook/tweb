@@ -79,7 +79,7 @@ var threadArray = [ThreadControl]()				// List of threads to initiate
 var threadControlMutex = pthread_mutex_t()		// Protect the list
 
 #if	os(Linux)
-let hardware = Hardware()
+//let hardware = Hardware()
 #endif
 
 
@@ -215,7 +215,7 @@ func runThreads() {
 		consumeThread()
 	case .blinkThread:
 #if	os(Linux)
-		hardware.blink()
+		blink()
 #endif
 	case .testThread:
 		let testerThread = ThreadTester()
