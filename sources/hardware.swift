@@ -45,9 +45,9 @@ let on  = 1
 		yellow!.direction = .OUT
 		green!.direction = .OUT
 
-		red!.value = on
-		yellow!.value = on
-		green!.value = on
+		red!.value = off
+		yellow!.value = off
+		green!.value = off
 	}
 
 	func delay() {

@@ -18,8 +18,8 @@ var hostAddress = "zerowpi2"    // or "workpi"
 
 #if	os(Linux)
 setupSignalHandling()		// Allow proper cleanup on unexpected exit signals (like ^C)
-startupThreads()
 #endif
+startupThreads()
 
 //print( "There are \(CommandLine.arguments.count) command line arguments" )
 
