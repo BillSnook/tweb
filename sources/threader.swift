@@ -13,11 +13,11 @@ import Darwin.C
 
 
 // Possible types of threads with which we work
-enum ThreadType {
-	case serverThread
-	case inputThread
-	case blinkThread
-	case testThread
+enum ThreadType: String {
+	case serverThread = "server"
+	case inputThread = "input"
+	case blinkThread = "blink"
+	case testThread = "test"
 }
 
 struct ThreadControl {
@@ -205,6 +205,10 @@ func startThread( threadType: ThreadType, socket: Int32 = 0, address: UInt32 = 0
 	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
 	defer { threadPtr.deallocate(capacity: 1) }
 	var t = threadPtr.pointee
+	guard t != nil else {
+		print( "\nUnable to create threadPointer \(threadType.rawValue)\n" )
+		return
+	}
 	
 	let attrPtr = UnsafeMutablePointer<pthread_attr_t>.allocate(capacity: 1)
 	defer { pthread_attr_destroy( attrPtr ) }
@@ -223,5 +227,5 @@ func startThread( threadType: ThreadType, socket: Int32 = 0, address: UInt32 = 0
 				   { _ in runThreads(); return nil },
 				   nil)
 #endif
-	pthread_attr_destroy( attrPtr )
+//	pthread_attr_destroy( attrPtr )
 }
