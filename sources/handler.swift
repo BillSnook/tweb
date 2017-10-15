@@ -24,14 +24,14 @@ class Handler {
 			endLoop = true
 		case "test":
 #if	os(Linux)
-			hardware.test()
+			test()
 #endif
 		case "blink":
 //			threadArray.append( ThreadControl( socket: 0, address: 0, threadType: .blinkThread ) )
 			startThread( threadType: .blinkThread )
 		case "blinkstop":
 #if	os(Linux)
-			hardware.blinkLoop = false
+			blinkLoop = false
 #endif
 		default:
 			endLoop = false
