@@ -20,10 +20,10 @@ let on  = 1
 
 //class Hardware {
 	
-	let gpios: [GPIOName: GPIO]?
-	let red: GPIO?
-	let yellow: GPIO?
-	let green: GPIO?
+	var gpios: [GPIOName: GPIO]?
+	var red: GPIO?
+	var yellow: GPIO?
+	var green: GPIO?
 
 	var blinkLoop = true
 	
