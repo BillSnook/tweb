@@ -41,13 +41,13 @@ let on  = 1
 		yellow = gpios[.P17]!	// p18
 		green = gpios[.P23]!	// p23
 		
-		red.direction = .OUT
-		yellow.direction = .OUT
-		green.direction = .OUT
+		red!.direction = .OUT
+		yellow!.direction = .OUT
+		green!.direction = .OUT
 
-		red.value = on
-		yellow.value = on
-		green.value = on
+		red!.value = on
+		yellow!.value = on
+		green!.value = on
 	}
 
 	func delay() {
@@ -59,29 +59,29 @@ let on  = 1
 		guard !blinkLoop else { return }
 		blinkLoop = true
 		repeat {
-			red.value = on
-			yellow.value = off
-			green.value = off
+			red!.value = on
+			yellow!.value = off
+			green!.value = off
 			delay()
-			red.value = off
-			yellow.value = on
-			green.value = off
+			red!.value = off
+			yellow!.value = on
+			green!.value = off
 			delay()
-			red.value = off
-			yellow.value = off
-			green.value = on
+			red!.value = off
+			yellow!.value = off
+			green!.value = on
 			delay()
 		} while blinkLoop
-		red.value = off
-		yellow.value = off
-		green.value = off
+		red!.value = off
+		yellow!.value = off
+		green!.value = off
 	}
 	
 	func test() {
 		
-		red.value = on
+		red!.value = on
 		delay()
-		red.value = off
+		red!.value = off
 	}
 
 //}
