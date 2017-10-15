@@ -182,7 +182,7 @@ func serverThread( sockfd: Int32, address: UInt32 ) {
 				print( "\nNo recognizable string data received, length: \(rcvLen)" )
 				continue
 			}
-			print( "\(sockfd)] \(newdata)" )	// Currently a newline is not in the sent string
+			print( "\(sockfd)] \(newdata)", terminator: "" )	// Currently a newline is in the sent string
 			
 			let sndLen = write( sockfd, readBuffer, rcvLen)
 			if (sndLen < 0) {
