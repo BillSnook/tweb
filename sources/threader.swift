@@ -77,7 +77,7 @@ struct ThreadControl {
 //	Globals
 var threadArray = [ThreadControl]()				// List of threads to initiate
 var threadControlMutex = pthread_mutex_t()		// Protect the list
-var threadCount = 0
+var threadCount = 1								// Count main thread
 
 #if	os(Linux)
 let hardware = Hardware()
