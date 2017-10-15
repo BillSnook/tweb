@@ -12,49 +12,6 @@ import Darwin.C
 #endif
 
 
-#if	os(Linux)
-
-enum Signal:Int32 {
-	case HUP    = 1
-	case INT    = 2
-	case QUIT   = 3
-	case ABRT   = 6
-	case KILL   = 9
-	case ALRM   = 14
-	case TERM   = 15
-}
-
-typealias SigactionHandler = @convention(c)(Int32) -> Void
-
-let hupHandler:SigactionHandler = { signal in
-	print( "Received HUP signal, reread config file" )
-}
-
-func trap( signum: Signal, action: SigactionHandler ) {
-	var sigAction = sigaction()
-	
-	sigAction.__sigaction_handler = unsafeBitCast( action, to:  sigaction.__Unnamed_union___sigaction_handler.self )
-	
-	sigaction( signum.rawValue, &sigAction, nil )
-}
-
-// Entry, init function to setup trap handlers for common, expected signals
-func setupSignalHandling() {
-	
-	// This method works
-	trap( signum: .INT ) { signal in
-		print("\nReceived INT signal, exiting now.\n")
-		// Time for all threads to stop and cleanup, then exit
-		exit(0)		// ? May not want to exit ?
-	}
-	
-	// And this works of course
-	trap( signum: .HUP, action: hupHandler )
-}
-
-#endif	// End of Linux-only section for signal handling
-
-
 // Possible types of threads with which we work
 enum ThreadType {
 	case serverThread
@@ -94,7 +51,6 @@ class ThreadTester {
 		print("  Thread ThreadTester.testThread() started\n")
 		print("  Thread ThreadTester.testThread() stopped\n")
 		usleep( 2000000 )		// Let print text clear buffers, before exiting
-		threadCount -= 1
 	}
 	
 }
@@ -128,7 +84,6 @@ func consumeThread() {
 	let result = tcsetattr( fileno(stdin), TCSADRAIN, &nflags )
 	guard result == 0 else {
 		print("\n  Thread consumeThread failed setting tcsetattr with error: \(result)\n")
-		threadCount -= 1
 		return
 	}
 
@@ -149,11 +104,9 @@ func consumeThread() {
 	let result2 = tcsetattr( fileno(stdin), TCSANOW, &oflags )		// Restore input echo behavior
 	guard result2 == 0 else {
 		print("\n  Thread consumeThread failed resetting tcsetattr with error: \(result2)\n")
-		threadCount -= 1
 		return
 	}
 
-	threadCount -= 1
 	print("  Thread consumeThread stopped\n")
 }
 
@@ -179,7 +132,6 @@ func serverThread( sockfd: Int32, address: UInt32 ) {
 			break
 		}
 		if rcvLen == 0 {
-//			print("\n  Disconnected from the other endpoint. Exiting thread now.")
 			print( "\(sockfd)] Connection closed by \(addrString), threads: \(threadCount - 1)" )
 			break
 		} else {	// rcvLen > 0
@@ -200,8 +152,6 @@ func serverThread( sockfd: Int32, address: UInt32 ) {
 	}
 //	print( "  Exiting thread serverThread for socketfd \(sockfd)\n" )
 	close( sockfd )
-	threadCount -= 1
-
 }
 
 // MARK: - Thread controller
@@ -230,6 +180,7 @@ func runThreads() {
 		let testerThread = ThreadTester()
 		testerThread.testThread()
 	}
+	threadCount -= 1
 }
 
 

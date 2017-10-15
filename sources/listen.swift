@@ -15,9 +15,8 @@ import Foundation
 
 class Listen {
 	
-	var target: Host?
-	var stopListening = false
-	
+	var stopLoop = false
+
 #if	os(Linux)
 	let socketfd = socket( AF_INET, Int32(SOCK_STREAM.rawValue), 0 )
 #else
@@ -58,8 +57,7 @@ class Listen {
 	func doListen() {
 
 		initThreads()
-		var notDone = true
-		repeat {
+		while !stopLoop {
 			listen( socketfd, 5 )
 			
 			var cli_addr = sockaddr_in()
@@ -73,13 +71,12 @@ class Listen {
 			}
 			if newsockfd < 0 {
 				print("\n\nERROR accepting, errno: \(errno)")
-				notDone = false
+				stopLoop = true
 			} else {
 				let ipaddr = UInt32(cli_addr.sin_addr.s_addr)
-//				threadArray.append( ThreadControl( socket: newsockfd, address: ipaddr, threadType: .serverThread ) )
 				startThread( threadType: .serverThread, socket: newsockfd, address: ipaddr )
 			}
-		} while notDone
+		}
 		freeThreads()
 		exit( 0 )
 	}

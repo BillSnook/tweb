@@ -15,12 +15,16 @@ import Darwin.C
 
 class Sender {
 
-	var target: Host?
-	#if	os(Linux)
-	let socketfd = socket( AF_INET, Int32(SOCK_STREAM.rawValue), 0 )
-	#else
-	let socketfd = socket( AF_INET, SOCK_STREAM, 0 )
-	#endif
+	var stopLoop = false
+	let socketfd: Int32
+	
+	init() {
+#if	os(Linux)
+		socketfd = socket( AF_INET, Int32(SOCK_STREAM.rawValue), 0 )
+#else
+		socketfd = socket( AF_INET, SOCK_STREAM, 0 )
+#endif
+	}
 
 	
 	func lookup( name: String ) -> String? {
@@ -58,7 +62,7 @@ class Sender {
 				targetAddr = ipaddrstr
 				break		// Get first valid IPV4 address string
 			}
-			print( "\nGot target address: \(String(describing: target))" )
+			print( "\nGot target address: \(String(describing: targetAddr))" )
 			info = info!.pointee.ai_next
 		}
 		freeaddrinfo( servinfo )
@@ -110,7 +114,6 @@ class Sender {
 	func doLoop( _ socketfd: Int32 ) {
 		var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
 		var writeBuffer: [CChar] = [CChar](repeating: 0, count: 256)
-		let stopLoop = false
 		while !stopLoop {
 			print( "> ", terminator: "" )
 			bzero( &writeBuffer, 256 )
