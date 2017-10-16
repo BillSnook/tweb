@@ -203,10 +203,14 @@ func startThread( threadType: ThreadType, socket: Int32 = 0, address: UInt32 = 0
 	pthread_mutex_unlock( &threadControlMutex )
 
 	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
+	guard threadPtr != nil else {
+		print( "\nUnable to create threadPointer for \(threadType.rawValue)\n" )
+		return
+	}
 	defer { threadPtr.deallocate(capacity: 1) }
 	var t = threadPtr.pointee
 	if t == nil {
-		print( "\nUnable to create threadPointer \(threadType.rawValue)\n" )
+		print( "\nUnable to see threadPointer pointee for \(threadType.rawValue)\n" )
 //		return
 	}
 	
