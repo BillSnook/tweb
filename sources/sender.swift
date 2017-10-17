@@ -125,7 +125,7 @@ class Sender {
 				printe( "\n\nERROR writing to socket" )
 				break
 			} else if sndLen == 0 {
-				printw( "\n\nConnection closed by other end when writing" )
+				printw( "\n\nConnection closed by server when writing" )
 				stopLoop = true
 			}
 
@@ -135,7 +135,7 @@ class Sender {
 				printe( "\n\nERROR reading from socket" )
 				break
 			} else if rcvLen == 0 {
-				printw( "\n\nConnection closed by other end while reading" )
+				printw( "\nConnection closed by server when reading\n" )
 				stopLoop = true
 			}
 		}
