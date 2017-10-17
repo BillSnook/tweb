@@ -25,7 +25,7 @@ class Hardware {
 	let yellow: GPIO
 	let green: GPIO
 
-	var blinkLoop = true
+	var stopLoop = true
 	
 	init() {
 		
@@ -45,9 +45,9 @@ class Hardware {
 		yellow.direction = .OUT
 		green.direction = .OUT
 
-		red.value = on
-		yellow.value = on
-		green.value = on
+		red.value = off
+		yellow.value = off
+		green.value = off
 	}
 
 	func delay() {
@@ -56,7 +56,7 @@ class Hardware {
 	
 	func blink() {
 
-		blinkLoop = true
+		stopLoop = true
 		repeat {
 			red.value = on
 			yellow.value = off
@@ -66,15 +66,14 @@ class Hardware {
 			yellow.value = on
 			green.value = off
 			delay()
-			red.value = off
-			yellow.value = off
-			green.value = on
-			delay()
-		} while blinkLoop
+//			red.value = off
+//			yellow.value = off
+//			green.value = on
+//			delay()
+		} while stopLoop
 		red.value = off
 		yellow.value = off
 		green.value = off
-		threadCount -= 1
 	}
 	
 	func test() {
@@ -82,7 +81,6 @@ class Hardware {
 		red.value = on
 		delay()
 		red.value = off
-		threadCount -= 1
 	}
 
 }

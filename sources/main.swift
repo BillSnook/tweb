@@ -13,6 +13,8 @@ import Foundation
 var portNumber: UInt16 = 5555
 var hostAddress = "zerowpi2"    // or "workpi"
 
+var listener: Listen?
+var sender: Sender?
 
 // Mark - executable code starts here
 
@@ -38,8 +40,8 @@ if CommandLine.arguments.count == 1 {	// Just the program name is entered
 		if CommandLine.arguments.count > 2 {
 			portNumber = UInt16(atoi( CommandLine.arguments[2] ))
 		}
-		let listener = Listen()
-		listener.doRcv( on: portNumber )
+		listener = Listen()
+		listener?.doRcv( on: portNumber )
 	} else if CommandLine.arguments[1] == "sender" {
 		if CommandLine.arguments.count > 4 {
 			printx( "USAGE: tweb sender [hostName (=\(hostAddress))]] [portNumber (=\(portNumber))]" )
@@ -52,10 +54,11 @@ if CommandLine.arguments.count == 1 {	// Just the program name is entered
 			hostAddress = CommandLine.arguments[2]
 		}
 		let localHostAddress = hostAddress + ".local"
-		let sender = Sender()
-		sender.doSnd( to: localHostAddress, at: portNumber )
+		sender = Sender()
+		sender?.doSnd( to: localHostAddress, at: portNumber )
 	} else if CommandLine.arguments[1] == "tester" {
 		printx( "\n  In Test Mode, starting test thread now\n" )
 		startThread( threadType: .testThread )
 	}
+	pthread_exit( nil )
 }

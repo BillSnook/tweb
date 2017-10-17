@@ -18,6 +18,7 @@
 		A9187F391F8932E200E2CE4C /* SwiftyGPIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* SwiftyGPIO.swift */; };
 		A9187F3A1F8932E200E2CE4C /* UART.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* UART.swift */; };
 		A9187F601F9416A600E2CE4C /* signals.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9187F5F1F9416A600E2CE4C /* signals.swift */; };
+		A9187F621F964B7300E2CE4C /* consumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9187F611F964B7300E2CE4C /* consumer.swift */; };
 		A9C2D8351F7D651900970784 /* listen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C2D8341F7D651900970784 /* listen.swift */; };
 		A9C2D8371F81867D00970784 /* threader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C2D8361F81867D00970784 /* threader.swift */; };
 		A9C9AB361F73535200144878 /* sender.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C9AB351F73535200144878 /* sender.swift */; };
@@ -28,6 +29,7 @@
 /* Begin PBXFileReference section */
 		A9187F2F1F892F9E00E2CE4C /* hardware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hardware.swift; sourceTree = "<group>"; };
 		A9187F5F1F9416A600E2CE4C /* signals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = signals.swift; sourceTree = "<group>"; };
+		A9187F611F964B7300E2CE4C /* consumer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = consumer.swift; sourceTree = "<group>"; };
 		A9357C0A1F624E12001350EF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A9C2D8341F7D651900970784 /* listen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = listen.swift; sourceTree = "<group>"; };
 		A9C2D8361F81867D00970784 /* threader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = threader.swift; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 				A9C2D8341F7D651900970784 /* listen.swift */,
 				A9CF0BAC1F623826005AFB60 /* handler.swift */,
 				A9C2D8361F81867D00970784 /* threader.swift */,
+				A9187F611F964B7300E2CE4C /* consumer.swift */,
 				A9187F2F1F892F9E00E2CE4C /* hardware.swift */,
 				A9187F5F1F9416A600E2CE4C /* signals.swift */,
 			);
@@ -178,6 +181,7 @@
 				A9187F371F8932E200E2CE4C /* SPI.swift in Sources */,
 				OBJ_45 /* main.swift in Sources */,
 				A9C9AB361F73535200144878 /* sender.swift in Sources */,
+				A9187F621F964B7300E2CE4C /* consumer.swift in Sources */,
 				A9187F3A1F8932E200E2CE4C /* UART.swift in Sources */,
 				A9187F361F8932E200E2CE4C /* PWM.swift in Sources */,
 				A9187F331F8932E200E2CE4C /* I2C.swift in Sources */,

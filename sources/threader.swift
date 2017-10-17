@@ -36,6 +36,8 @@ var threadArray = [ThreadControl]()				// List of threads to initiate
 var threadControlMutex = pthread_mutex_t()		// Protect the list
 var threadCount = 1								// Count main thread
 
+var consumer: Consumer?
+
 #if	os(Linux)
 let hardware = Hardware()
 #endif
@@ -59,53 +61,9 @@ class ThreadTester {
 func consumeThread() {
 	
 	printx("  Thread consumeThread started\n")
-	
-	let messageHandler = Handler()
-	var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
 
-	var oflags = termios()
-	var nflags = termios()
-	
-	_ = tcgetattr( fileno(stdin), &oflags )
-	nflags = oflags
-	var flags = Int32(nflags.c_lflag)
-	flags = flags & ~ECHO
-	flags = flags & ~ECHONL
-#if	os(Linux)
-	nflags.c_lflag = tcflag_t(flags)
-#else
-#if Xcode
-	nflags.c_lflag = UInt32(flags)
-#else
-	nflags.c_lflag = tcflag_t(flags)
-#endif
-#endif
-
-	let result = tcsetattr( fileno(stdin), TCSADRAIN, &nflags )
-	guard result == 0 else {
-		printe("\n  Thread consumeThread failed setting tcsetattr with error: \(result)\n")
-		return
-	}
-
-	var stopLoop = false
-	while !stopLoop {
-		bzero( &readBuffer, 256 )
-		fgets( &readBuffer, 255, stdin )    // Blocks for input
-
-		let len = strlen( &readBuffer )
-		guard let newdata = String( bytesNoCopy: &readBuffer, length: Int(len), encoding: .utf8, freeWhenDone: false ) else {
-			printe( "\n  No recognizable string data received, length: \(len)" )
-			continue
-		}
-		printx( "X] \(newdata)" )
-		
-		stopLoop = messageHandler.processMsg( newdata )	// Returns true if quit message is received
-	}
-	let result2 = tcsetattr( fileno(stdin), TCSANOW, &oflags )		// Restore input echo behavior
-	guard result2 == 0 else {
-		printe("\n  Thread consumeThread failed resetting tcsetattr with error: \(result2)\n")
-		return
-	}
+	consumer = Consumer()
+	consumer?.consume()
 
 	printx("  Thread consumeThread stopped\n")
 }
@@ -209,10 +167,10 @@ func startThread( threadType: ThreadType, socket: Int32 = 0, address: UInt32 = 0
 //	}
 	defer { threadPtr.deallocate(capacity: 1) }
 	var t = threadPtr.pointee
-	if t == nil {
-		printw( "\nUnable to see threadPointer pointee for \(threadType.rawValue)\n" )
-//		return
-	}
+//	if t == nil {
+//		printw( "\nUnable to see threadPointer pointee for \(threadType.rawValue)\n" )
+////		return
+//	}
 	
 	let attrPtr = UnsafeMutablePointer<pthread_attr_t>.allocate(capacity: 1)
 	defer { pthread_attr_destroy( attrPtr ) }
