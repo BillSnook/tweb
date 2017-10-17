@@ -57,3 +57,74 @@ func setupSignalHandling() {
 }
 	
 #endif	// End of Linux-only section for signal handling
+
+
+enum Level: String {
+	case none
+	case error
+	case warning
+	case verbose
+	case user1
+	case user2
+	case user3
+	case user4
+}
+
+var level = Level.none
+
+func printx( _ message: String ) {				// Print always (unless none)
+	if level != .none {
+		print( message )
+	}
+}
+
+func printv( _ message: String ) {				// Print only if verbose
+	if level == .verbose {
+		print( message )
+	}
+}
+
+func printe( _ message: String ) {
+	if level == .verbose || level == .error {	// Print error
+		print( message )
+	}
+}
+
+func printw( _ message: String ) {
+	if level == .verbose || level == .error || level == .warning {	// Print error and warning
+		print( message )
+	}
+}
+
+func printu1( _ message: String ) {
+	if level == .verbose || level == .error || level == .user1 {
+		print( message )
+	}
+}
+
+func printu2( _ message: String ) {
+	if level == .verbose || level == .error || level == .user2 {
+		print( message )
+	}
+}
+
+func printu3( _ message: String ) {
+	if level == .verbose || level == .error || level == .user3 {
+		print( message )
+	}
+}
+
+func printu4( _ message: String ) {
+	if level == .verbose || level == .error || level == .user4 {
+		print( message )
+	}
+}
+
+func printn( _ message: String ) {				// Print without implicit newline terminator
+	if level != .none {
+		print( message, terminator: "" )
+	}
+}
+
+
+

@@ -27,10 +27,10 @@ class Listen {
 	func doRcv( on port: UInt16 ) {
 		let bindResult = getConnector( on: port )
 		if bindResult < 0 {
-			print( "\nFailed binding to port \(port)" )
+			printe( "\nFailed binding to port \(port)" )
 			return
 		}
-		print( "\nBound to local port \(port), start listening\n" )
+		printx( "\nBound to local port \(port), start listening\n" )
 		doListen()
 	}
 	
@@ -48,7 +48,7 @@ class Listen {
 			}
 		}
 		if bindResult < 0 {
-			print("\n\nERROR binding, errno: \(errno)")
+			printe("\n\nERROR binding, errno: \(errno)")
 		}
 		return bindResult
 	}
@@ -70,7 +70,7 @@ class Listen {
 				}
 			}
 			if newsockfd < 0 {
-				print("\n\nERROR accepting, errno: \(errno)")
+				printe("\n\nERROR accepting, errno: \(errno)")
 				stopLoop = true
 			} else {
 				let ipaddr = UInt32(cli_addr.sin_addr.s_addr)

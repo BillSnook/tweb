@@ -20,15 +20,18 @@ var hostAddress = "zerowpi2"    // or "workpi"
 setupSignalHandling()		// Allow proper cleanup on unexpected exit signals (like ^C)
 #endif
 
-//print( "There are \(CommandLine.arguments.count) command line arguments" )
+//printx( "There are \(CommandLine.arguments.count) command line arguments" )
+
+// Recomment verbose for testing (all), error for just errors, warning for errors and warnings, none for none
+level = .verbose
 
 if CommandLine.arguments.count == 1 {	// Just the program name is entered
-	print( "USAGE: tweb [listen [portNumber (=\(portNumber))] | sender [hostName (=\(hostAddress))] [portNumber (=\(portNumber))]]" )
+	printx( "USAGE: tweb [listen [portNumber (=\(portNumber))] | sender [hostName (=\(hostAddress))] [portNumber (=\(portNumber))]]" )
 	exit(0)
 } else {
 	if CommandLine.arguments[1] == "listen" {
 		if CommandLine.arguments.count != 2 && CommandLine.arguments.count != 3 {
-			print( "USAGE: tweb listen [portNumber (=\(portNumber))]" )
+			printx( "USAGE: tweb listen [portNumber (=\(portNumber))]" )
 			exit(0)
 		}
 		if CommandLine.arguments.count > 2 {
@@ -38,7 +41,7 @@ if CommandLine.arguments.count == 1 {	// Just the program name is entered
 		listener.doRcv( on: portNumber )
 	} else if CommandLine.arguments[1] == "sender" {
 		if CommandLine.arguments.count > 4 {
-			print( "USAGE: tweb sender [hostName (=\(hostAddress))]] [portNumber (=\(portNumber))]" )
+			printx( "USAGE: tweb sender [hostName (=\(hostAddress))]] [portNumber (=\(portNumber))]" )
 			exit(0)
 		}
 		if CommandLine.arguments.count > 3 {
@@ -51,7 +54,7 @@ if CommandLine.arguments.count == 1 {	// Just the program name is entered
 		let sender = Sender()
 		sender.doSnd( to: localHostAddress, at: portNumber )
 	} else if CommandLine.arguments[1] == "tester" {
-		print( "\n  In Test Mode, starting test thread now\n" )
+		printx( "\n  In Test Mode, starting test thread now\n" )
 		startThread( threadType: .testThread )
 	}
 }

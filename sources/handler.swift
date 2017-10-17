@@ -67,22 +67,22 @@ public class WatchPins {
  
          gp17.onRaising {
             gpio in
-            print( "Pin 17 is on" )
+            printx( "Pin 17 is on" )
             sender.send( pin: "17", state: "on" )
        }
         gp17.onFalling {
             gpio in
-            print( "Pin 17 is off" )
+            printx( "Pin 17 is off" )
             sender.send( pin: "17", state: "off" )
         }
         gp18.onRaising {
             gpio in
-            print( "Pin 18 is on" )
+            printx( "Pin 18 is on" )
             sender.send( pin: "18", state: "on" )
         }
         gp18.onFalling {
             gpio in
-            print( "Pin 18 is off" )
+            printx( "Pin 18 is off" )
             sender.send( pin: "18", state: "off" )
         }
 

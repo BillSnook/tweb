@@ -48,8 +48,8 @@ class ThreadTester {
 	
 	func testThread() {
 		
-		print("  Thread ThreadTester.testThread() started\n")
-		print("  Thread ThreadTester.testThread() stopped\n")
+		printv("  Thread ThreadTester.testThread() started\n")
+		printv("  Thread ThreadTester.testThread() stopped\n")
 		usleep( 2000000 )		// Let print text clear buffers, before exiting
 	}
 	
@@ -58,7 +58,7 @@ class ThreadTester {
 
 func consumeThread() {
 	
-//	print("  Thread consumeThread started\n")
+//	printx("  Thread consumeThread started\n")
 	
 	let messageHandler = Handler()
 	var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
@@ -83,7 +83,7 @@ func consumeThread() {
 
 	let result = tcsetattr( fileno(stdin), TCSADRAIN, &nflags )
 	guard result == 0 else {
-		print("\n  Thread consumeThread failed setting tcsetattr with error: \(result)\n")
+		printe("\n  Thread consumeThread failed setting tcsetattr with error: \(result)\n")
 		return
 	}
 
@@ -94,25 +94,25 @@ func consumeThread() {
 
 		let len = strlen( &readBuffer )
 		guard let newdata = String( bytesNoCopy: &readBuffer, length: Int(len), encoding: .utf8, freeWhenDone: false ) else {
-			print( "\n  No recognizable string data received, length: \(len)" )
+			printe( "\n  No recognizable string data received, length: \(len)" )
 			continue
 		}
-//		print( newdata, terminator: "" )
+//		printv( newdata, terminator: "" )
 		
 		stopLoop = messageHandler.processMsg( newdata )	// Returns true if quit message is received
 	}
 	let result2 = tcsetattr( fileno(stdin), TCSANOW, &oflags )		// Restore input echo behavior
 	guard result2 == 0 else {
-		print("\n  Thread consumeThread failed resetting tcsetattr with error: \(result2)\n")
+		printe("\n  Thread consumeThread failed resetting tcsetattr with error: \(result2)\n")
 		return
 	}
 
-	print("  Thread consumeThread stopped\n")
+	printx("  Thread consumeThread stopped\n")
 }
 
 func serverThread( sockfd: Int32, address: UInt32 ) {
 	
-//	print("  Thread serverThread started for socketfd \(sockfd)\n")
+//	printx("  Thread serverThread started for socketfd \(sockfd)\n")
 	
 	let messageHandler = Handler()
 	var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
@@ -122,35 +122,35 @@ func serverThread( sockfd: Int32, address: UInt32 ) {
 	var inaddr = in_addr( s_addr: address )
 	inet_ntop(AF_INET, &inaddr, &addrCString, UInt32(INET_ADDRSTRLEN))
 	let addrString = String( cString: addrCString )
-	print( "\(sockfd)] Connection accepted from \(addrString)" )
+	printx( "\(sockfd)] Connection accepted from \(addrString)" )
 	
 	while !stopLoop  {
 		bzero( &readBuffer, 256 )
 		let rcvLen = read( sockfd, &readBuffer, 255 )
 		if (rcvLen < 0) {
-			print("\n\nERROR reading from newsocket")
+			printe("\n\nERROR reading from newsocket")
 			break
 		}
 		if rcvLen == 0 {
-			print( "\(sockfd)] Connection closed by \(addrString), threads: \(threadCount - 1)" )
+			printx( "\(sockfd)] Connection closed by \(addrString), threads: \(threadCount - 1)" )
 			break
 		} else {	// rcvLen > 0
 			guard let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) else {
-				print( "\nNo recognizable string data received, length: \(rcvLen)" )
+				printw( "\nNo recognizable string data received, length: \(rcvLen)" )
 				continue
 			}
-			print( "\(sockfd)] \(newdata)", terminator: "" )	// Currently a newline is in the sent string
+			printn( "\(sockfd)] \(newdata)" )	// Currently a newline is in the sent string
 			
 			let sndLen = write( sockfd, readBuffer, rcvLen)
 			if (sndLen < 0) {
-				print("\n\nERROR writing to socket")
+				printe("\n\nERROR writing to socket")
 				continue
 			}
 			
 			stopLoop = messageHandler.processMsg( newdata )	// Returns true if quit message is received
 		}
 	}
-//	print( "  Exiting thread serverThread for socketfd \(sockfd)\n" )
+//	printx( "  Exiting thread serverThread for socketfd \(sockfd)\n" )
 	close( sockfd )
 }
 
@@ -203,14 +203,14 @@ func startThread( threadType: ThreadType, socket: Int32 = 0, address: UInt32 = 0
 	pthread_mutex_unlock( &threadControlMutex )
 
 	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
-	guard threadPtr != nil else {
-		print( "\nUnable to create threadPointer for \(threadType.rawValue)\n" )
-		return
-	}
+//	guard threadPtr != nil else {
+//		printe( "\nUnable to create threadPointer for \(threadType.rawValue)\n" )
+//		return
+//	}
 	defer { threadPtr.deallocate(capacity: 1) }
 	var t = threadPtr.pointee
 	if t == nil {
-		print( "\nUnable to see threadPointer pointee for \(threadType.rawValue)\n" )
+		printw( "\nUnable to see threadPointer pointee for \(threadType.rawValue)\n" )
 //		return
 	}
 	
