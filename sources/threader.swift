@@ -58,16 +58,16 @@ class ThreadTester {
 }
 
 
-func consumeThread() {
-	
-	printx("  Thread consumeThread started\n")
-
-	consumer = Consumer()
-	consumer?.consume()
-
-	printx("  Thread consumeThread stopped\n")
-}
-
+//func consumeThread() {
+//	
+////	printx("  Thread consumeThread started\n")
+//
+//	consumer = Consumer()
+//	consumer?.consume()
+//
+////	printx("  Thread consumeThread stopped\n")
+//}
+//
 func serverThread( sockfd: Int32, address: UInt32 ) {
 	
 //	printx("  Thread serverThread started for socketfd \(sockfd)\n")
@@ -129,7 +129,9 @@ func runThreads() {
 	case .serverThread:
 		serverThread( sockfd: nextThreadControl.nextSocket, address: nextThreadControl.newAddress )
 	case .inputThread:
-		consumeThread()
+		consumer = Consumer()
+		consumer?.consume()
+//		consumeThread()
 	case .blinkThread:
 #if	os(Linux)
 		hardware.blink()
