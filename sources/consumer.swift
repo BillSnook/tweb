@@ -13,6 +13,7 @@
 
 class Consumer {
 	
+	var oflags = termios()
 	var stopLoop = false
 
 	func consume() {
@@ -20,7 +21,6 @@ class Consumer {
 		let messageHandler = Handler()
 		var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
 		
-		var oflags = termios()
 		var nflags = termios()
 		
 		_ = tcgetattr( fileno(stdin), &oflags )
@@ -49,7 +49,7 @@ class Consumer {
 			fgets( &readBuffer, 255, stdin )    // Blocks for input
 			
 			let len = strlen( &readBuffer )
-			guard let newdata = String( bytesNoCopy: &readBuffer, length: Int(len), encoding: .utf8, freeWhenDone: false ) else {
+			guard len > 0, let newdata = String( bytesNoCopy: &readBuffer, length: Int(len), encoding: .utf8, freeWhenDone: false ) else {
 				printe( "\n  No recognizable string data received, length: \(len)" )
 				continue
 			}
@@ -62,5 +62,17 @@ class Consumer {
 			printe("\n  Thread consumeThread failed resetting tcsetattr with error: \(result2)\n")
 			return
 		}
+	}
+	
+	func stopInput() {
+		
+		if !stopLoop {
+			stopLoop = true
+			let result = tcsetattr( fileno(stdin), TCSANOW, &oflags )		// Restore input echo behavior
+			if result != 0 {
+				printe("\n  Thread consumeThread failed resetting tcsetattr with error: \(result)\n")
+			}
+		}
+		exit(0)
 	}
 }
