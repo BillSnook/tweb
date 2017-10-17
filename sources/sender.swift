@@ -124,6 +124,9 @@ class Sender {
 			if ( sndLen < 0 ) {
 				printe( "\n\nERROR writing to socket" )
 				break
+			} else if sndLen == 0 {
+				printw( "\n\nConnection closed by other end when writing" )
+				stopLoop = true
 			}
 
 			bzero( &readBuffer, 256 )
@@ -131,6 +134,9 @@ class Sender {
 			if (rcvLen < 0) {
 				printe( "\n\nERROR reading from socket" )
 				break
+			} else if rcvLen == 0 {
+				printw( "\n\nConnection closed by other end while reading" )
+				stopLoop = true
 			}
 		}
 		
