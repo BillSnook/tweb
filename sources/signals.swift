@@ -121,7 +121,6 @@ func printu4( _ message: String ) {
 }
 
 func printn( _ message: String ) {				// Print without implicit newline terminator
-	print( "Level: \(level.rawValue)" )
 	if level != .none {
 		print( message, terminator: "" )
 	}

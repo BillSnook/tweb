@@ -31,6 +31,9 @@ class Listen {
 			return
 		}
 		printx( "\nBound to local port \(port), start listening\n" )
+		
+		startThread(threadType: .inputThread )
+		
 		doListen()
 	}
 	

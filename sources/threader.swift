@@ -58,7 +58,7 @@ class ThreadTester {
 
 func consumeThread() {
 	
-//	printx("  Thread consumeThread started\n")
+	printx("  Thread consumeThread started\n")
 	
 	let messageHandler = Handler()
 	var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
@@ -97,7 +97,7 @@ func consumeThread() {
 			printe( "\n  No recognizable string data received, length: \(len)" )
 			continue
 		}
-//		printn( newdata )
+		printx( "X] \(newdata)" )
 		
 		stopLoop = messageHandler.processMsg( newdata )	// Returns true if quit message is received
 	}
