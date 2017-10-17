@@ -30,7 +30,7 @@ class Handler {
 			startThread( threadType: .blinkThread )
 		case "blinkstop":
 #if	os(Linux)
-			hardware.blinkLoop = false
+			hardware.stopLoop = false
 #endif
 		default:
 			endLoop = false
