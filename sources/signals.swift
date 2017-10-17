@@ -72,17 +72,17 @@ enum Level: String {
 
 var level = Level.none
 
-func printx( _ message: String ) {				// Print always (unless none)
+func printx( _ message: String ) {				// Print always (unless none) - effectively verbose
 	if level != .none {
 		print( message )
 	}
 }
 
-func printv( _ message: String ) {				// Print only if verbose
-	if level == .verbose {
-		print( message )
-	}
-}
+//func printv( _ message: String ) {				// Print only if verbose
+//	if level == .verbose {
+//		print( message )
+//	}
+//}
 
 func printe( _ message: String ) {
 	if level == .verbose || level == .error {	// Print error

@@ -48,8 +48,8 @@ class ThreadTester {
 	
 	func testThread() {
 		
-		printv("  Thread ThreadTester.testThread() started\n")
-		printv("  Thread ThreadTester.testThread() stopped\n")
+		printx("  Thread ThreadTester.testThread() started\n")
+		printx("  Thread ThreadTester.testThread() stopped\n")
 		usleep( 2000000 )		// Let print text clear buffers, before exiting
 	}
 	
@@ -97,7 +97,7 @@ func consumeThread() {
 			printe( "\n  No recognizable string data received, length: \(len)" )
 			continue
 		}
-//		printv( newdata, terminator: "" )
+//		printn( newdata )
 		
 		stopLoop = messageHandler.processMsg( newdata )	// Returns true if quit message is received
 	}
