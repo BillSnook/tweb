@@ -85,9 +85,7 @@ class Sender {
 		}
 		printx( "\nConnecting on port \(at) to host \(to) (\(targetAddr))\n" )
 		
-		doLoop( socketfd )
-		
-		close( socketfd )
+		startThread( threadType: .senderThread )
 	}
 
 	func doConnect( _ addr: String, port: UInt16 ) -> Int32 {
@@ -111,7 +109,7 @@ class Sender {
 	}
 	
 	
-	func doLoop( _ socketfd: Int32 ) {
+	func doLoop() {
 		var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
 		var writeBuffer: [CChar] = [CChar](repeating: 0, count: 256)
 		while !stopLoop {
@@ -139,7 +137,7 @@ class Sender {
 				stopLoop = true
 			}
 		}
-		
+		close( socketfd )
 	}
 }
 

@@ -34,7 +34,8 @@ class Listen {
 		
 		startThread(threadType: .inputThread )
 		
-		doListen()
+		startThread( threadType: .listenThread, socket: socketfd, address: 0 )
+//		doListen()
 	}
 	
 	

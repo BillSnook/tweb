@@ -14,6 +14,8 @@ import Darwin.C
 
 // Possible types of threads with which we work
 enum ThreadType: String {
+	case senderThread = "sender"
+	case listenThread = "listen"
 	case serverThread = "server"
 	case inputThread = "input"
 	case blinkThread = "blink"
@@ -21,13 +23,13 @@ enum ThreadType: String {
 }
 
 struct ThreadControl {
+	var nextThreadType: ThreadType
 	var nextSocket: Int32
 	var newAddress: UInt32
-	var nextThreadType: ThreadType
-	init( socket: Int32, address: UInt32, threadType: ThreadType ) {
+	init( threadType: ThreadType, socket: Int32 = 0, address: UInt32 = 0 ) {
+		nextThreadType = threadType
 		nextSocket = socket
 		newAddress = address
-		nextThreadType = threadType
 	}
 }
 
@@ -39,7 +41,7 @@ var threadCount = 1								// Count main thread
 var consumer: Consumer?
 
 #if	os(Linux)
-//let hardware = Hardware()
+let hardware = Hardware()
 #endif
 
 
@@ -119,6 +121,10 @@ func runThreads() {
 	printx( "Thread count: \(threadCount) for \(nextThreadControl.nextThreadType.rawValue)" )
 
 	switch nextThreadControl.nextThreadType {
+	case .senderThread:
+		sender?.doLoop()
+	case .listenThread:
+		listener?.doListen()
 	case .serverThread:
 		serverThread( sockfd: nextThreadControl.nextSocket, address: nextThreadControl.newAddress )
 	case .inputThread:
@@ -126,8 +132,7 @@ func runThreads() {
 		consumer?.consume()
 	case .blinkThread:
 #if	os(Linux)
-		blink()
-//		hardware.blink()
+		hardware.blink()
 #endif
 	case .testThread:
 		let testerThread = ThreadTester()
@@ -153,9 +158,12 @@ func freeThreads() {
 func startThread( threadType: ThreadType, socket: Int32 = 0, address: UInt32 = 0 ) {
 
 	pthread_mutex_lock( &threadControlMutex )
-	threadArray.append( ThreadControl( socket: socket, address: address, threadType: threadType ) )
+	threadArray.append( ThreadControl( threadType: threadType, socket: socket, address: address ) )
 	pthread_mutex_unlock( &threadControlMutex )
+}
 
+func createThread() {
+	
 	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
 //	if threadPtr == nil {
 //		printe( "\nUnable to create threadPointer for \(threadType.rawValue)\n" )
@@ -164,7 +172,7 @@ func startThread( threadType: ThreadType, socket: Int32 = 0, address: UInt32 = 0
 	defer { threadPtr.deallocate(capacity: 1) }
 	var t = threadPtr.pointee
 	if t == nil {
-		printw( "\nUnable to see threadPointer pointee for \(threadType.rawValue)\n" )
+		printw( "\nUnable to see threadPointer pointee\n" )
 //		return
 	}
 	

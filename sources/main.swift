@@ -13,6 +13,8 @@ import Foundation
 var portNumber: UInt16 = 5555
 var hostAddress = "zerowpi2"    // or "workpi"
 
+var mainLoop = true
+
 var listener: Listen?
 var sender: Sender?
 
@@ -62,6 +64,20 @@ if CommandLine.arguments.count == 1 {	// Just the program name is entered
 		printx( "\n  In Test Mode, starting test thread now\n" )
 		startThread( threadType: .testThread )
 	}
+	
+	var success = false
+	repeat {
+		usleep( 10000 )
+		success = false
+		pthread_mutex_lock( &threadControlMutex )
+		if threadArray.count > 0 {
+			success = true
+		}
+		pthread_mutex_unlock( &threadControlMutex )
+		if success {
+			createThread()
+		}
+	} while mainLoop
 	freeThreads()
 	printx( "Threads remaining: \(threadCount)  --  Main thread exiting" )
 	pthread_exit( nil )
