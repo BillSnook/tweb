@@ -142,9 +142,6 @@ func runThreads() {
 func initThreads() {
 	
 	pthread_mutex_init( &threadControlMutex, nil )
-#if	os(Linux)
-	initHardware()
-#endif
 }
 
 func freeThreads() {
