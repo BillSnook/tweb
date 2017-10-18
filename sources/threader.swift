@@ -118,7 +118,7 @@ func runThreads() {
 	guard let nextThreadControl = tc else { return }
 	
 	threadCount += 1
-	printx( "Thread count: \(threadCount) for \(nextThreadControl.nextThreadType.rawValue)" )
+//	printx( "Thread count: \(threadCount) for \(nextThreadControl.nextThreadType.rawValue)" )
 
 	switch nextThreadControl.nextThreadType {
 	case .senderThread:
@@ -139,7 +139,7 @@ func runThreads() {
 		testerThread.testThread()
 	}
 	threadCount -= 1
-	printx( "Threads remaining: \(threadCount) after exit for \(nextThreadControl.nextThreadType.rawValue)" )
+//	printx( "Threads remaining: \(threadCount) after exit for \(nextThreadControl.nextThreadType.rawValue)" )
 }
 
 
@@ -171,10 +171,10 @@ func createThread() {
 //	}
 	defer { threadPtr.deallocate(capacity: 1) }
 	var t = threadPtr.pointee
-	if t == nil {
-		printw( "\nUnable to see threadPointer pointee\n" )
-//		return
-	}
+//	if t == nil {
+//		printw( "\nUnable to see threadPointer pointee\n" )
+////		return
+//	}
 	
 	let attrPtr = UnsafeMutablePointer<pthread_attr_t>.allocate(capacity: 1)
 	defer { pthread_attr_destroy( attrPtr ) }
