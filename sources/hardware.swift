@@ -24,10 +24,12 @@ let on  = 1
 //	let yellow: GPIO?
 //	let green: GPIO?
 
-	var stopLoop = true
+	var stopLoop = false
 	
 	func blink() {
 		
+		guard stopLoop == false else { return }
+		stopLoop = true
 		var gpios: [GPIOName: GPIO]?
 		let numberOfProcessors = sysconf( Int32(_SC_NPROCESSORS_ONLN) )
 //		printx("\nInit Hardware, number of cores: \(numberOfProcessors)\n")
@@ -49,7 +51,6 @@ let on  = 1
 		yellow.value = off
 		green.value = off
 
-		stopLoop = true
 		repeat {
 			red.value = on
 			yellow.value = off
