@@ -14,7 +14,7 @@
 class Consumer {
 	
 	var oflags = termios()
-	var stopLoop = false
+	var stopLoop = true
 
 	func consume() {
 		
@@ -44,6 +44,9 @@ class Consumer {
 			return
 		}
 		
+		printx( "\nBound to terminal with echo off, start waiting for input\n" )
+
+		stopLoop = false
 		while !stopLoop {
 			bzero( &readBuffer, 256 )
 			fgets( &readBuffer, 255, stdin )    // Blocks for input

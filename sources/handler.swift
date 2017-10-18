@@ -20,7 +20,7 @@ class Handler {
 		let command = message.replacingOccurrences( of: "\n", with: "" )
 		var endLoop = false
 		switch command {
-		case "quit":
+		case "superquit":
 			endLoop = true
 		case "test":
 #if	os(Linux)

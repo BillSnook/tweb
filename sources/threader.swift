@@ -48,6 +48,7 @@ let hardware = Hardware()
 // MARK: - Threads
 class ThreadTester {
 	
+	// Test Thread
 	func testThread() {
 		
 		printx("  Thread ThreadTester.testThread() started\n")
@@ -58,16 +59,7 @@ class ThreadTester {
 }
 
 
-//func consumeThread() {
-//	
-////	printx("  Thread consumeThread started\n")
-//
-//	consumer = Consumer()
-//	consumer?.consume()
-//
-////	printx("  Thread consumeThread stopped\n")
-//}
-//
+// MARK: - Server Thread
 func serverThread( sockfd: Int32, address: UInt32 ) {
 	
 //	printx("  Thread serverThread started for socketfd \(sockfd)\n")
