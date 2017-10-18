@@ -20,7 +20,6 @@ let on  = 1
 
 //class Hardware {
 	
-	let gpios: [GPIOName: GPIO]?
 //	let red: GPIO?
 //	let yellow: GPIO?
 //	let green: GPIO?
@@ -29,6 +28,7 @@ let on  = 1
 	
 	func blink() {
 		
+		var gpios: [GPIOName: GPIO]?
 		let numberOfProcessors = sysconf( Int32(_SC_NPROCESSORS_ONLN) )
 //		printx("\nInit Hardware, number of cores: \(numberOfProcessors)\n")
 		if numberOfProcessors == 1 {	// Must be ZeroW
@@ -37,9 +37,9 @@ let on  = 1
 			gpios = SwiftyGPIO.GPIOs(for:.RaspberryPi3)
 		}
 
-		let red = gpios[.P18]!		// GPIO_GEN0
-		let yellow = gpios[.P17]!	// p18
-		let green = gpios[.P23]!	// p23
+		let red = gpios?[.P18]!		// GPIO_GEN0
+		let yellow = gpios?[.P17]!	// p18
+		let green = gpios?[.P23]!	// p23
 		
 		red.direction = .OUT
 		yellow.direction = .OUT
