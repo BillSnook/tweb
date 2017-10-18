@@ -82,7 +82,7 @@ func serverThread( sockfd: Int32, address: UInt32 ) {
 			break
 		}
 		if rcvLen == 0 {
-			printx( "\(sockfd)] Connection closed by \(addrString), threads: \(threadCount - 1)" )
+			printx( "\(sockfd)] Connection closed by \(addrString)" )
 			break
 		} else {	// rcvLen > 0
 			guard let newdata = String( bytesNoCopy: &readBuffer, length: rcvLen, encoding: .utf8, freeWhenDone: false ) else {
@@ -116,6 +116,7 @@ func runThreads() {
 	guard let nextThreadControl = tc else { return }
 	
 	threadCount += 1
+	printx( "\nThread count: \(threadCount)" )
 
 	switch nextThreadControl.nextThreadType {
 	case .serverThread:
@@ -133,6 +134,7 @@ func runThreads() {
 		testerThread.testThread()
 	}
 	threadCount -= 1
+	printx( "\nThreads remaining: \(threadCount)" )
 }
 
 
