@@ -157,23 +157,23 @@ func startThread( threadType: ThreadType, socket: Int32 = 0, address: UInt32 = 0
 	pthread_mutex_unlock( &threadControlMutex )
 
 	let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
-//	guard threadPtr != nil else {
+//	if threadPtr == nil {
 //		printe( "\nUnable to create threadPointer for \(threadType.rawValue)\n" )
 //		return
 //	}
 	defer { threadPtr.deallocate(capacity: 1) }
 	var t = threadPtr.pointee
-//	if t == nil {
-//		printw( "\nUnable to see threadPointer pointee for \(threadType.rawValue)\n" )
-////		return
-//	}
+	if t == nil {
+		printw( "\nUnable to see threadPointer pointee for \(threadType.rawValue)\n" )
+//		return
+	}
 	
 	let attrPtr = UnsafeMutablePointer<pthread_attr_t>.allocate(capacity: 1)
 	defer { pthread_attr_destroy( attrPtr ) }
 	pthread_attr_init( attrPtr )
 	pthread_attr_setdetachstate( attrPtr, 0 )
 
-	// No context can be captured in 3rd param because it is a C routine and knows not swift
+	// No context can be captured in 3rd param because it is a C routine and knows not swift contexts
 #if	os(Linux)
 	pthread_create(&t!,
 	               attrPtr,
@@ -185,5 +185,4 @@ func startThread( threadType: ThreadType, socket: Int32 = 0, address: UInt32 = 0
 				   { _ in runThreads(); return nil },
 				   nil)
 #endif
-//	pthread_attr_destroy( attrPtr )
 }
