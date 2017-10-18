@@ -32,6 +32,8 @@ if CommandLine.arguments.count == 1 {	// Just the program name is entered
 	printx( "USAGE: tweb [listen [portNumber (=\(portNumber))] | sender [hostName (=\(hostAddress))] [portNumber (=\(portNumber))]]" )
 	exit(0)
 } else {
+	printx( "Thread count: \(threadCount)  --  Main Thread running" )
+	initThreads()
 	if CommandLine.arguments[1] == "listen" {
 		if CommandLine.arguments.count != 2 && CommandLine.arguments.count != 3 {
 			printx( "USAGE: tweb listen [portNumber (=\(portNumber))]" )
@@ -60,5 +62,7 @@ if CommandLine.arguments.count == 1 {	// Just the program name is entered
 		printx( "\n  In Test Mode, starting test thread now\n" )
 		startThread( threadType: .testThread )
 	}
+	freeThreads()
+	printx( "Threads remaining: \(threadCount)  --  Main thread exiting" )
 	pthread_exit( nil )
 }
