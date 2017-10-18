@@ -116,7 +116,7 @@ func runThreads() {
 	guard let nextThreadControl = tc else { return }
 	
 	threadCount += 1
-	printx( "\nThread count: \(threadCount)" )
+	printx( "Thread count: \(threadCount)" )
 
 	switch nextThreadControl.nextThreadType {
 	case .serverThread:
@@ -134,7 +134,7 @@ func runThreads() {
 		testerThread.testThread()
 	}
 	threadCount -= 1
-	printx( "\nThreads remaining: \(threadCount)" )
+	printx( "Threads remaining: \(threadCount)" )
 }
 
 

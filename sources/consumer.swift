@@ -44,7 +44,7 @@ class Consumer {
 			return
 		}
 		
-		printx( "\nBound to terminal with echo off, start waiting for input\n" )
+		printx( "\nBound to terminal with echo off, start waiting for input" )
 
 		stopLoop = false
 		while !stopLoop {

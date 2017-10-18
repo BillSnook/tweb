@@ -30,7 +30,7 @@ class Listen {
 			printe( "\nFailed binding to port \(port)" )
 			return
 		}
-		printx( "\nBound to local port \(port), start listening\n" )
+		printx( "\nBound to local port \(port), start listening" )
 		
 		startThread(threadType: .inputThread )
 		
