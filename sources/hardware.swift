@@ -37,9 +37,9 @@ let on  = 1
 			gpios = SwiftyGPIO.GPIOs(for:.RaspberryPi3)
 		}
 
-		let red = gpios?[.P18]!		// GPIO_GEN0
-		let yellow = gpios?[.P17]!	// p18
-		let green = gpios?[.P23]!	// p23
+		guard let red = gpios?[.P18]! else { return }		// GPIO_GEN0
+		guard let yellow = gpios?[.P17]! else { return }	// p18
+		guard let green = gpios?[.P23]! else { return }		// p23
 		
 		red.direction = .OUT
 		yellow.direction = .OUT
