@@ -39,7 +39,7 @@ var threadCount = 1								// Count main thread
 var consumer: Consumer?
 
 #if	os(Linux)
-let hardware = Hardware()
+//let hardware = Hardware()
 #endif
 
 
@@ -124,10 +124,10 @@ func runThreads() {
 	case .inputThread:
 		consumer = Consumer()
 		consumer?.consume()
-//		consumeThread()
 	case .blinkThread:
 #if	os(Linux)
-		hardware.blink()
+		blink()
+//		hardware.blink()
 #endif
 	case .testThread:
 		let testerThread = ThreadTester()
@@ -142,6 +142,9 @@ func runThreads() {
 func initThreads() {
 	
 	pthread_mutex_init( &threadControlMutex, nil )
+#if	os(Linux)
+	initHardware()
+#endif
 }
 
 func freeThreads() {

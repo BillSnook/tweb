@@ -18,7 +18,7 @@ let off = 0
 let on  = 1
 
 
-class Hardware {
+//class Hardware {
 	
 	let gpios: [GPIOName: GPIO]
 	let red: GPIO
@@ -27,7 +27,7 @@ class Hardware {
 
 	var stopLoop = true
 	
-	init() {
+	func initHardware() {
 		
 		let numberOfProcessors = sysconf( Int32(_SC_NPROCESSORS_ONLN) )
 //		printx("\nInit Hardware, number of cores: \(numberOfProcessors)\n")
@@ -83,7 +83,7 @@ class Hardware {
 		red.value = off
 	}
 
-}
+//}
 
 #else
 	
