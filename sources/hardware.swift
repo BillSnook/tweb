@@ -45,9 +45,9 @@ let on  = 1
 		yellow!.direction = .OUT
 		green!.direction = .OUT
 
-		red.value = off
-		yellow.value = off
-		green.value = off
+		red!.value = off
+		yellow!.value = off
+		green!.value = off
 	}
 
 	func delay() {
@@ -72,9 +72,9 @@ let on  = 1
 //			green.value = on
 //			delay()
 		} while stopLoop
-		red.value = off
-		yellow.value = off
-		green.value = off
+		red!.value = off
+		yellow!.value = off
+		green!.value = off
 	}
 	
 	func test() {
