@@ -25,12 +25,12 @@ let on  = 1
 	var yellow: GPIO?
 	var green: GPIO?
 
-	var blinkLoop = true
+	var stopLoop = true
 	
 	func startupThreads() {
 		
 		let numberOfProcessors = sysconf( Int32(_SC_NPROCESSORS_ONLN) )
-//		print("\nNumber of cores: \(numberOfProcessors)\n")
+//		printx("\nInit Hardware, number of cores: \(numberOfProcessors)\n")
 		if numberOfProcessors == 1 {	// Must be ZeroW
 			gpios = SwiftyGPIO.GPIOs(for:.RaspberryPiPlusZero)
 		} else {
@@ -45,9 +45,9 @@ let on  = 1
 		yellow!.direction = .OUT
 		green!.direction = .OUT
 
-		red!.value = off
-		yellow!.value = off
-		green!.value = off
+		red.value = off
+		yellow.value = off
+		green.value = off
 	}
 
 	func delay() {
@@ -56,8 +56,8 @@ let on  = 1
 	
 	func blink() {
 
-		guard !blinkLoop else { return }
-		blinkLoop = true
+		guard !stopLoop else { return }
+		stopLoop = true
 		repeat {
 			red!.value = on
 			yellow!.value = off
@@ -67,14 +67,14 @@ let on  = 1
 			yellow!.value = on
 			green!.value = off
 			delay()
-			red!.value = off
-			yellow!.value = off
-			green!.value = on
-			delay()
-		} while blinkLoop
-		red!.value = off
-		yellow!.value = off
-		green!.value = off
+//			red.value = off
+//			yellow.value = off
+//			green.value = on
+//			delay()
+		} while stopLoop
+		red.value = off
+		yellow.value = off
+		green.value = off
 	}
 	
 	func test() {

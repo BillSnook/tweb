@@ -15,9 +15,8 @@ import Foundation
 
 class Listen {
 	
-	var target: Host?
-	var stopListening = false
-	
+	var stopLoop = false
+
 #if	os(Linux)
 	let socketfd = socket( AF_INET, Int32(SOCK_STREAM.rawValue), 0 )
 #else
@@ -28,11 +27,15 @@ class Listen {
 	func doRcv( on port: UInt16 ) {
 		let bindResult = getConnector( on: port )
 		if bindResult < 0 {
-			print( "\nFailed binding to port \(port)" )
+			printe( "\nFailed binding to port \(port)" )
 			return
 		}
-		print( "\nBound to local port \(port), start listening\n" )
-		doListen()
+		printx( "\nBound to local port \(port), start listening" )
+		
+		startThread(threadType: .inputThread )
+		
+		startThread( threadType: .listenThread, socket: socketfd, address: 0 )
+//		doListen()
 	}
 	
 	
@@ -49,7 +52,7 @@ class Listen {
 			}
 		}
 		if bindResult < 0 {
-			print("\n\nERROR binding, errno: \(errno)")
+			printe("\n\nERROR binding, errno: \(errno)")
 		}
 		return bindResult
 	}
@@ -57,8 +60,7 @@ class Listen {
 	
 	func doListen() {
 
-		var notDone = true
-		repeat {
+		while !stopLoop {
 			listen( socketfd, 5 )
 			
 			var cli_addr = sockaddr_in()
@@ -71,13 +73,14 @@ class Listen {
 				}
 			}
 			if newsockfd < 0 {
-				print("\n\nERROR accepting, errno: \(errno)")
-				notDone = false
+				printe("\n\nERROR accepting, errno: \(errno)")
+				stopLoop = true
+				mainLoop = true
 			} else {
 				let ipaddr = UInt32(cli_addr.sin_addr.s_addr)
 				startThread( threadType: .serverThread, socket: newsockfd, address: ipaddr )
 			}
-		} while notDone
+		}
 		exit( 0 )
 	}
 }

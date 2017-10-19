@@ -20,17 +20,17 @@ class Handler {
 		let command = message.replacingOccurrences( of: "\n", with: "" )
 		var endLoop = false
 		switch command {
-		case "quit":
+		case "superquit":
 			endLoop = true
 		case "test":
 #if	os(Linux)
-			test()
+			hardware.test()
 #endif
 		case "blink":
 			startThread( threadType: .blinkThread )
 		case "blinkstop":
 #if	os(Linux)
-			blinkLoop = false
+			hardware.stopLoop = false
 #endif
 		default:
 			endLoop = false
@@ -67,22 +67,22 @@ public class WatchPins {
  
          gp17.onRaising {
             gpio in
-            print( "Pin 17 is on" )
+            printx( "Pin 17 is on" )
             sender.send( pin: "17", state: "on" )
        }
         gp17.onFalling {
             gpio in
-            print( "Pin 17 is off" )
+            printx( "Pin 17 is off" )
             sender.send( pin: "17", state: "off" )
         }
         gp18.onRaising {
             gpio in
-            print( "Pin 18 is on" )
+            printx( "Pin 18 is on" )
             sender.send( pin: "18", state: "on" )
         }
         gp18.onFalling {
             gpio in
-            print( "Pin 18 is off" )
+            printx( "Pin 18 is off" )
             sender.send( pin: "18", state: "off" )
         }
 

@@ -15,12 +15,16 @@ import Darwin.C
 
 class Sender {
 
-	var target: Host?
-	#if	os(Linux)
-	let socketfd = socket( AF_INET, Int32(SOCK_STREAM.rawValue), 0 )
-	#else
-	let socketfd = socket( AF_INET, SOCK_STREAM, 0 )
-	#endif
+	var stopLoop = false
+	let socketfd: Int32
+	
+	init() {
+#if	os(Linux)
+		socketfd = socket( AF_INET, Int32(SOCK_STREAM.rawValue), 0 )
+#else
+		socketfd = socket( AF_INET, SOCK_STREAM, 0 )
+#endif
+	}
 
 	
 	func lookup( name: String ) -> String? {
@@ -42,7 +46,7 @@ class Sender {
 		let status = getaddrinfo( name, "5555", &hints, &servinfo)
 		guard status == 0 else {
 			let stat = strerror( errno )
-			print( "\ngetaddrinfo failed for \(name), status: \(status), error: \(String(cString: stat!))" )
+			printe( "\ngetaddrinfo failed for \(name), status: \(status), error: \(String(cString: stat!))" )
 			return nil
 		}
 
@@ -58,7 +62,7 @@ class Sender {
 				targetAddr = ipaddrstr
 				break		// Get first valid IPV4 address string
 			}
-			print( "\nGot target address: \(String(describing: target))" )
+			printx( "\nGot target address: \(String(describing: targetAddr))" )
 			info = info!.pointee.ai_next
 		}
 		freeaddrinfo( servinfo )
@@ -69,21 +73,19 @@ class Sender {
 	func doSnd( to: String, at: UInt16 ) {
 	
 		guard let targetAddr = lookup( name: to ) else {
-//			print( "\nLookup failed for \(to)" )
+//			printx( "\nLookup failed for \(to)" )
 			return
 		}
-//		print( "\nFound target address: \(targetAddr!)" )
+//		printx( "\nFound target address: \(targetAddr!)" )
 
 		let result = doConnect( targetAddr, port: at )
 		guard result >= 0 else {
-			print( "\nConnect failed" )
+			printe( "\nConnect failed" )
 			return
 		}
-		print( "\nConnecting on port \(at) to host \(to) (\(targetAddr))\n" )
+		printx( "\nConnecting on port \(at) to host \(to) (\(targetAddr))\n" )
 		
-		doLoop( socketfd )
-		
-		close( socketfd )
+		startThread( threadType: .senderThread )
 	}
 
 	func doConnect( _ addr: String, port: UInt16 ) -> Int32 {
@@ -98,39 +100,46 @@ class Sender {
 				connect( socketfd, $0, serv_addr_len )
 			}
 		}
-//		print( "\nIn getConnection with connectResult: \(connectResult)\n" )
+//		printx( "\nIn getConnection with connectResult: \(connectResult)\n" )
 		if connectResult < 0 {
-			print("\nERROR connecting, errno: \(errno)")
+			printe("\nERROR connecting, errno: \(errno)")
 		}
 		
 		return connectResult
 	}
 	
 	
-	func doLoop( _ socketfd: Int32 ) {
+	func doLoop() {
 		var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
 		var writeBuffer: [CChar] = [CChar](repeating: 0, count: 256)
-		let stopLoop = false
 		while !stopLoop {
-			print( "> ", terminator: "" )
+			printn( "> " )
 			bzero( &writeBuffer, 256 )
 			fgets( &writeBuffer, 255, stdin )    // Blocks for input
 			
 			let len = strlen( &writeBuffer )
 			let sndLen = write( socketfd, &writeBuffer, Int(len) )
 			if ( sndLen < 0 ) {
-				print( "\n\nERROR writing to socket" )
+				printe( "\n\nERROR writing to socket" )
 				break
+			} else if sndLen == 0 {
+				printw( "\n\nConnection closed by server when writing" )
+				stopLoop = true
+				mainLoop = true
 			}
 
 			bzero( &readBuffer, 256 )
 			let rcvLen = read( socketfd, &readBuffer, 255 )
 			if (rcvLen < 0) {
-				print( "\n\nERROR reading from socket" )
+				printe( "\n\nERROR reading from socket" )
 				break
+			} else if rcvLen == 0 {
+				printw( "\nConnection closed by server when reading\n" )
+				stopLoop = true
+				mainLoop = true
 			}
 		}
-		
+		close( socketfd )
 	}
 }
 

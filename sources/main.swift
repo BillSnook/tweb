@@ -13,34 +13,42 @@ import Foundation
 var portNumber: UInt16 = 5555
 var hostAddress = "zerowpi2"    // or "workpi"
 
+var mainLoop = true
+
+var listener: Listen?
+var sender: Sender?
 
 // Mark - executable code starts here
 
 #if	os(Linux)
 setupSignalHandling()		// Allow proper cleanup on unexpected exit signals (like ^C)
 #endif
-startupThreads()
 
-//print( "There are \(CommandLine.arguments.count) command line arguments" )
+//printx( "There are \(CommandLine.arguments.count) command line arguments" )
+
+// Recomment verbose for testing (displays all others), error for just errors, warning for errors and warnings, none for none
+level = .verbose
+//printx prints unless none
 
 if CommandLine.arguments.count == 1 {	// Just the program name is entered
-	print( "USAGE: tweb [listen [portNumber (=\(portNumber))] | sender [hostName (=\(hostAddress))] [portNumber (=\(portNumber))]]" )
+	printx( "USAGE: tweb [listen [portNumber (=\(portNumber))] | sender [hostName (=\(hostAddress))] [portNumber (=\(portNumber))]]" )
 	exit(0)
 } else {
+//	printx( "Thread count: \(threadCount)  --  Main Thread running" )
 	initThreads()
 	if CommandLine.arguments[1] == "listen" {
 		if CommandLine.arguments.count != 2 && CommandLine.arguments.count != 3 {
-			print( "USAGE: tweb listen [portNumber (=\(portNumber))]" )
+			printx( "USAGE: tweb listen [portNumber (=\(portNumber))]" )
 			exit(0)
 		}
 		if CommandLine.arguments.count > 2 {
 			portNumber = UInt16(atoi( CommandLine.arguments[2] ))
 		}
-		let listener = Listen()
-		listener.doRcv( on: portNumber )
+		listener = Listen()
+		listener?.doRcv( on: portNumber )
 	} else if CommandLine.arguments[1] == "sender" {
 		if CommandLine.arguments.count > 4 {
-			print( "USAGE: tweb sender [hostName (=\(hostAddress))]] [portNumber (=\(portNumber))]" )
+			printx( "USAGE: tweb sender [hostName (=\(hostAddress))]] [portNumber (=\(portNumber))]" )
 			exit(0)
 		}
 		if CommandLine.arguments.count > 3 {
@@ -50,11 +58,27 @@ if CommandLine.arguments.count == 1 {	// Just the program name is entered
 			hostAddress = CommandLine.arguments[2]
 		}
 		let localHostAddress = hostAddress + ".local"
-		let sender = Sender()
-		sender.doSnd( to: localHostAddress, at: portNumber )
+		sender = Sender()
+		sender?.doSnd( to: localHostAddress, at: portNumber )
 	} else if CommandLine.arguments[1] == "tester" {
-		print( "\n  In Test Mode, starting test now\n" )
+		printx( "\n  In Test Mode, starting test thread now\n" )
 		startThread( threadType: .testThread )
 	}
+	
+	var success = false
+	repeat {
+		usleep( 10000 )
+		success = false
+		pthread_mutex_lock( &threadControlMutex )
+		if threadArray.count > 0 {
+			success = true
+		}
+		pthread_mutex_unlock( &threadControlMutex )
+		if success {
+			createThread()
+		}
+	} while mainLoop
 	freeThreads()
+	printx( "Threads remaining: \(threadCount)  --  Main thread exiting" )
+	pthread_exit( nil )
 }
