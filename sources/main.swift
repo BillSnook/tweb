@@ -22,6 +22,7 @@ var sender: Sender?
 
 #if	os(Linux)
 setupSignalHandling()		// Allow proper cleanup on unexpected exit signals (like ^C)
+startupHardware()
 #endif
 
 //printx( "There are \(CommandLine.arguments.count) command line arguments" )

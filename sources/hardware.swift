@@ -27,7 +27,7 @@ let on  = 1
 
 	var stopLoop = true
 	
-	func startupThreads() {
+	func startupHardware() {
 		
 		let numberOfProcessors = sysconf( Int32(_SC_NPROCESSORS_ONLN) )
 //		printx("\nInit Hardware, number of cores: \(numberOfProcessors)\n")
