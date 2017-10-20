@@ -80,7 +80,7 @@ func printx( _ message: String ) {				// Print always (unless none) - effectivel
 	}
 }
 
-//func printv( _ message: String ) {				// Print only if verbose
+//func printv( _ message: String ) {			// Print only if verbose
 //	if level == .verbose {
 //		print( message )
 //	}

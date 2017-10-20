@@ -21,7 +21,7 @@ class Handler {
 		var endLoop = false
 		switch command {
 		case "superquit":
-			endLoop = true
+			endLoop = true	// Ends loop that sourced this command - network or console thread
 		case "test":
 #if	os(Linux)
 			test()

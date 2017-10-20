@@ -28,7 +28,7 @@ setupSignalHandling()		// Allow proper cleanup on unexpected exit signals (like 
 
 // Recomment verbose for testing (displays all others), error for just errors, warning for errors and warnings, none for none
 level = .verbose
-//printx prints unless none
+//printx always prints unless none
 
 if CommandLine.arguments.count == 1 {	// Just the program name is entered
 	printx( "USAGE: tweb [listen [portNumber (=\(portNumber))] | sender [hostName (=\(hostAddress))] [portNumber (=\(portNumber))]]" )
