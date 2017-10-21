@@ -41,6 +41,14 @@ class Hardware {
 		yellow = gpios[.P17]!	// p18
 		green = gpios[.P23]!	// p23
 		
+		red.direction = .OUT
+		yellow.direction = .OUT
+		green.direction = .OUT
+		
+		red.value = off
+		yellow.value = off
+		green.value = off
+		
 	}
 	
 	func delay() {
@@ -49,15 +57,8 @@ class Hardware {
 	
 	public func blink() {
 
+		printx("\nblink" )
 		guard !stopLoop else { return }
-		red.direction = .OUT
-		yellow.direction = .OUT
-		green.direction = .OUT
-		
-		red.value = off
-		yellow.value = off
-		green.value = off
-
 		stopLoop = true
 		repeat {
 			red.value = on
