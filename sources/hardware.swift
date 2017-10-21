@@ -25,7 +25,7 @@ class Hardware {
 	var yellow: GPIO
 	var green: GPIO
 
-	var stopLoop = true
+	var stopLoop = false
 	
 	init() {
 		
