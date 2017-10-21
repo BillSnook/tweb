@@ -18,7 +18,6 @@ class Consumer {
 
 	func consume() {
 		
-		let messageHandler = Handler()
 		var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
 		
 		var nflags = termios()

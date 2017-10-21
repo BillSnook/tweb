@@ -18,16 +18,16 @@ let off = 0
 let on  = 1
 
 
-//class Hardware {
+class Hardware {
 	
-	var gpios: [GPIOName: GPIO]?
-	var red: GPIO?
-	var yellow: GPIO?
-	var green: GPIO?
+	var gpios: [GPIOName: GPIO]
+	var red: GPIO
+	var yellow: GPIO
+	var green: GPIO
 
 	var stopLoop = true
 	
-	func startupHardware() {
+	init() {
 		
 		let numberOfProcessors = sysconf( Int32(_SC_NPROCESSORS_ONLN) )
 //		printx("\nInit Hardware, number of cores: \(numberOfProcessors)\n")
@@ -36,55 +36,56 @@ let on  = 1
 		} else {
 			gpios = SwiftyGPIO.GPIOs(for:.RaspberryPi3)
 		}
-
-		red = gpios![.P18]!		// GPIO_GEN0
-		yellow = gpios![.P17]!	// p18
-		green = gpios![.P23]!	// p23
 		
-		red!.direction = .OUT
-		yellow!.direction = .OUT
-		green!.direction = .OUT
-
-		red!.value = off
-		yellow!.value = off
-		green!.value = off
+		red = gpios[.P18]!		// GPIO_GEN0
+		yellow = gpios[.P17]!	// p18
+		green = gpios[.P23]!	// p23
+		
 	}
-
+	
 	func delay() {
 		_ = usleep(300000)
 	}
 	
-	func blink() {
+	public func blink() {
 
 		guard !stopLoop else { return }
+		red.direction = .OUT
+		yellow.direction = .OUT
+		green.direction = .OUT
+		
+		red.value = off
+		yellow.value = off
+		green.value = off
+
 		stopLoop = true
 		repeat {
-			red!.value = on
-			yellow!.value = off
-			green!.value = off
+			red.value = on
+			yellow.value = off
+			green.value = off
 			delay()
-			red!.value = off
-			yellow!.value = on
-			green!.value = off
+			red.value = off
+			yellow.value = on
+			green.value = off
 			delay()
 //			red.value = off
 //			yellow.value = off
 //			green.value = on
 //			delay()
 		} while stopLoop
-		red!.value = off
-		yellow!.value = off
-		green!.value = off
+		red.value = off
+		yellow.value = off
+		green.value = off
 	}
 	
 	func test() {
 		
-		red!.value = on
+		red.value = on
 		delay()
-		red!.value = off
+		red.value = off
 	}
 
-//}
+}
 
 #else
 	

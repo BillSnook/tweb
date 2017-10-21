@@ -12,7 +12,6 @@
 	import Darwin.C
 #endif
 
-
 class Handler {
 	
 	public func processMsg( _ message: String ) -> Bool {
@@ -24,13 +23,13 @@ class Handler {
 			endLoop = true	// Ends loop that sourced this command - network or console thread
 		case "test":
 #if	os(Linux)
-			test()
+			hardware.test()
 #endif
 		case "blink":
 			startThread( threadType: .blinkThread )
 		case "blinkstop":
 #if	os(Linux)
-			stopLoop = false
+			hardware.stopLoop = false
 #endif
 		default:
 			endLoop = false

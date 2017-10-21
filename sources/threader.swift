@@ -78,7 +78,6 @@ func serverThread( sockfd: Int32, address: UInt32 ) {
 	
 //	printx("  Thread serverThread started for socketfd \(sockfd)\n")
 	
-	let messageHandler = Handler()
 	var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
 	var stopLoop = false
 	
@@ -144,7 +143,7 @@ func runThreads() {
 		consumer?.consume()
 	case .blinkThread:
 #if	os(Linux)
-		blink()
+		hardware.blink()
 #endif
 	case .testThread:
 		let testerThread = ThreadTester()
