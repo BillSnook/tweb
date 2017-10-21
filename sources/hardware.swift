@@ -57,7 +57,6 @@ class Hardware {
 	
 	public func blink() {
 
-		printx("\nblink" )
 		guard !stopLoop else { return }
 		stopLoop = true
 		repeat {
