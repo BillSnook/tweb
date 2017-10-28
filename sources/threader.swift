@@ -182,8 +182,8 @@ func createThread() {
 
 	// No context can be captured in 3rd param because it is a C routine and knows not swift contexts
 #if	os(Linux)
-	guard let tPointee = t! as pthread_t else { print( "\nPointee nil\n" ); return }
-	pthread_create(&tPointee,
+	guard t != nil else { print( "\nPointee nil\n" ); return }
+	pthread_create(&t!,
 	               attrPtr,
 	               { _ in runThreads(); return nil },
 	               nil)
