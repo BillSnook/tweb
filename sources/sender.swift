@@ -70,22 +70,24 @@ class Sender {
 	}
 	
 
-	func doSnd( to: String, at: UInt16 ) {
+	func doSnd( to: String, at: UInt16 ) -> Bool {
 	
 		guard let targetAddr = lookup( name: to ) else {
 //			printx( "\nLookup failed for \(to)" )
-			return
+			return false
 		}
 //		printx( "\nFound target address: \(targetAddr!)" )
 
 		let result = doConnect( targetAddr, port: at )
 		guard result >= 0 else {
 			printe( "\nConnect failed" )
-			return
+			return false
 		}
 		printx( "\nConnecting on port \(at) to host \(to) (\(targetAddr))\n" )
 		
 		startThread( threadType: .senderThread )
+		
+		return true
 	}
 
 	func doConnect( _ addr: String, port: UInt16 ) -> Int32 {

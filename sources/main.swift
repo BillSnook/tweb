@@ -49,7 +49,7 @@ if CommandLine.arguments.count == 1 {	// Just the program name is entered
 			portNumber = UInt16(atoi( CommandLine.arguments[2] ))
 		}
 		listener = Listen()
-		listener?.doRcv( on: portNumber )
+		mainLoop = listener!.doRcv( on: portNumber )
 	} else if CommandLine.arguments[1] == "sender" {
 		if CommandLine.arguments.count > 4 {
 			printx( "USAGE: tweb sender [hostName (=\(hostAddress))]] [portNumber (=\(portNumber))]" )
@@ -63,7 +63,7 @@ if CommandLine.arguments.count == 1 {	// Just the program name is entered
 		}
 		let localHostAddress = hostAddress + ".local"
 		sender = Sender()
-		sender?.doSnd( to: localHostAddress, at: portNumber )
+		mainLoop = sender!.doSnd( to: localHostAddress, at: portNumber )
 	} else if CommandLine.arguments[1] == "tester" {
 		printx( "\n  In Test Mode, starting test thread now\n" )
 		startThread( threadType: .testThread )

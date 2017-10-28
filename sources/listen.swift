@@ -24,18 +24,19 @@ class Listen {
 #endif
 	
 
-	func doRcv( on port: UInt16 ) {
+	func doRcv( on port: UInt16 ) -> Bool {
 		let bindResult = getConnector( on: port )
 		if bindResult < 0 {
 			printe( "\nFailed binding to port \(port)" )
-			return
+			return false
 		}
 		printx( "\nBound to local port \(port), start listening" )
 		
 		startThread(threadType: .inputThread )
 		
 		startThread( threadType: .listenThread, socket: socketfd, address: 0 )
-//		doListen()
+
+		return true
 	}
 	
 	
