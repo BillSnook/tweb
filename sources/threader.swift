@@ -84,7 +84,7 @@ func serverThread( sockfd: Int32, address: UInt32 ) {
 	var inaddr = in_addr( s_addr: address )
 	inet_ntop(AF_INET, &inaddr, &addrCString, UInt32(INET_ADDRSTRLEN))
 	let addrString = String( cString: addrCString )
-	printx( "\(sockfd)] Connection opened from \(addrString)" )
+	printx( "\(sockfd)] Connection opened by \(addrString)" )
 	
 	while !stopLoop  {
 		bzero( &readBuffer, 256 )
