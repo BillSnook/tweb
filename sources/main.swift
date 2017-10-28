@@ -72,11 +72,8 @@ if CommandLine.arguments.count == 1 {	// Just the program name is entered
 	var success = false
 	repeat {
 		usleep( 10000 )
-		success = false
 		pthread_mutex_lock( &threadControlMutex )
-		if threadArray.count > 0 {
-			success = true
-		}
+		success = threadArray.count > 0
 		pthread_mutex_unlock( &threadControlMutex )
 		if success {
 			createThread()
