@@ -83,6 +83,6 @@ if CommandLine.arguments.count == 1 {	// Just the program name is entered
 		}
 	} while mainLoop
 	freeThreads()
-	printx( "Threads remaining: \(threadCount)  --  Main thread exiting" )
+//	printx( "Threads remaining: \(threadCount)  --  Main thread exiting" )
 	pthread_exit( nil )
 }

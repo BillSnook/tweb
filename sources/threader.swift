@@ -77,7 +77,6 @@ class ThreadTester {
 func serverThread( sockfd: Int32, address: UInt32 ) {
 	
 //	printx("  Thread serverThread started for socketfd \(sockfd)\n")
-	
 	var readBuffer: [CChar] = [CChar](repeating: 0, count: 256)
 	var stopLoop = false
 	
@@ -183,7 +182,8 @@ func createThread() {
 
 	// No context can be captured in 3rd param because it is a C routine and knows not swift contexts
 #if	os(Linux)
-	pthread_create(&t!,
+	guard let tPointee = t as! pthread_t else { print( "\nPointee nil\n" ); return }
+	pthread_create(&tPointee,
 	               attrPtr,
 	               { _ in runThreads(); return nil },
 	               nil)
