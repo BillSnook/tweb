@@ -163,7 +163,11 @@ func startThread( threadType: ThreadType, socket: Int32 = 0, address: UInt32 = 0
 
 func createThread() {
 	
-	let threadPtr = UnsafeMutablePointer<pthread_t>.allocate(capacity: 1)
+	#if	os(Linux)
+		let threadPtr = UnsafeMutablePointer<pthread_t>.allocate(capacity: 1)
+	#else	// Darwin - MacOS    iOS?
+		let threadPtr = UnsafeMutablePointer<pthread_t?>.allocate(capacity: 1)
+	#endif
 //	if threadPtr == nil {
 //		printe( "\nUnable to create threadPointer for \(threadType.rawValue)\n" )
 //		return
