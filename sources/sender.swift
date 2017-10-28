@@ -127,7 +127,7 @@ class Sender {
 			} else if sndLen == 0 {
 				printw( "\n\nConnection closed by server when writing" )
 				stopLoop = true
-				mainLoop = true
+				mainLoop = false
 			}
 
 			bzero( &readBuffer, 256 )
@@ -138,7 +138,7 @@ class Sender {
 			} else if rcvLen == 0 {
 				printw( "\nConnection closed by server when reading\n" )
 				stopLoop = true
-				mainLoop = true
+				mainLoop = false
 			}
 		}
 		close( socketfd )

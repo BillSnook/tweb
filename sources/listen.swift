@@ -76,7 +76,7 @@ class Listen {
 			if newsockfd < 0 {
 				printe("\n\nERROR accepting, errno: \(errno)")
 				stopLoop = true
-				mainLoop = true
+				mainLoop = false
 			} else {
 				let ipaddr = UInt32(cli_addr.sin_addr.s_addr)
 				startThread( threadType: .serverThread, socket: newsockfd, address: ipaddr )
