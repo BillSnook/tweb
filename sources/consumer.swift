@@ -74,7 +74,7 @@ class Consumer {
 			if result != 0 {
 				printe("\n  Thread consumeThread failed resetting tcsetattr with error: \(result)\n")
 			}
-		}		
-		pthread_exit( nil )
+		}
+		exit( 0 )
 	}
 }
