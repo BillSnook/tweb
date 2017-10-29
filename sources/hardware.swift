@@ -51,6 +51,10 @@ class Hardware {
 		
 	}
 	
+	func blinkStart() {
+		startThread( threadType: .blinkThread )
+	}
+	
 	func delay() {
 		_ = usleep(300000)
 	}
@@ -87,6 +91,56 @@ class Hardware {
 
 }
 
+/*
+	public class WatchPins {
+		
+		let gpios: [GPIOName: GPIO]
+		let gp17: GPIO
+		let gp18: GPIO
+		
+		init() {
+			gpios = SwiftyGPIO.GPIOs(for:.RaspberryPi3)
+			gp17 = gpios[.P17]!
+			gp18 = gpios[.P18]!
+		}
+		
+		func trackPins() {
+			
+			let sender = SendPinState()
+			sender.send( urlString: "http://workpi.local:8080/startup" )
+			
+			gp17.direction = .IN
+			gp18.direction = .IN
+			
+			gp17.onRaising {
+				gpio in
+				printx( "Pin 17 is on" )
+				sender.send( pin: "17", state: "on" )
+			}
+			gp17.onFalling {
+				gpio in
+				printx( "Pin 17 is off" )
+				sender.send( pin: "17", state: "off" )
+			}
+			gp18.onRaising {
+				gpio in
+				printx( "Pin 18 is on" )
+				sender.send( pin: "18", state: "on" )
+			}
+			gp18.onFalling {
+				gpio in
+				printx( "Pin 18 is off" )
+				sender.send( pin: "18", state: "off" )
+			}
+			
+			while true {
+				usleep(100000)
+			}
+		}
+	}
+*/
+
+	
 #else
 	
 //	import Darwin.C

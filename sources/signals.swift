@@ -7,12 +7,6 @@
 
 #if	os(Linux)
 import Glibc
-#else
-import Darwin.C
-#endif
-
-
-#if	os(Linux)
 	
 enum Signal:Int32 {
 	case HUP    = 1
@@ -41,7 +35,7 @@ func trap( signum: Signal, action: SigactionHandler ) {
 // Entry, init function to setup trap handlers for common, expected signals
 func setupSignalHandling() {
 	
-	// This method works
+	// This method works with block
 	trap( signum: .INT ) { signal in
 		print("\nReceived INT signal, exiting now.\n")
 		// Time for all threads to stop and cleanup, then exit
@@ -49,12 +43,12 @@ func setupSignalHandling() {
 		consumer?.stopInput()
 		sender?.stopLoop = true
 		listener?.stopLoop = true
-		mainLoop = true
+		mainLoop = false
 		
-		exit(0)		// ? May not want to exit just yet ?
+//		exit(0)		// ? May not want to exit just yet ?
 	}
 	
-	// And this works of course
+	// And this works of course, with handler
 	trap( signum: .HUP, action: hupHandler )
 }
 	

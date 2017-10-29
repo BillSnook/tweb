@@ -46,7 +46,7 @@ class Sender {
 		let status = getaddrinfo( name, "5555", &hints, &servinfo)
 		guard status == 0 else {
 			let stat = strerror( errno )
-			printe( "\ngetaddrinfo failed for \(name), status: \(status), error: \(String(cString: stat!))" )
+			printe( "\ngetaddrinfo failed for \(name), status: \(status), error: \(String(cString: stat!))\n" )
 			return nil
 		}
 
