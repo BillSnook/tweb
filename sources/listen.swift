@@ -82,6 +82,7 @@ class Listen {
 				startThread( threadType: .serverThread, socket: newsockfd, address: ipaddr )
 			}
 		}
-		exit( 0 )
+		close( socketfd )
+		pthread_exit( nil )
 	}
 }

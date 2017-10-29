@@ -142,6 +142,7 @@ class Sender {
 			}
 		}
 		close( socketfd )
+		pthread_exit( nil )
 	}
 }
 
