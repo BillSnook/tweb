@@ -45,7 +45,7 @@ func setupSignalHandling() {
 		listener?.stopLoop = true
 		mainLoop = false
 		
-//		exit(0)		// ? May not want to exit just yet ?
+		exit(0)		// ? May not want to exit just yet ?
 	}
 	
 	// And this works of course, with handler

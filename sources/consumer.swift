@@ -74,11 +74,7 @@ class Consumer {
 			if result != 0 {
 				printe("\n  Thread consumeThread failed resetting tcsetattr with error: \(result)\n")
 			}
-		}
-		
-#if	os(Linux)
-	close( stdin )
-#endif
-//		exit(0)
+		}		
+		exit(0)
 	}
 }
