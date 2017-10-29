@@ -27,7 +27,7 @@ class Handler {
 #endif
 		case "blink":
 #if	os(Linux)
-			hardware.startBlink()
+			hardware.blinkStart()
 #endif
 		case "blinkstop":
 #if	os(Linux)
