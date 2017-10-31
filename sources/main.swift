@@ -67,10 +67,13 @@ if CommandLine.arguments.count == 1 {	// Just the program name is entered
 	} else if CommandLine.arguments[1] == "tester" {
 		printx( "\n  In Test Mode, starting test thread now\n" )
 		startThread( threadType: .testThread )
+	} else {
+		printx( "USAGE: tweb [listen [portNumber (=\(portNumber))] | sender [hostName (=\(hostAddress))] [portNumber (=\(portNumber))]]" )
+		mainLoop = false
 	}
 	
 	var success = false
-	repeat {
+	while mainLoop {
 		usleep( 10000 )
 		pthread_mutex_lock( &threadControlMutex )
 		success = threadArray.count > 0
@@ -78,7 +81,7 @@ if CommandLine.arguments.count == 1 {	// Just the program name is entered
 		if success {
 			createThread()
 		}
-	} while mainLoop
+	}
 	freeThreads()
 //	printx( "Threads remaining: \(threadCount)  --  Main thread exiting" )
 	pthread_exit( nil )
