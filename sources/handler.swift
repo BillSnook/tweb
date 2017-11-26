@@ -41,9 +41,14 @@ class Handler {
 #if    os(Linux)
             hardware.colorLED( .offLED )
 #endif
-		case "blinkstop":
-#if	os(Linux)
-			hardware.stopLoop = false
+        case "blinkstop":
+#if    os(Linux)
+            hardware.stopLoop = false
+#endif
+        case "stop":
+#if    os(Linux)
+            hardware.stopLoop = false
+            hardware.clearLEDs()
 #endif
 		default:
 			endLoop = false

@@ -54,10 +54,7 @@ class Hardware {
 		yellow.direction = .OUT
 		green.direction = .OUT
 		
-		red.value = ledState.offLED.rawValue
-		yellow.value = ledState.offLED.rawValue
-		green.value = ledState.offLED.rawValue
-		
+		clearLEDs()
 	}
 	
 	func blinkStart() {
@@ -86,6 +83,7 @@ class Hardware {
 //			green.value = ledState.onLED.rawValue
 //			delay()
 		} while stopLoop
+        clearLEDs()
 		red.value = ledState.offLED.rawValue
 		yellow.value = ledState.offLED.rawValue
 		green.value = ledState.offLED.rawValue
@@ -96,10 +94,16 @@ class Hardware {
 		red.value = ledState.onLED.rawValue
 		delay()
 		red.value = ledState.offLED.rawValue
-	}
-
+    }
+    
+    func clearLEDs() {
+        red.value = ledState.offLED.rawValue
+        yellow.value = ledState.offLED.rawValue
+        green.value = ledState.offLED.rawValue
+    }
+    
     func colorLED( _ state: ledState, _ colorOfLED: ledColor = .redLED ) {
-        
+
         var pin: GPIO
         switch colorOfLED {
         case .redLED:
