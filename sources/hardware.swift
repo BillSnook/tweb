@@ -54,9 +54,9 @@ class Hardware {
 		yellow.direction = .OUT
 		green.direction = .OUT
 		
-		red.value = off
-		yellow.value = off
-		green.value = off
+		red.value = ledState.offLED.rawValue
+		yellow.value = ledState.offLED.rawValue
+		green.value = ledState.offLED.rawValue
 		
 	}
 	
@@ -73,29 +73,29 @@ class Hardware {
 		guard !stopLoop else { return }
 		stopLoop = true
 		repeat {
-			red.value = on
-			yellow.value = off
-			green.value = off
+			red.value = ledState.onLED.rawValue
+			yellow.value = ledState.offLED.rawValue
+			green.value = ledState.offLED.rawValue
 			delay()
-			red.value = off
-			yellow.value = on
-			green.value = off
+			red.value = ledState.offLED.rawValue
+			yellow.value = ledState.onLED.rawValue
+			green.value = ledState.offLED.rawValue
 			delay()
-//			red.value = off
-//			yellow.value = off
-//			green.value = on
+//			red.value = ledState.offLED.rawValue
+//			yellow.value = ledState.offLED.rawValue
+//			green.value = ledState.onLED.rawValue
 //			delay()
 		} while stopLoop
-		red.value = off
-		yellow.value = off
-		green.value = off
+		red.value = ledState.offLED.rawValue
+		yellow.value = ledState.offLED.rawValue
+		green.value = ledState.offLED.rawValue
 	}
 	
 	func test() {
 		
-		red.value = on
+		red.value = ledState.onLED.rawValue
 		delay()
-		red.value = off
+		red.value = ledState.offLED.rawValue
 	}
 
     func colorLED( _ state: ledState, _ colorOfLED: ledColor = .redLED ) {
@@ -108,9 +108,7 @@ class Hardware {
             pin = self.yellow
         case .greenLED:
             pin = self.green
-        default:
-            pin = self.red
-        }
+       }
         pin.value = state.rawValue
     }
 
