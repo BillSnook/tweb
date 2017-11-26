@@ -103,11 +103,11 @@ class Hardware {
         var pin: GPIO
         switch colorOfLED {
         case .redLED:
-            pin = redGPIO
+            pin = red
         case .yellowLED:
-            pin = yellowGPIO
+            pin = yellow
         case .greenLED:
-            pin = greenGPIO
+            pin = green
         default:
             state = redGPIO
         }
