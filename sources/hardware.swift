@@ -18,10 +18,10 @@ enum ledState: int {
     case off    = 1
 }
 
-enum ledColor: int {
-    case redLED     = 0
-    case yellowLED  = 1
-    case greenLED   = 2
+enum ledColor {
+    case redLED
+    case yellowLED
+    case greenLED
 }
 
 class Hardware {
@@ -95,7 +95,7 @@ class Hardware {
 		red.value = off
 	}
 
-    func colorLED( _ state: ledState, _ color: ledColor = .red ) {
+    func colorLED( _ state: ledState, _ color: ledColor = .redLED ) {
         
         var color: GPIO
         switch ledColor {
