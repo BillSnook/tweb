@@ -39,7 +39,7 @@ class Handler {
 #endif
         case "colorStop":
 #if    os(Linux)
-            hardware.colorLED( .offLED )
+            hardware.clearLEDs()
 #endif
         case "blinkstop":
 #if    os(Linux)

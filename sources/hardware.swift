@@ -57,15 +57,15 @@ class Hardware {
 		clearLEDs()
 	}
 	
+    func delay() {
+        _ = usleep(300000)
+    }
+    
 	func blinkStart() {
         print( "blinkStart with stopLoop = \(stopLoop)" )
 		startThread( threadType: .blinkThread )
 	}
 	
-	func delay() {
-		_ = usleep(300000)
-    }
-    
     public func blinkStop() {
         print( "blinkStop with stopLoop = \(stopLoop)" )
         if stopLoop {
@@ -77,7 +77,7 @@ class Hardware {
     
     public func blink() {
 
-        print( "blink with stopLoop = \(stopLoop)" )
+//        print( "blink with stopLoop = \(stopLoop)" )
         guard stopLoop else { return }
         stopLoop = false
 		while !stopLoop {
@@ -110,7 +110,7 @@ class Hardware {
         green.value = ledState.offLED.rawValue
     }
     
-    func colorLED( _ state: ledState, _ colorOfLED: ledColor = .redLED ) {
+    func colorLED( _ state: ledState, _ colorOfLED: ledColor ) {
 
         var pin: GPIO
         switch colorOfLED {
