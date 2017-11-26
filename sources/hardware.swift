@@ -58,6 +58,7 @@ class Hardware {
 	}
 	
 	func blinkStart() {
+        print( "blinkStart with stopLoop = \(stopLoop)" )
 		startThread( threadType: .blinkThread )
 	}
 	
@@ -66,6 +67,7 @@ class Hardware {
     }
     
     public func blinkStop() {
+        print( "blinkStop with stopLoop = \(stopLoop)" )
         if stopLoop {
             clearLEDs()
         } else {
@@ -75,6 +77,7 @@ class Hardware {
     
     public func blink() {
 
+        print( "blink with stopLoop = \(stopLoop)" )
         guard !stopLoop else { return }
 		while !stopLoop {
 			red.value = ledState.onLED.rawValue
