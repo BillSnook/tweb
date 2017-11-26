@@ -100,19 +100,18 @@ class Hardware {
 
     func colorLED( _ state: ledState, _ colorOfLED: ledColor = .redLED ) {
         
-        var color: GPIO
-        
+        var pin: GPIO
         switch colorOfLED {
         case .redLED:
-            state = redGPIO
+            pin = redGPIO
         case .yellowLED:
-            state = yellowGPIO
+            pin = yellowGPIO
         case .greenLED:
-            state = greenGPIO
+            pin = greenGPIO
         default:
             state = redGPIO
         }
-        color.value = state.rawValue
+        pin.value = state.rawValue
     }
 
 }
