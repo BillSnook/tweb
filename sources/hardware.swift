@@ -68,8 +68,7 @@ class Hardware {
 	public func blink() {
 
 		guard !stopLoop else { return }
-		stopLoop = true
-		repeat {
+		while !stopLoop {
 			red.value = ledState.onLED.rawValue
 			yellow.value = ledState.offLED.rawValue
 			green.value = ledState.offLED.rawValue
@@ -82,7 +81,8 @@ class Hardware {
 //			yellow.value = ledState.offLED.rawValue
 //			green.value = ledState.onLED.rawValue
 //			delay()
-		} while stopLoop
+		}
+        stopLoop = false
         clearLEDs()
 	}
 	

@@ -43,6 +43,7 @@ func setupSignalHandling() {
 		consumer?.stopInput()
 		sender?.stopLoop = true
 		listener?.stopLoop = true
+        hardware?.stopLoop = true
 		mainLoop = false
 		
 		exit(0)		// ? May not want to exit just yet ?
