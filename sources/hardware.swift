@@ -84,9 +84,6 @@ class Hardware {
 //			delay()
 		} while stopLoop
         clearLEDs()
-		red.value = ledState.offLED.rawValue
-		yellow.value = ledState.offLED.rawValue
-		green.value = ledState.offLED.rawValue
 	}
 	
 	func test() {
