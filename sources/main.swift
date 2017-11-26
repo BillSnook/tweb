@@ -34,6 +34,8 @@ let messageHandler = Handler()  //
 level = .verbose
 //printx always prints unless none
 
+printx( "\ntweb socket communication program, v1.0\n\n" )
+
 if CommandLine.arguments.count == 1 {	// Just the program name is entered
 	printx( "USAGE: tweb [listen [portNumber (=\(portNumber))] | sender [hostName (=\(hostAddress))] [portNumber (=\(portNumber))]]" )
 	exit(0)
