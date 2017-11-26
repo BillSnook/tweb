@@ -43,11 +43,11 @@ class Handler {
 #endif
         case "blinkstop":
 #if    os(Linux)
-            hardware.stopLoop = false
+            hardware.stopLoop = true
 #endif
         case "stop":
 #if    os(Linux)
-            hardware.stopLoop = false
+            hardware.stopLoop = true
             hardware.clearLEDs()
 #endif
 		default:
