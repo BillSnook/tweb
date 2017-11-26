@@ -13,10 +13,8 @@ import Glibc
 import SwiftyGPIO
 
 
-enum ledState: int {
-    case on     = 0
-    case off    = 1
-}
+let on     = 0
+let off    = 1
 
 enum ledColor {
     case redLED
