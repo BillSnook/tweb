@@ -58,16 +58,24 @@ class Hardware {
 	}
 	
 	func blinkStart() {
+        guard stopLoop else { return }
 		startThread( threadType: .blinkThread )
 	}
 	
 	func delay() {
 		_ = usleep(300000)
-	}
-	
-	public func blink() {
+    }
+    
+    public func blinkStop() {
+        if stopLoop {
+            clearLEDs()
+        } else {
+            stopLoop = true
+        }
+    }
+    
+    public func blink() {
 
-		guard !stopLoop else { return }
 		while !stopLoop {
 			red.value = ledState.onLED.rawValue
 			yellow.value = ledState.offLED.rawValue

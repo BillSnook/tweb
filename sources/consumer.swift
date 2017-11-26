@@ -14,7 +14,7 @@
 class Consumer {
 	
 	var oflags = termios()
-	var stopLoop = true
+	var stopLoop = false
 
 	func consume() {
 		
