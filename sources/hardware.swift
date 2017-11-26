@@ -78,7 +78,8 @@ class Hardware {
     public func blink() {
 
         print( "blink with stopLoop = \(stopLoop)" )
-        guard !stopLoop else { return }
+        guard stopLoop else { return }
+        stopLoop = false
 		while !stopLoop {
 			red.value = ledState.onLED.rawValue
 			yellow.value = ledState.offLED.rawValue
