@@ -25,9 +25,21 @@ class Handler {
 #if	os(Linux)
 			hardware.test()
 #endif
-		case "blink":
-#if	os(Linux)
-			hardware.blinkStart()
+        case "blink":
+#if    os(Linux)
+            hardware.blink()
+#endif
+        case "red":
+#if    os(Linux)
+            hardware.colorLED( .on, .red )
+#endif
+        case "yellow":
+#if    os(Linux)
+            hardware.colorLED( .on, .yellow )
+#endif
+        case "colorStop":
+#if    os(Linux)
+            hardware.colorLED( .off )
 #endif
 		case "blinkstop":
 #if	os(Linux)

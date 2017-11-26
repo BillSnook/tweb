@@ -13,10 +13,16 @@ import Glibc
 import SwiftyGPIO
 
 
+enum ledState: int {
+    case on     = 0
+    case off    = 1
+}
 
-let off = 0
-let on  = 1
-
+enum ledColor: int {
+    case redLED     = 0
+    case yellowLED  = 1
+    case greenLED   = 2
+}
 
 class Hardware {
 	
@@ -88,6 +94,23 @@ class Hardware {
 		delay()
 		red.value = off
 	}
+
+    func colorLED( _ state: ledState, _ color: ledColor = .red ) {
+        
+        var color: GPIO
+        switch ledColor {
+        case .redLED:
+            state = redGPIO
+        case .yellowLED:
+            state = yellowGPIO
+        case .greenLED:
+            state = greenGPIO
+        default:
+            state = redGPIO
+        }
+        color.value = state.rawValue
+    }
+    
 
 }
 
