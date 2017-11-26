@@ -31,15 +31,15 @@ class Handler {
 #endif
         case "red":
 #if    os(Linux)
-            hardware.colorLED( .on, .redLED )
+            hardware.colorLED( .onLED, .redLED )
 #endif
         case "yellow":
 #if    os(Linux)
-            hardware.colorLED( .on, .yellowLED )
+            hardware.colorLED( .onLED, .yellowLED )
 #endif
         case "colorStop":
 #if    os(Linux)
-            hardware.colorLED( .off )
+            hardware.colorLED( .offLED )
 #endif
 		case "blinkstop":
 #if	os(Linux)

@@ -16,12 +16,17 @@ import SwiftyGPIO
 let on     = 0
 let off    = 1
 
+enum ledState: Int {
+    case onLED  = 0
+    case offLED = 1
+}
+
 enum ledColor {
     case redLED
     case yellowLED
     case greenLED
 }
-
+    
 class Hardware {
 	
 	var gpios: [GPIOName: GPIO]
@@ -108,7 +113,6 @@ class Hardware {
         }
         color.value = state.rawValue
     }
-    
 
 }
 
