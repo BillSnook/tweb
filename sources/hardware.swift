@@ -17,8 +17,8 @@ let on     = 0
 let off    = 1
 
 enum ledState: Int {
-    case onLED  = 0
-    case offLED = 1
+    case offLED  = 0
+    case onLED = 1
 }
 
 enum ledColor {
