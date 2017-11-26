@@ -21,11 +21,11 @@ var sender: Sender?
 // Mark - executable code starts here
 
 #if	os(Linux)
-setupSignalHandling()		// Allow proper cleanup on unexpected exit signals (like ^C)
-let hardware = Hardware()
+setupSignalHandling()		    // Allow proper cleanup on unexpected exit signals (like ^C)
+let hardware = Hardware()       // Support SwiftyGPIO library for Raspberry Pi pin functions support
 #endif
 
-let messageHandler = Handler()
+let messageHandler = Handler()  //
 
 
 //printx( "There are \(CommandLine.arguments.count) command line arguments" )

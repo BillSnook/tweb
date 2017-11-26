@@ -29,7 +29,7 @@ listen
 
 consume
   thread - repeat
-    listen on stdin (with echo off) and handle input
+    listen on stdin (with echo off) and handle input from local keyboard
 
 threader
   start thread with runThreads routine
@@ -40,12 +40,12 @@ threader
 handler
   gets called with input received on server threads and from console input
   if the input represents a known command, that command is executed
-  example: blink runs blink subprogram to blink LEDs on device with LEDs attached
+  example: blink runs the blink subprogram to blink LEDs on devices with LEDs attached
   
 hardware
   initialize and operate device GPIO pins to support handler subprograms
 
 signals
-manage signals environment and handle ^C (the interrupt signal) for a better exit
+  manage signals environment and handle ^C (the interrupt signal) for a better exit
 
 

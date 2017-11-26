@@ -62,23 +62,20 @@ class Hardware {
     }
     
 	func blinkStart() {
-        print( "blinkStart with stopLoop = \(stopLoop)" )
+        guard stopLoop else { return }          // Verify blink is not already started
 		startThread( threadType: .blinkThread )
 	}
 	
     public func blinkStop() {
-        print( "blinkStop with stopLoop = \(stopLoop)" )
         if stopLoop {
             clearLEDs()
         } else {
-            stopLoop = true
+            stopLoop = true     // LEDs clear on loop stoppage
         }
     }
     
     public func blink() {
 
-//        print( "blink with stopLoop = \(stopLoop)" )
-        guard stopLoop else { return }
         stopLoop = false
 		while !stopLoop {
 			red.value = ledState.onLED.rawValue

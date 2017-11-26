@@ -41,11 +41,11 @@ class Listen {
 	
 	
 	func getConnector( on port: UInt16 ) -> Int32 {
-		#if	os(Linux)
+#if	os(Linux)
 			var serv_addr_in = sockaddr_in( sin_family: sa_family_t(AF_INET), sin_port: htons(port), sin_addr: in_addr( s_addr: INADDR_ANY ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
-		#else
+#else
 			var serv_addr_in = sockaddr_in( sin_len: __uint8_t(MemoryLayout< sockaddr_in >.size), sin_family: sa_family_t(AF_INET), sin_port: port.bigEndian, sin_addr: in_addr( s_addr: INADDR_ANY ), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0) )
-		#endif
+#endif
 
 		let bindResult = withUnsafeMutablePointer(to: &serv_addr_in) {
 			$0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
