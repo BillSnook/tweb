@@ -40,10 +40,10 @@ func setupSignalHandling() {
 		print("\nReceived INT signal, exiting now.\n")
 		// Time for all threads to stop and cleanup, then exit
 		// Each thread that does not end quickly needs a method to halt itself so we can exit cleanly
+        hardware.stopLoop = true
 		consumer?.stopInput()
 		sender?.stopLoop = true
 		listener?.stopLoop = true
-        hardware?.stopLoop = true
 		mainLoop = false
 		
 		exit(0)		// ? May not want to exit just yet ?
