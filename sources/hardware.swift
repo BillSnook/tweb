@@ -93,7 +93,6 @@ class Hardware {
 //			green.value = ledState.onLED.rawValue
 //			delay()
 		}
-        stopLoop = false
         clearLEDs()
 	}
 	
