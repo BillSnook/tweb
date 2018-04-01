@@ -123,6 +123,10 @@ class Hardware {
 
     func getUPS() {
         
+        let vreg = 2
+        let creg = 4
+        let adrs = 0x36
+        
         let i2cs = SwiftyGPIO.hardwareI2Cs(for:.RaspberryPi2)!
         let i2c = i2cs[1]
         
@@ -144,6 +148,26 @@ class Hardware {
             print()
         }
         print("\n")
+        
+        // Reading register 0 of the device with address 0x68
+        //print(i2c.readByte(0x68, command: 0))
+        
+        // Reading register 1 of the device with address 0x68
+        //print(i2c.readByte(0x68, command: 1))
+        
+        // Writing register 0 of the device with address 0x68
+        //i2c.writeByte(0x68, command: 0, value: 0)
+        
+        // Reading again register 0 of the device with address 0x68
+        //print(i2c.readByte(0x68, command: 0))
+
+        let v1 = i2c.readWord( adrs, vreg )
+        printf("v1: \(v1) - \( (v1 * 78.125) / 1000000.0 )V straight");
+        let lo = ( v1 >> 8 ) | 0xFF
+        let hi = v1 | 0xFF
+        let v2 = ( hi << 8 ) | lo
+        printf("v2: \(v2) - \( (v2 * 78.125) / 1000000.0 )V switched");
+
 
     }
 }
