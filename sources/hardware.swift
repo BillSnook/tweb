@@ -161,11 +161,12 @@ class Hardware {
         // Reading again register 0 of the device with address 0x68
         //print(i2c.readByte(0x68, command: 0))
 
-        let v1 = i2c.readWord( adrs, command: vreg )
+        let v1: UInt16 = i2c.readWord( adrs, command: vreg )
         print("v1: \(v1) - \( (Float(v1) * 78.125) / 1000000.0 )V straight");
-        let lo = ( v1 >> 8 ) | 0xFF
-        let hi = v1 | 0xFF
-        let v2 = ( hi << 8 ) | lo
+        let lo = ( v1 & 0xFF00 ) >> 8
+        let hi = v1 & 0xFF
+        print( "hi: \(hi), lo: \(lo)" )
+        let v2: UInt16 = ( hi << 8 ) | lo
         print("v2: \(v2) - \( (Float(v2) * 78.125) / 1000000.0 )V switched");
 
 
