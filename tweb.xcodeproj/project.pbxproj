@@ -89,7 +89,7 @@
 				OBJ_21 /* UART.swift */,
 			);
 			name = "SwiftyGPIO 0.9.8";
-			path = ".build/checkouts/SwiftyGPIO.git-6330852604069455572/Sources";
+			path = ../SwiftyGPIO/Sources;
 			sourceTree = SOURCE_ROOT;
 		};
 		OBJ_22 /* Products */ = {

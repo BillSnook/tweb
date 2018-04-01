@@ -161,7 +161,7 @@ class Hardware {
         // Reading again register 0 of the device with address 0x68
         //print(i2c.readByte(0x68, command: 0))
 
-        let v1 = i2c.readWord( adrs, vreg )
+        let v1 = i2c.readWord( adrs, command: vreg )
         printf("v1: \(v1) - \( (v1 * 78.125) / 1000000.0 )V straight");
         let lo = ( v1 >> 8 ) | 0xFF
         let hi = v1 | 0xFF
