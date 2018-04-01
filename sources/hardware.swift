@@ -163,13 +163,19 @@ class Hardware {
 
         let v1: UInt16 = i2c.readWord( adrs, command: vreg )
         print("v1: \(v1) - \( (Float(v1) * 78.125) / 1000000.0 )V straight");
-        let lo = ( v1 & 0xFF00 ) >> 8
-        let hi = v1 & 0xFF
+        swapBytes( v1 )
+        print("v2: \(v1) - \( (Float(v1) * 78.125) / 1000000.0 )V switched");
+
+
+    }
+    
+    func swapBytes( _ word: inout UInt16 ) {
+        
+        let lo = ( word >> 8 ) & 0xFF
+        let hi = ( word & 0xFF ) << 8
         print( "hi: \(hi), lo: \(lo)" )
-        let v2: UInt16 = ( hi << 8 ) | lo
-        print("v2: \(v2) - \( (Float(v2) * 78.125) / 1000000.0 )V switched");
-
-
+        word = hi | lo
+        print( "word: \(word)")
     }
 }
 
