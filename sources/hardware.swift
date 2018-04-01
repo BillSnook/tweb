@@ -162,11 +162,11 @@ class Hardware {
         //print(i2c.readByte(0x68, command: 0))
 
         let v1 = i2c.readWord( adrs, command: vreg )
-        printf("v1: \(v1) - \( (Float(v1) * 78.125) / 1000000.0 )V straight");
+        print("v1: \(v1) - \( (Float(v1) * 78.125) / 1000000.0 )V straight");
         let lo = ( v1 >> 8 ) | 0xFF
         let hi = v1 | 0xFF
         let v2 = ( hi << 8 ) | lo
-        printf("v2: \(v2) - \( (Float(v2) * 78.125) / 1000000.0 )V switched");
+        print("v2: \(v2) - \( (Float(v2) * 78.125) / 1000000.0 )V switched");
 
 
     }
