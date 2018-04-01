@@ -123,9 +123,9 @@ class Hardware {
 
     func getUPS() {
         
-        let vreg = 2
-        let creg = 4
-        let adrs = 0x36
+        let vreg: UInt8 = 2
+        let creg: UInt8 = 4
+        let adrs: Int = 0x36
         
         let i2cs = SwiftyGPIO.hardwareI2Cs(for:.RaspberryPi2)!
         let i2c = i2cs[1]
