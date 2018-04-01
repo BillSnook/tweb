@@ -162,10 +162,11 @@ class Hardware {
         //print(i2c.readByte(0x68, command: 0))
 
         let v1: UInt16 = i2c.readWord( adrs, command: vreg )
-        print("v1: \(v1) - \( (Float(v1) * 78.125) / 1000000.0 )V straight");
-        swapBytes( v1 )
-        print("v2: \(v1) - \( (Float(v1) * 78.125) / 1000000.0 )V switched");
-
+        print("v1: \(v1) - \( (Float(v1) * 78.125) / 1000000.0 )V");
+        
+        let c1: UInt16 = i2c.readWord( adrs, command: creg )
+        print("v1: \(v1) - \( Float(v1) / 256.0 )%");
+        
 
     }
     
