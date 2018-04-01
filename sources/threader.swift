@@ -65,10 +65,17 @@ class ThreadTester {
 	// Test Thread
 	func testThread() {
 		
-		printx("  Thread ThreadTester.testThread() started\n")
-		printx("  Thread ThreadTester.testThread() stopped\n")
-		usleep( 2000000 )		// Let print text clear buffers, before exiting
-	}
+//        printx("  Thread ThreadTester.testThread() started\n")
+//        printx("  Thread ThreadTester.testThread() stopped\n")
+//        usleep( 2000000 )        // Let print text clear buffers, before exiting
+
+        printx("  Thread getUPS()\n")
+#if    os(Linux)
+        hardware.getUPS()
+#endif
+
+    
+    }
 	
 }
 
