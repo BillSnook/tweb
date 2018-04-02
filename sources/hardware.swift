@@ -130,24 +130,24 @@ class Hardware {
         let i2cs = SwiftyGPIO.hardwareI2Cs(for:.RaspberryPi2)!
         let i2c = i2cs[1]
         
-        print("Detecting devices on the I2C bus:\n")
-        outer: for i in 0x0...0x7 {
-            if i == 0 {
-                print("    0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f")
-            }
-            for j in 0x0...0xf {
-                if j == 0 {
-                    print(String(format:"%x0",i), terminator: "")
-                }
-                // Test within allowed range 0x3...0x77
-                if (i==0) && (j<3) {print("   ", terminator: "");continue}
-                if (i>=7) && (j>=7) {break outer}
-                
-                print(" \(i2c.isReachable(i<<4 + j) ? " x" : " ." )", terminator: "")
-            }
-            print()
-        }
-        print("\n")
+//        print("Detecting devices on the I2C bus:\n")
+//        outer: for i in 0x0...0x7 {
+//            if i == 0 {
+//                print("    0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f")
+//            }
+//            for j in 0x0...0xf {
+//                if j == 0 {
+//                    print(String(format:"%x0",i), terminator: "")
+//                }
+//                // Test within allowed range 0x3...0x77
+//                if (i==0) && (j<3) {print("   ", terminator: "");continue}
+//                if (i>=7) && (j>=7) {break outer}
+//
+//                print(" \(i2c.isReachable(i<<4 + j) ? " x" : " ." )", terminator: "")
+//            }
+//            print()
+//        }
+//        print("\n")
         
         // Reading register 0 of the device with address 0x68
         //print(i2c.readByte(0x68, command: 0))
@@ -161,11 +161,15 @@ class Hardware {
         // Reading again register 0 of the device with address 0x68
         //print(i2c.readByte(0x68, command: 0))
 
-        let v1: UInt16 = i2c.readWord( adrs, command: vreg )
-        print("v1: \(v1) - \( (Float(v1) * 78.125) / 1000000.0 )V");
-        
-        let c1: UInt16 = i2c.readWord( adrs, command: creg )
-        print("c1: \(c1) - \( Float(c1) / 256.0 )%");
+        var v1: UInt16
+        var c1: UInt16
+        for _ in 0..10 {
+            v1 = i2c.readWord( adrs, command: vreg )
+            print("v1: \(v1) - \( (Float(v1) * 78.125) / 1000000.0 )V");
+            
+            c1 = i2c.readWord( adrs, command: creg )
+            print("c1: \(c1) - \( Float(c1) / 256.0 )%");
+        }
         
 
     }
@@ -173,51 +177,6 @@ class Hardware {
 }
 
 
-/*
-void Motor::getUPS() {
-    
-    int vOpt = 1, cOpt = 1;
-    unsigned char buf[BUFSIZE] = {0};
-    
-    int busfd;
-    if ((busfd = open(DEV, O_RDWR)) < 0) {
-        printf("can't open %s (running as root?)\n",DEV);
-        return;
-    }
-    
-    int ret = ioctl(busfd, I2C_SLAVE, ADRS);
-    if (ret < 0) {
-        printf("i2c device initialisation failed\n");
-        return;
-    }
-    
-    readReg(busfd, VREG, buf, 2);
-    
-    int hi,lo;
-    hi = buf[0];
-    lo = buf[1];
-    int v = (hi << 8)+lo;
-    if (vOpt) {
-        fprintf( stderr, "%fV ",(((float)v)* 78.125 / 1000000.0));
-    }
-    
-    readReg(busfd, CREG, buf, 2);
-    hi = buf[0];
-    lo = buf[1];
-    v = (hi << 8)+lo;
-    if (!cOpt && !vOpt) {
-        fprintf( stderr, "%i",(int)(((float)v) / 256.0));
-    }
-    
-    if (cOpt) {
-        fprintf( stderr, "%f%%",(((float)v) / 256.0));
-    }
-    
-    fprintf( stderr, "\n");
-    
-    close(busfd);
-}
-*/
 
 /*
 	public class WatchPins {

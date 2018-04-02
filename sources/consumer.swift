@@ -31,7 +31,7 @@ class Consumer {
 		nflags.c_lflag = tcflag_t(flags)
 #else
 #if Xcode
-        nflags.c_lflag = tcflag_t(UInt32(flags))
+        nflags.c_lflag = UInt32(flags)
 #else
 		nflags.c_lflag = tcflag_t(flags)
 #endif
