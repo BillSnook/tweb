@@ -163,7 +163,7 @@ class Hardware {
 
         var v1: UInt16
         var c1: UInt16
-        for _ in 0..10 {
+        for _ in 0...10 {
             v1 = i2c.readWord( adrs, command: vreg )
             print("v1: \(v1) - \( (Float(v1) * 78.125) / 1000000.0 )V");
             
