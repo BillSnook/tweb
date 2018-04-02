@@ -166,11 +166,12 @@ class Hardware {
         var s1: String
         for _ in 0...10 {
             v1 = i2c.readWord( adrs, command: vreg )
-            s1 = String(v1, radix: 16, uppercase: true)
+            s1 = String(format:"%04X", v1)
+
             print("v1: \(s1) - \( (Float(v1) * 78.125) / 1000000.0 )V");
             
             c1 = i2c.readWord( adrs, command: creg )
-            s1 = String(c1, radix: 16, uppercase: true)
+            s1 = String(format:"%04X", c1)
             print("c1: \(s1) - \( Float(c1) / 256.0 )%");
         }
         
